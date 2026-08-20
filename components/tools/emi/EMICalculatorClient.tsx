@@ -5,8 +5,7 @@ import { m, AnimatePresence } from "framer-motion";
 import { useEmiStore } from "@/src/features/emi-calculator/store";
 import { useSessionStore } from "@/src/store/useSessionStore";
 import { SessionRestoredBanner } from "@/components/ui/SessionRestoredBanner";
-import { EmiInputs as EmiInputsType, EmiResult } from "@/src/lib/emi-calculations";
-import { workerOrchestrator } from "@/src/engine/workers/WorkerOrchestrator";
+import { EmiInputs as EmiInputsType, EmiResult, generateSchedule } from "@/src/lib/emi-calculations";
 import { EmiInputs } from "./EmiInputs";
 import { PrepaymentSection } from "./PrepaymentSection";
 import { AffordabilityPanel } from "./AffordabilityPanel";
@@ -18,16 +17,19 @@ import { SaveLoadScenarios } from "./SaveLoadScenarios";
 import { formatCurrency } from "@/src/lib/utils";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { CalculatorActionBar } from "@/components/ui/CalculatorActionBar";
-import { Calculator, TrendingDown, Receipt, Calendar, Info } from "lucide-react";
+import { Calculator, TrendingDown, Receipt, Calendar, Info, Sparkles } from "lucide-react";
 
 export default function EMICalculatorClient() {
   const inputs = useEmiStore(state => state.inputs);
   const setInputs = useEmiStore(state => state.setInputs);
+  const showPrepayment = useEmiStore(state => state.showPrepayment);
+  const showMoratorium = useEmiStore(state => state.showMoratorium);
+  const showFloatingRate = useEmiStore(state => state.showFloatingRate);
+
   const saveState = useSessionStore(state => state.saveState);
   const loadState = useSessionStore(state => state.loadState);
   const clearState = useSessionStore(state => state.clearState);
-  const [result, setResult] = useState<EmiResult | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+
   const [showRestoredBanner, setShowRestoredBanner] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -56,50 +58,56 @@ export default function EMICalculatorClient() {
     }
   }, [isHydrated, loadState, setInputs]);
 
+  // Compute active inputs reflecting checkbox states
+  const activeInputs = useMemo((): EmiInputsType => {
+    return {
+      loanAmount: Number(inputs.loanAmount) || 0,
+      interestRate: Number(inputs.interestRate) || 0,
+      tenureMonths: Number(inputs.tenureMonths) || 12,
+      prepayments: showPrepayment ? (inputs.prepayments || []) : [],
+      recurringPrepayment: (showPrepayment && inputs.recurringPrepayment && inputs.recurringPrepayment.amount > 0)
+        ? inputs.recurringPrepayment
+        : undefined,
+      moratorium: (showMoratorium && inputs.moratorium && inputs.moratorium.months > 0)
+        ? inputs.moratorium
+        : undefined,
+      floatingRateDelta: showFloatingRate ? (Number(inputs.floatingRateDelta) || 0) : 0,
+    };
+  }, [inputs, showPrepayment, showMoratorium, showFloatingRate]);
+
+  // Pure reactive calculation — updates instantaneously with 0 lag
+  const result: EmiResult = useMemo(() => {
+    return generateSchedule(activeInputs);
+  }, [activeInputs]);
+
   useEffect(() => {
     if (!isHydrated) return;
     saveState('emi-calculator', inputs);
-    
-    let active = true;
-    const calculate = async () => {
-      setIsLoading(true);
-      try {
-        const res = await workerOrchestrator.run('calculateEmiSchedule', [inputs]) as EmiResult;
-        if (active) setResult(res);
-      } catch (err) {
-        console.error("Calculation failed:", err);
-      } finally {
-        if (active) setIsLoading(false);
-      }
-    };
-
-    calculate();
-    return () => { active = false; };
   }, [inputs, saveState, isHydrated]);
 
   const summary = useMemo(() => {
     if (!result) return "";
     let s = `EMI Calculator Summary\n`;
     s += `----------------------\n`;
-    s += `Loan Amount: ${formatCurrency(inputs.loanAmount)}\n`;
-    s += `Interest Rate: ${inputs.interestRate}%\n`;
-    s += `Tenure: ${inputs.tenureMonths} Months\n`;
+    s += `Loan Amount: ${formatCurrency(activeInputs.loanAmount)}\n`;
+    s += `Interest Rate: ${activeInputs.interestRate}%\n`;
+    s += `Tenure: ${activeInputs.tenureMonths} Months (${(activeInputs.tenureMonths / 12).toFixed(1)} Years)\n`;
     
-    if (inputs.floatingRateDelta) {
-      s += `Floating Rate Delta: ${inputs.floatingRateDelta > 0 ? '+' : ''}${inputs.floatingRateDelta}%\n`;
+    if (activeInputs.floatingRateDelta) {
+      s += `Floating Rate Delta: ${activeInputs.floatingRateDelta > 0 ? '+' : ''}${activeInputs.floatingRateDelta}%\n`;
     }
     
-    if (inputs.moratorium) {
-      s += `Moratorium: ${inputs.moratorium.months} Months (${inputs.moratorium.type})\n`;
+    if (activeInputs.moratorium) {
+      s += `Moratorium: ${activeInputs.moratorium.months} Months (${activeInputs.moratorium.type})\n`;
     }
 
     s += `\nResults:\n`;
     s += `Monthly EMI: ${formatCurrency(result.monthlyEmi)}\n`;
     s += `Total Interest: ${formatCurrency(result.totalInterest)}\n`;
     s += `Total Payment: ${formatCurrency(result.totalPayment)}\n`;
-    s += `Effective Tenure: ${result.effectiveTenure} Months\n`;
+    s += `Effective Tenure: ${result.effectiveTenure} Months (${(result.effectiveTenure / 12).toFixed(1)} Years)\n`;
     
-    if (result.savings) {
+    if (result.savings && (result.savings.interest > 0 || result.savings.months > 0)) {
       s += `\nSavings via Prepayment:\n`;
       s += `Interest Saved: ${formatCurrency(result.savings.interest)}\n`;
       s += `Tenure Saved: ${result.savings.months} Months\n`;
@@ -107,19 +115,22 @@ export default function EMICalculatorClient() {
     
     s += `\nGenerated via KaruviLab`;
     return s;
-  }, [inputs, result]);
+  }, [activeInputs, result]);
 
   const handleClearSession = () => {
     clearState('emi-calculator');
     const defaultInputs: Partial<EmiInputsType> = { 
       loanAmount: 5000000, 
       interestRate: 8.5, 
-      tenureMonths: 240 
+      tenureMonths: 240,
+      floatingRateDelta: 0,
+      moratorium: undefined,
+      recurringPrepayment: undefined,
+      prepayments: []
     };
     setInputs(defaultInputs);
     setShowRestoredBanner(false);
   };
-
 
   const [isSticky, setIsSticky] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
@@ -182,7 +193,7 @@ export default function EMICalculatorClient() {
           </div>
 
           <PrepaymentSection result={result} />
-          <AffordabilityPanel currentEmi={result?.monthlyEmi || 0} />
+          <AffordabilityPanel currentEmi={result.monthlyEmi} />
         </div>
 
         <div className="space-y-6 lg:sticky lg:top-8">
@@ -191,53 +202,63 @@ export default function EMICalculatorClient() {
           <div ref={resultRef} className="space-y-6">
             <MetricCard
               label="Monthly EMI"
-              value={formatCurrency(result?.monthlyEmi || 0)}
+              value={formatCurrency(result.monthlyEmi)}
               icon={Receipt}
-              loading={isLoading || !result}
-              trend={(inputs.floatingRateDelta !== undefined && inputs.floatingRateDelta !== 0) ? {
-                value: `${inputs.floatingRateDelta > 0 ? '+' : ''}${inputs.floatingRateDelta}%`,
-                isPositive: inputs.floatingRateDelta < 0,
+              trend={(activeInputs.floatingRateDelta !== undefined && activeInputs.floatingRateDelta !== 0) ? {
+                value: `${activeInputs.floatingRateDelta > 0 ? '+' : ''}${activeInputs.floatingRateDelta}%`,
+                isPositive: activeInputs.floatingRateDelta < 0,
                 label: "Stress Test"
               } : undefined}
             />
 
             <MetricCard
               label="Total Interest"
-              value={formatCurrency(result?.totalInterest || 0)}
+              value={formatCurrency(result.totalInterest)}
               icon={TrendingDown}
-              loading={isLoading || !result}
               className="bg-surface-2/40"
             />
           </div>
 
           <MetricCard
-            label="Total Payment"
-            value={formatCurrency(result?.totalPayment || 0)}
+            label="Total Payment (Principal + Interest)"
+            value={formatCurrency(result.totalPayment)}
             icon={Calendar}
-            loading={isLoading || !result}
           />
 
           <div className="p-4 sm:p-6 bg-blue/5 border border-blue/10 rounded-2xl sm:rounded-4xl space-y-2 relative overflow-hidden">
-            { (isLoading || !result) && <div className="absolute inset-0 bg-surface/50 shimmer-wrapper z-content" /> }
-            <div className="flex items-center gap-2 text-blue">
-              <Info className="w-4 h-4" />
-              <span className="text-xs font-bold uppercase tracking-wider">Effective Tenure</span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-blue">
+                <Info className="w-4 h-4" />
+                <span className="text-xs font-bold uppercase tracking-wider">Effective Tenure</span>
+              </div>
+              {result.savings && result.savings.months > 0 && (
+                <div className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-bold text-emerald-400">
+                  <Sparkles className="w-3 h-3" />
+                  <span>Early Payoff</span>
+                </div>
+              )}
             </div>
+
             <p className="text-2xl sm:text-3xl font-black text-text tabular-nums">
-              {result?.effectiveTenure || 0} <span className="text-sm text-text-muted font-bold">Months</span>
+              {result.effectiveTenure} <span className="text-sm text-text-muted font-bold">Months</span>
+              <span className="text-sm font-semibold text-text-muted ml-2">
+                ({(result.effectiveTenure / 12).toFixed(1)} Years)
+              </span>
             </p>
             <p className="text-xs text-text-muted font-medium leading-relaxed">
-              {(result?.effectiveTenure || 0) / 12 >= 1 
-                ? `${((result?.effectiveTenure || 0) / 12).toFixed(1)} years until debt-free.` 
-                : "Loan will be closed within a year."}
+              {result.savings && result.savings.months > 0 
+                ? `You will be completely debt-free ${(result.savings.months / 12).toFixed(1)} years (${result.savings.months} months) earlier!`
+                : (result.effectiveTenure / 12 >= 1 
+                    ? `${(result.effectiveTenure / 12).toFixed(1)} years until debt-free.` 
+                    : "Loan will be closed within a year.")}
             </p>
           </div>
 
           <CalculatorActionBar 
             summary={summary}
             toolId="emi-calculator"
-            historyLabel={`${formatCurrency(inputs.loanAmount)} @ ${inputs.interestRate}%`}
-            historyData={{ inputs, result }}
+            historyLabel={`${formatCurrency(activeInputs.loanAmount)} @ ${activeInputs.interestRate}%`}
+            historyData={{ inputs: activeInputs, result }}
           />
 
           <div className="no-print pt-4">
@@ -252,27 +273,25 @@ export default function EMICalculatorClient() {
       </div>
 
       {/* Results & Visualization */}
-      {result && (
-        <div className="space-y-12">
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 items-start">
-            <div className="space-y-8">
-              <AmortisationChart schedule={result.schedule} />
+      <div className="space-y-12">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 items-start">
+          <div className="space-y-8">
+            <AmortisationChart schedule={result.schedule} />
+          </div>
+          <div className="space-y-8">
+            <div className="flex items-center justify-between no-print">
+               <h3 className="text-sm font-bold uppercase tracking-wider text-text">Reports & Export</h3>
+               <ExportButtons schedule={result.schedule} />
             </div>
-            <div className="space-y-8">
-              <div className="flex items-center justify-between no-print">
-                 <h3 className="text-sm font-black uppercase tracking-widest text-text">Reports & Export</h3>
-                 <ExportButtons schedule={result.schedule} />
-              </div>
-              <AmortisationTable schedule={result.schedule} />
-            </div>
+            <AmortisationTable schedule={result.schedule} />
           </div>
         </div>
-      )}
+      </div>
 
       {/* Print-Only Header */}
       <div className="hidden print-only py-10 border-b-2 border-border mb-10">
          <h2 className="text-4xl font-black">KV EMI Report</h2>
-         <p className="text-text-3 mt-2 font-bold uppercase tracking-widest">
+         <p className="text-text-muted mt-2 font-bold uppercase tracking-wider">
            {new Date().toLocaleDateString()} · Advanced Loan Analysis
          </p>
       </div>

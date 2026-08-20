@@ -8,8 +8,45 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/
 import { useEmiStore } from "@/src/features/emi-calculator/store";
 import { useShallow } from "zustand/react/shallow";
 import { formatCurrency } from "@/src/lib/utils";
+import { Home, Car, Briefcase, GraduationCap, RotateCcw } from "lucide-react";
+
+const LOAN_CATEGORIES = [
+  { 
+    id: "home", 
+    label: "Home Loan", 
+    icon: Home, 
+    amount: 5000000, 
+    rate: 8.5, 
+    tenureMonths: 240 
+  },
+  { 
+    id: "car", 
+    label: "Car Loan", 
+    icon: Car, 
+    amount: 1000000, 
+    rate: 9.0, 
+    tenureMonths: 60 
+  },
+  { 
+    id: "personal", 
+    label: "Personal Loan", 
+    icon: Briefcase, 
+    amount: 500000, 
+    rate: 12.5, 
+    tenureMonths: 36 
+  },
+  { 
+    id: "education", 
+    label: "Education Loan", 
+    icon: GraduationCap, 
+    amount: 1500000, 
+    rate: 10.0, 
+    tenureMonths: 84 
+  },
+];
 
 const LOAN_PRESETS = [
+  { label: "₹5 Lakh", value: 500000 },
   { label: "₹10 Lakh", value: 1000000 },
   { label: "₹25 Lakh", value: 2500000 },
   { label: "₹50 Lakh", value: 5000000 },
@@ -25,15 +62,19 @@ const RATE_PRESETS = [
   { label: "9.5%", value: 9.5 },
   { label: "10.5%", value: 10.5 },
   { label: "12.0%", value: 12.0 },
+  { label: "14.0%", value: 14.0 },
 ];
 
 const YEAR_PRESETS = [
-  { label: "5Y", years: 5, months: 60 },
-  { label: "10Y", years: 10, months: 120 },
-  { label: "15Y", years: 15, months: 180 },
-  { label: "20Y", years: 20, months: 240 },
-  { label: "25Y", years: 25, months: 300 },
-  { label: "30Y", years: 30, months: 360 },
+  { label: "1Y", months: 12 },
+  { label: "3Y", months: 36 },
+  { label: "5Y", months: 60 },
+  { label: "7Y", months: 84 },
+  { label: "10Y", months: 120 },
+  { label: "15Y", months: 180 },
+  { label: "20Y", months: 240 },
+  { label: "25Y", months: 300 },
+  { label: "30Y", months: 360 },
 ];
 
 function formatIndianNumberWords(num: number): string {
@@ -68,14 +109,73 @@ export function EmiInputs() {
     toggleSection: state.toggleSection
   })));
 
-  // Tenure mode: 'years' or 'months'
-  const [tenureUnit, setTenureUnit] = useState<"years" | "months">("years");
-
   const tenureYears = inputs.tenureMonths / 12;
   const wordDisplay = formatIndianNumberWords(inputs.loanAmount);
 
+  const handleResetDefaults = () => {
+    setInputs({
+      loanAmount: 5000000,
+      interestRate: 8.5,
+      tenureMonths: 240,
+      floatingRateDelta: 0,
+      moratorium: undefined,
+      recurringPrepayment: undefined,
+      prepayments: []
+    });
+  };
+
   return (
     <div className="space-y-6">
+      {/* 0. Quick Loan Category Presets */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-bold uppercase tracking-wider text-text-muted">Loan Type Presets</span>
+          <button
+            type="button"
+            onClick={handleResetDefaults}
+            className="inline-flex items-center gap-1 text-[11px] font-semibold text-text-muted hover:text-text transition-colors cursor-pointer"
+            title="Reset to default home loan"
+          >
+            <RotateCcw className="w-3 h-3" />
+            <span>Reset</span>
+          </button>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          {LOAN_CATEGORIES.map((cat) => {
+            const Icon = cat.icon;
+            const isSelected = 
+              inputs.loanAmount === cat.amount && 
+              inputs.interestRate === cat.rate && 
+              inputs.tenureMonths === cat.tenureMonths;
+
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setInputs({ 
+                  loanAmount: cat.amount, 
+                  interestRate: cat.rate, 
+                  tenureMonths: cat.tenureMonths 
+                })}
+                className={`flex items-center gap-2 p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                  isSelected
+                    ? "bg-blue/10 border-blue text-blue shadow-sm"
+                    : "bg-surface-2/40 border-border hover:border-border/80 text-text hover:bg-surface-2/70"
+                }`}
+              >
+                <div className={`p-1.5 rounded-lg ${isSelected ? "bg-blue text-white" : "bg-surface text-text-muted"}`}>
+                  <Icon className="w-3.5 h-3.5" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-bold truncate">{cat.label}</p>
+                  <p className="text-[10px] text-text-muted truncate">{cat.rate}% · {cat.tenureMonths / 12}Y</p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* 1. Loan Amount Section */}
       <div className="space-y-2">
         <ToolInput
@@ -110,14 +210,14 @@ export function EmiInputs() {
       {/* 2. Interest Rate Section */}
       <div className="space-y-2">
         <ToolInput
-          label="Interest Rate (%)"
+          label="Interest Rate (% p.a.)"
           type="number"
           value={String(inputs.interestRate)}
           onChange={(val) => {
             const num = Number(val);
             if (num >= 0 && num <= 100) setInputs({ interestRate: num });
           }}
-          description="Annual Interest Percentage (p.a.)"
+          description="Annual Interest Rate Percentage"
         />
         {/* Quick Rate Chips */}
         <div className="flex flex-wrap gap-1.5 pt-1">
@@ -138,98 +238,56 @@ export function EmiInputs() {
         </div>
       </div>
 
-      {/* 3. Loan Tenure Section (Years vs Months Switcher) */}
+      {/* 3. Loan Tenure Section (Dual Synchronized Years & Months) */}
       <div className="space-y-3 p-4 bg-surface-2/30 border border-border/80 rounded-2xl">
-        <div className="flex items-center justify-between gap-2">
-          <div className="space-y-0.5">
-            <span className="text-sm font-bold text-text">Loan Tenure</span>
-            <p className="text-xs text-text-muted font-medium">
-              {tenureUnit === "years" 
-                ? `${tenureYears.toFixed(tenureYears % 1 === 0 ? 0 : 1)} Years (${inputs.tenureMonths} Months)` 
-                : `${inputs.tenureMonths} Months (${(inputs.tenureMonths / 12).toFixed(1)} Years)`}
-            </p>
-          </div>
-
-          {/* Unit Toggle Switcher: Years vs Months */}
-          <div className="grid grid-cols-2 gap-1 bg-surface p-1 rounded-xl border border-border text-xs">
-            <button
-              type="button"
-              onClick={() => setTenureUnit("years")}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-colors cursor-pointer ${
-                tenureUnit === "years"
-                  ? "bg-blue text-white shadow-sm"
-                  : "text-text-muted hover:text-text"
-              }`}
-            >
-              Years
-            </button>
-            <button
-              type="button"
-              onClick={() => setTenureUnit("months")}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-colors cursor-pointer ${
-                tenureUnit === "months"
-                  ? "bg-blue text-white shadow-sm"
-                  : "text-text-muted hover:text-text"
-              }`}
-            >
-              Months
-            </button>
-          </div>
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-bold uppercase tracking-wider text-text">Loan Tenure</span>
+          <span className="text-xs font-mono font-bold text-blue">
+            {tenureYears.toFixed(tenureYears % 1 === 0 ? 0 : 1)} Years ({inputs.tenureMonths} Months)
+          </span>
         </div>
 
-        {/* Input & Slider for Years Mode */}
-        {tenureUnit === "years" ? (
-          <div className="space-y-3">
-            <ToolInput
-              label="Tenure in Years"
-              type="number"
-              value={String(tenureYears % 1 === 0 ? tenureYears : tenureYears.toFixed(1))}
-              onChange={(val) => {
-                const yr = Number(val);
-                if (yr >= 0 && yr <= 50) {
-                  setInputs({ tenureMonths: Math.max(1, Math.round(yr * 12)) });
-                }
-              }}
-              description="Enter loan duration in years"
-            />
-            <SliderField
-              id="tenure-years-slider"
-              label="Tenure Slider (Years)"
-              min={1}
-              max={30}
-              step={1}
-              value={Math.round(tenureYears)}
-              onChange={(val) => setInputs({ tenureMonths: val * 12 })}
-              format={(v) => `${v} Years (${v * 12} Mo)`}
-            />
-          </div>
-        ) : (
-          /* Input & Slider for Months Mode */
-          <div className="space-y-3">
-            <ToolInput
-              label="Tenure in Months"
-              type="number"
-              value={String(inputs.tenureMonths)}
-              onChange={(val) => {
-                const mo = Number(val);
-                if (mo >= 1 && mo <= 600) {
-                  setInputs({ tenureMonths: mo });
-                }
-              }}
-              description="Enter loan duration in months"
-            />
-            <SliderField
-              id="tenure-months-slider"
-              label="Tenure Slider (Months)"
-              min={12}
-              max={360}
-              step={6}
-              value={inputs.tenureMonths}
-              onChange={(val) => setInputs({ tenureMonths: val })}
-              format={(v) => `${v} Mo (${(v / 12).toFixed(1)} Yr)`}
-            />
-          </div>
-        )}
+        {/* Dual Side-by-Side Inputs: Years & Months */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <ToolInput
+            label="Tenure in Years"
+            type="number"
+            value={String(tenureYears % 1 === 0 ? tenureYears : tenureYears.toFixed(1))}
+            onChange={(val) => {
+              const yr = Number(val);
+              if (yr >= 0 && yr <= 50) {
+                setInputs({ tenureMonths: Math.max(1, Math.round(yr * 12)) });
+              }
+            }}
+            description="e.g. 5, 10, 20, 30 years"
+          />
+          <ToolInput
+            label="Tenure in Months"
+            type="number"
+            value={String(inputs.tenureMonths)}
+            onChange={(val) => {
+              const mo = Number(val);
+              if (mo >= 1 && mo <= 600) {
+                setInputs({ tenureMonths: mo });
+              }
+            }}
+            description="e.g. 60, 120, 240, 360 months"
+          />
+        </div>
+
+        {/* Real-Time Interactive Slider */}
+        <div className="pt-2">
+          <SliderField
+            id="tenure-slider"
+            label="Adjust Tenure Duration"
+            min={12}
+            max={360}
+            step={6}
+            value={inputs.tenureMonths}
+            onChange={(val) => setInputs({ tenureMonths: val })}
+            format={(v) => `${(v / 12).toFixed(v % 12 === 0 ? 0 : 1)} Yr (${v} Mo)`}
+          />
+        </div>
 
         {/* Quick Tenure Preset Chips */}
         <div className="flex flex-wrap gap-1.5 pt-1">

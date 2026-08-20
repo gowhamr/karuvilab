@@ -135,11 +135,12 @@ export function generateSchedule(inputs: EmiInputs): EmiResult {
 
   // Calculate savings if prepayments were made
   let savings;
-  if (prepayments.length > 0 || recurringPrepayment) {
+  const hasActivePrepayments = (prepayments && prepayments.length > 0 && prepayments.some(p => p.amount > 0)) || (recurringPrepayment && recurringPrepayment.amount > 0);
+  if (hasActivePrepayments) {
     const standard = generateSchedule({ ...inputs, prepayments: [], recurringPrepayment: undefined });
     savings = {
       interest: Math.max(0, standard.totalInterest - totalInterest),
-      months: Math.max(0, tenureMonths - schedule.length)
+      months: Math.max(0, standard.effectiveTenure - schedule.length)
     };
   }
 
