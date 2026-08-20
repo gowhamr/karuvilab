@@ -49,7 +49,7 @@ export default function ToolClient() {
   const [feather, setFeather] = useState<number>(2);
   const [invert, setInvert] = useState<boolean>(false);
   const [selectedBackend, setSelectedBackend] = useState<ModelBackend | 'auto'>('auto');
-  const [selectedModelId, setSelectedModelId] = useState<string>('background-removal-rmbg');
+  const [selectedModelId, setSelectedModelId] = useState<string>('u2netp-mobile');
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState<{ percent: number; stage: string } | null>(null);
   const [aiError, setAiError] = useState<string | null>(null);
@@ -312,7 +312,7 @@ export default function ToolClient() {
             )}
           >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>AI Neural Removal (RMBG 2.0 • Complex/Portraits)</span>
+            <span>AI Neural Removal (U²-NetP • 4.4MB Offline / RMBG 2.0)</span>
           </button>
         </div>
       </div>
@@ -381,14 +381,42 @@ export default function ToolClient() {
               } />
             </div>
 
-            {/* Error notifications */}
+            {/* Error notifications with recovery buttons */}
             {(canvasError || aiError) && (
-              <div className="p-3.5 bg-red-500/10 text-red-400 text-xs rounded-xl border border-red-500/20 flex items-start gap-2">
-                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-                <div className="space-y-1">
-                  <p className="font-bold">Removal Error</p>
-                  <p>{canvasError || aiError}</p>
+              <div className="p-3.5 bg-red-500/10 text-red-400 text-xs rounded-xl border border-red-500/20 flex flex-col gap-2.5">
+                <div className="flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                  <div className="space-y-1">
+                    <p className="font-bold">Removal Error</p>
+                    <p>{canvasError || aiError}</p>
+                  </div>
                 </div>
+                {aiError && (
+                  <div className="flex flex-wrap gap-2 pt-1 border-t border-red-500/20">
+                    {selectedModelId !== 'u2netp-mobile' && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedModelId('u2netp-mobile');
+                          setAiError(null);
+                        }}
+                        className="px-2.5 py-1 bg-surface border border-border rounded-lg text-text hover:text-white font-bold text-[11px] transition-colors cursor-pointer"
+                      >
+                        ⚡ Switch to U²-NetP (4.4 MB)
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActiveTab('canvas');
+                        setAiError(null);
+                      }}
+                      className="px-2.5 py-1 bg-surface border border-border rounded-lg text-text hover:text-white font-bold text-[11px] transition-colors cursor-pointer"
+                    >
+                      🎨 Switch to Instant Canvas Mode
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 
@@ -462,8 +490,14 @@ export default function ToolClient() {
                     onChange={(e) => setSelectedModelId(e.target.value)}
                     className="w-full bg-surface border border-border rounded-xl px-3 py-2 text-sm text-text focus:outline-none focus:border-blue"
                   >
-                    <option value="background-removal-rmbg">RMBG 2.0 (BiRefNet High Quality)</option>
+                    <option value="u2netp-mobile">U²-NetP Ultra-Fast Mobile (4.4 MB • Built-in Offline Fast)</option>
+                    <option value="background-removal-rmbg">RMBG 2.0 / BiRefNet (168 MB • High Quality HD)</option>
                   </select>
+                  <p className="text-[11px] text-text-muted">
+                    {selectedModelId === 'u2netp-mobile' 
+                      ? '✓ Lightweight offline model (4.4MB), optimized for mobile & desktop with instant loading.'
+                      : '✓ Deep learning high-resolution segmentation model, streams via open AI CDN.'}
+                  </p>
                 </div>
 
                 <button

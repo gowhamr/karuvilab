@@ -11,8 +11,12 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     name: 'RMBG 2.0 (BiRefNet)',
     version: '2.0',
     family: 'birefnet',
-    // IMPORTANT: Model file is a placeholder. Replace with real rmbg-2.0.onnx (~168MB).
     file: '/models/rmbg-2.0.onnx',
+    cdnUrls: [
+      'https://huggingface.co/briaai/RMBG-1.4/resolve/main/onnx/model.onnx',
+      'https://huggingface.co/Xenova/birefnet-general/resolve/main/onnx/model_quantized.onnx'
+    ],
+    fallbackModelId: 'u2netp-mobile',
     sha256: '8cafcf770b06757c4eaced21b1a88e57fd2b66de01b8045f35f01535ba742e0f',
     sizeMB: 168,
     backend: ['webgpu', 'wasm'],
@@ -41,9 +45,11 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     name: 'U²-NetP Ultra-Fast Mobile',
     version: '1.0',
     family: 'u2net',
-    // IMPORTANT: Model file is a placeholder. Replace with real u2netp.onnx (~4.7MB).
     file: '/models/u2netp.onnx',
-    sha256: '',
+    cdnUrls: [
+      'https://huggingface.co/Xenova/u2netp/resolve/main/onnx/model_quantized.onnx'
+    ],
+    sha256: '309c8469258dda742793dce0ebea8e6dd393174f89934733ecc8b14c76f4ddd8',
     sizeMB: 4.7,
     backend: ['wasm', 'webgpu'],
     input: { width: 320, height: 320, channels: 3, dataType: 'float32', shape: [1, 3, 320, 320] },
@@ -62,7 +68,7 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     supportsGuidedFilter: false,
     qualityScore: 82,
     speedScore: 98,
-    available: false,
+    available: true,
     description: 'Lightweight pruned U2-Net model optimized for mobile browsers.',
     license: 'Apache-2.0'
   },

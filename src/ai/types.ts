@@ -41,6 +41,8 @@ export interface ModelManifest {
   // Scalability & Quantization Metadata (50+ Model Scaling)
   quantization?: 'int8' | 'fp16' | 'fp32';
   chunked?: boolean;
+  cdnUrls?: string[];
+  fallbackModelId?: string;
 }
 
 export type ModelFamily = 'birefnet' | 'u2net' | 'modnet' | 'ben2' | 'inspyrenet' | 'ppmatting' | 'isnet' | 'yolo' | 'paddle';
