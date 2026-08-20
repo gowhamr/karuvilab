@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ToolInput } from "@/components/ui/ToolInput";
 import { SliderField } from "@/components/ui/SliderField";
 import { Checkbox } from "@/components/ui/Checkbox";
@@ -109,10 +109,92 @@ export function EmiInputs() {
     toggleSection: state.toggleSection
   })));
 
+  // Local string buffers to enable clearing and typing smoothly without snapping back
+  const [localYears, setLocalYears] = useState<string>(() => {
+    const yr = (inputs.tenureMonths || 240) / 12;
+    return String(yr % 1 === 0 ? yr : parseFloat(yr.toFixed(2)));
+  });
+  const [localMonths, setLocalMonths] = useState<string>(() => String(inputs.tenureMonths || 240));
+  const [localAmount, setLocalAmount] = useState<string>(() => String(inputs.loanAmount || 5000000));
+  const [localRate, setLocalRate] = useState<string>(() => String(inputs.interestRate || 8.5));
+
+  // Synchronize local buffers when store changes externally (e.g. from preset chips or resets)
+  useEffect(() => {
+    const yr = (inputs.tenureMonths || 240) / 12;
+    const yrStr = String(yr % 1 === 0 ? yr : parseFloat(yr.toFixed(2)));
+    setLocalYears(prev => {
+      if (prev === "" || parseFloat(prev) === yr) return prev;
+      return yrStr;
+    });
+    setLocalMonths(prev => {
+      if (prev === "" || parseInt(prev, 10) === inputs.tenureMonths) return prev;
+      return String(inputs.tenureMonths);
+    });
+  }, [inputs.tenureMonths]);
+
+  useEffect(() => {
+    setLocalAmount(prev => {
+      if (prev === "" || parseFloat(prev) === inputs.loanAmount) return prev;
+      return String(inputs.loanAmount);
+    });
+  }, [inputs.loanAmount]);
+
+  useEffect(() => {
+    setLocalRate(prev => {
+      if (prev === "" || parseFloat(prev) === inputs.interestRate) return prev;
+      return String(inputs.interestRate);
+    });
+  }, [inputs.interestRate]);
+
+  // Handlers with empty string tolerance
+  const handleYearsChange = (val: string) => {
+    setLocalYears(val);
+    if (val === "" || val === "." || isNaN(Number(val))) return;
+    const yr = parseFloat(val);
+    if (yr > 0 && yr <= 50) {
+      const mo = Math.round(yr * 12);
+      setLocalMonths(String(mo));
+      setInputs({ tenureMonths: mo });
+    }
+  };
+
+  const handleMonthsChange = (val: string) => {
+    setLocalMonths(val);
+    if (val === "" || isNaN(Number(val))) return;
+    const mo = parseInt(val, 10);
+    if (mo >= 1 && mo <= 600) {
+      const yr = mo / 12;
+      setLocalYears(String(yr % 1 === 0 ? yr : parseFloat(yr.toFixed(2))));
+      setInputs({ tenureMonths: mo });
+    }
+  };
+
+  const handleAmountChange = (val: string) => {
+    setLocalAmount(val);
+    if (val === "" || isNaN(Number(val))) return;
+    const amt = parseFloat(val);
+    if (amt >= 0 && amt <= 1000000000000) {
+      setInputs({ loanAmount: amt });
+    }
+  };
+
+  const handleRateChange = (val: string) => {
+    setLocalRate(val);
+    if (val === "" || val === "." || isNaN(Number(val))) return;
+    const r = parseFloat(val);
+    if (r >= 0 && r <= 100) {
+      setInputs({ interestRate: r });
+    }
+  };
+
   const tenureYears = inputs.tenureMonths / 12;
   const wordDisplay = formatIndianNumberWords(inputs.loanAmount);
 
   const handleResetDefaults = () => {
+    setLocalAmount("5000000");
+    setLocalRate("8.5");
+    setLocalYears("20");
+    setLocalMonths("240");
     setInputs({
       loanAmount: 5000000,
       interestRate: 8.5,
@@ -152,11 +234,17 @@ export function EmiInputs() {
               <button
                 key={cat.id}
                 type="button"
-                onClick={() => setInputs({ 
-                  loanAmount: cat.amount, 
-                  interestRate: cat.rate, 
-                  tenureMonths: cat.tenureMonths 
-                })}
+                onClick={() => {
+                  setLocalAmount(String(cat.amount));
+                  setLocalRate(String(cat.rate));
+                  setLocalMonths(String(cat.tenureMonths));
+                  setLocalYears(String(cat.tenureMonths / 12));
+                  setInputs({ 
+                    loanAmount: cat.amount, 
+                    interestRate: cat.rate, 
+                    tenureMonths: cat.tenureMonths 
+                  });
+                }}
                 className={`flex items-center gap-2 p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                   isSelected
                     ? "bg-blue/10 border-blue text-blue shadow-sm"
@@ -181,11 +269,8 @@ export function EmiInputs() {
         <ToolInput
           label="Loan Amount"
           type="number"
-          value={String(inputs.loanAmount)}
-          onChange={(val) => {
-            const num = Number(val);
-            if (num >= 0 && num <= 1000000000000) setInputs({ loanAmount: num });
-          }}
+          value={localAmount}
+          onChange={handleAmountChange}
           description={wordDisplay ? `Total Principal: ${formatCurrency(inputs.loanAmount)} (${wordDisplay})` : "Total Principal Amount"}
         />
         {/* Quick Amount Chips */}
@@ -194,7 +279,10 @@ export function EmiInputs() {
             <button
               key={preset.label}
               type="button"
-              onClick={() => setInputs({ loanAmount: preset.value })}
+              onClick={() => {
+                setLocalAmount(String(preset.value));
+                setInputs({ loanAmount: preset.value });
+              }}
               className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition-colors cursor-pointer border ${
                 inputs.loanAmount === preset.value
                   ? "bg-blue text-white border-blue shadow-sm"
@@ -212,11 +300,8 @@ export function EmiInputs() {
         <ToolInput
           label="Interest Rate (% p.a.)"
           type="number"
-          value={String(inputs.interestRate)}
-          onChange={(val) => {
-            const num = Number(val);
-            if (num >= 0 && num <= 100) setInputs({ interestRate: num });
-          }}
+          value={localRate}
+          onChange={handleRateChange}
           description="Annual Interest Rate Percentage"
         />
         {/* Quick Rate Chips */}
@@ -225,7 +310,10 @@ export function EmiInputs() {
             <button
               key={preset.label}
               type="button"
-              onClick={() => setInputs({ interestRate: preset.value })}
+              onClick={() => {
+                setLocalRate(String(preset.value));
+                setInputs({ interestRate: preset.value });
+              }}
               className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition-colors cursor-pointer border ${
                 inputs.interestRate === preset.value
                   ? "bg-blue text-white border-blue shadow-sm"
@@ -247,31 +335,21 @@ export function EmiInputs() {
           </span>
         </div>
 
-        {/* Dual Side-by-Side Inputs: Years & Months */}
+        {/* Dual Side-by-Side Inputs: Years & Months with robust local text state */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <ToolInput
             label="Tenure in Years"
             type="number"
-            value={String(tenureYears % 1 === 0 ? tenureYears : tenureYears.toFixed(1))}
-            onChange={(val) => {
-              const yr = Number(val);
-              if (yr >= 0 && yr <= 50) {
-                setInputs({ tenureMonths: Math.max(1, Math.round(yr * 12)) });
-              }
-            }}
-            description="e.g. 5, 10, 20, 30 years"
+            value={localYears}
+            onChange={handleYearsChange}
+            description="Enter loan duration in years (e.g. 5, 10, 20, 30)"
           />
           <ToolInput
             label="Tenure in Months"
             type="number"
-            value={String(inputs.tenureMonths)}
-            onChange={(val) => {
-              const mo = Number(val);
-              if (mo >= 1 && mo <= 600) {
-                setInputs({ tenureMonths: mo });
-              }
-            }}
-            description="e.g. 60, 120, 240, 360 months"
+            value={localMonths}
+            onChange={handleMonthsChange}
+            description="Enter loan duration in months (e.g. 60, 120, 240, 360)"
           />
         </div>
 
@@ -284,7 +362,12 @@ export function EmiInputs() {
             max={360}
             step={6}
             value={inputs.tenureMonths}
-            onChange={(val) => setInputs({ tenureMonths: val })}
+            onChange={(val) => {
+              const yr = val / 12;
+              setLocalMonths(String(val));
+              setLocalYears(String(yr % 1 === 0 ? yr : parseFloat(yr.toFixed(2))));
+              setInputs({ tenureMonths: val });
+            }}
             format={(v) => `${(v / 12).toFixed(v % 12 === 0 ? 0 : 1)} Yr (${v} Mo)`}
           />
         </div>
@@ -295,7 +378,12 @@ export function EmiInputs() {
             <button
               key={preset.label}
               type="button"
-              onClick={() => setInputs({ tenureMonths: preset.months })}
+              onClick={() => {
+                const yr = preset.months / 12;
+                setLocalMonths(String(preset.months));
+                setLocalYears(String(yr % 1 === 0 ? yr : parseFloat(yr.toFixed(2))));
+                setInputs({ tenureMonths: preset.months });
+              }}
               className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition-colors cursor-pointer border ${
                 inputs.tenureMonths === preset.months
                   ? "bg-blue text-white border-blue shadow-sm"
