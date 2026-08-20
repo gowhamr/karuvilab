@@ -15,6 +15,17 @@ import {
   exportStopwatchCSV,
   exportStopwatchText,
 } from '../../features/stopwatch/export-utils';
+import {
+  computeSessionPaceTrend,
+  computeLapDistribution,
+} from '../../features/stopwatch/session-analytics';
+import {
+  computeReactionStats,
+} from '../../features/stopwatch/reaction-analytics';
+import {
+  compareStopwatchSessions,
+} from '../../features/stopwatch/comparison-utils';
+import { SavedSession } from '../../features/stopwatch/types';
 
 describe('Stopwatch Timing Engine & Monotonic Elapsed Calculations', () => {
   it('calculates elapsed time from start timestamp without accumulated timer interval drift', () => {
@@ -54,15 +65,14 @@ describe('Stopwatch Timing Engine & Monotonic Elapsed Calculations', () => {
     expect(formatStopwatchTime(timeMs, 'seconds')).toBe('01:14');
     expect(formatStopwatchTime(timeMs, 'centiseconds')).toBe('01:14.38');
     expect(formatStopwatchTime(timeMs, 'milliseconds')).toBe('01:14.382');
-    // Legacy boolean compatibility
     expect(formatStopwatchTime(timeMs, true)).toBe('01:14.382');
     expect(formatStopwatchTime(timeMs, false)).toBe('01:14.38');
   });
 
   it('handles 59:59.999 to 01:00:00.000 rollover correctly', () => {
-    const beforeHour = 3599999; // 59m 59s 999ms
-    const atHour = 3600000; // 1h 00m 00s 000ms
-    const afterHour = 3601500; // 1h 00m 01s 500ms
+    const beforeHour = 3599999;
+    const atHour = 3600000;
+    const afterHour = 3601500;
 
     expect(formatStopwatchTime(beforeHour, 'milliseconds')).toBe('59:59.999');
     expect(formatStopwatchTime(atHour, 'milliseconds')).toBe('01:00:00.000');
@@ -116,13 +126,12 @@ describe('Lap Analytics & Split Calculations', () => {
   });
 
   it('calculates multiple laps with split times, deltas, and fastest/slowest tagging', () => {
-    const rawLaps = [10000, 8000, 12000]; // Lap 2 is fastest (8000), Lap 3 is slowest (12000)
+    const rawLaps = [10000, 8000, 12000];
     const totalElapsed = 30000;
 
     const records = computeLapRecords(rawLaps, totalElapsed);
     expect(records).toHaveLength(3);
 
-    // Lap 1
     expect(records[0]?.lapNumber).toBe(1);
     expect(records[0]?.lapTimeMs).toBe(10000);
     expect(records[0]?.splitTimeMs).toBe(10000);
@@ -130,7 +139,6 @@ describe('Lap Analytics & Split Calculations', () => {
     expect(records[0]?.isFastest).toBe(false);
     expect(records[0]?.isSlowest).toBe(false);
 
-    // Lap 2 (Fastest)
     expect(records[1]?.lapNumber).toBe(2);
     expect(records[1]?.lapTimeMs).toBe(8000);
     expect(records[1]?.splitTimeMs).toBe(18000);
@@ -138,7 +146,6 @@ describe('Lap Analytics & Split Calculations', () => {
     expect(records[1]?.isFastest).toBe(true);
     expect(records[1]?.isSlowest).toBe(false);
 
-    // Lap 3 (Slowest)
     expect(records[2]?.lapNumber).toBe(3);
     expect(records[2]?.lapTimeMs).toBe(12000);
     expect(records[2]?.splitTimeMs).toBe(30000);
@@ -166,7 +173,7 @@ describe('Statistical Metrics & Consistency Engine', () => {
     const stats = computeStopwatchStats(rawLaps, 100000);
 
     expect(stats.avgLapMs).toBe(25000);
-    expect(stats.medianLapMs).toBe(25000); // (20000 + 30000) / 2
+    expect(stats.medianLapMs).toBe(25000);
   });
 
   it('gives 100% consistency score for identical lap times (zero variance)', () => {
@@ -207,10 +214,10 @@ describe('Export Serialization Fidelity (JSON, CSV, Plain Text)', () => {
     const csvStr = exportStopwatchCSV(stats, records, 'centiseconds');
     const lines = csvStr.trim().split('\n');
 
-    expect(lines).toHaveLength(4); // Header + 3 laps
+    expect(lines).toHaveLength(4);
     expect(lines[0]).toContain('Lap Number,Lap Time (Formatted),Lap Time (ms)');
-    expect(lines[2]).toContain('Fastest'); // Lap 2
-    expect(lines[3]).toContain('Slowest'); // Lap 3
+    expect(lines[2]).toContain('Fastest');
+    expect(lines[3]).toContain('Slowest');
   });
 
   it('exports clean, human-readable plain text summary table', () => {
@@ -228,7 +235,7 @@ describe('Export Serialization Fidelity (JSON, CSV, Plain Text)', () => {
 
 describe('Phase 4 Hardening: Long Durations, Rapid Cycles & Scientific Reaction Tiers', () => {
   it('formats extreme long durations (> 24 hours) accurately', () => {
-    const twentyFiveHours = 25 * 3600000 + 12 * 60000 + 34 * 1000 + 567; // 25:12:34.567
+    const twentyFiveHours = 25 * 3600000 + 12 * 60000 + 34 * 1000 + 567;
     expect(formatStopwatchTime(twentyFiveHours, 'milliseconds')).toBe('25:12:34.567');
     expect(formatStopwatchTime(twentyFiveHours, 'seconds')).toBe('25:12:34');
   });
@@ -239,12 +246,12 @@ describe('Phase 4 Hardening: Long Durations, Rapid Cycles & Scientific Reaction 
 
     for (let i = 0; i < 100; i++) {
       const start = baseTime;
-      const now = start + 50; // 50ms pulse
+      const now = start + 50;
       accumulated = calculateElapsed(start, now, accumulated);
-      baseTime += 100; // simulated gap
+      baseTime += 100;
     }
 
-    expect(accumulated).toBe(5000); // 100 * 50ms = 5000ms exactly
+    expect(accumulated).toBe(5000);
   });
 
   it('accurately classifies reaction times into neutral scientific benchmark tiers', () => {
@@ -266,3 +273,93 @@ describe('Phase 4 Hardening: Long Durations, Rapid Cycles & Scientific Reaction 
   });
 });
 
+describe('Phase 5 Analytics: Pace Trends, Distributions & Session Comparisons', () => {
+  it('identifies improving pace trend (getting faster across laps)', () => {
+    const rawLaps = [20000, 18000, 16000, 14000]; // getting 2s faster each lap
+    const records = computeLapRecords(rawLaps, 68000);
+    const pace = computeSessionPaceTrend(records);
+
+    expect(pace).not.toBeNull();
+    expect(pace?.trend).toBe('improving');
+    expect(pace?.slopeMsPerLap).toBeLessThan(-50);
+    expect(pace?.firstHalfAvgMs).toBe(19000);
+    expect(pace?.secondHalfAvgMs).toBe(15000);
+    expect(pace?.lapToLapImprovements[0]).toBe(10); // (20000 - 18000)/20000 = 10%
+  });
+
+  it('identifies slowing pace trend (fatigue across laps)', () => {
+    const rawLaps = [10000, 12000, 14000, 16000];
+    const records = computeLapRecords(rawLaps, 52000);
+    const pace = computeSessionPaceTrend(records);
+
+    expect(pace).not.toBeNull();
+    expect(pace?.trend).toBe('slowing');
+    expect(pace?.slopeMsPerLap).toBeGreaterThan(50);
+  });
+
+  it('generates accurate histogram distribution bins across laps', () => {
+    const rawLaps = [10000, 12000, 15000, 18000, 20000];
+    const records = computeLapRecords(rawLaps, 75000);
+    const bins = computeLapDistribution(records, 4);
+
+    expect(bins).toHaveLength(4);
+    const totalCount = bins.reduce((sum, b) => sum + b.count, 0);
+    expect(totalCount).toBe(5);
+  });
+
+  it('computes reaction analytics summary and tier distributions', () => {
+    const attempts = [180, 220, 250, 310, 420];
+    const stats = computeReactionStats(attempts, 1);
+
+    expect(stats.attemptCount).toBe(5);
+    expect(stats.falseStartsCount).toBe(1);
+    expect(stats.bestReactionMs).toBe(180);
+    expect(stats.worstReactionMs).toBe(420);
+    expect(stats.avgReactionMs).toBe(276);
+    expect(stats.medianReactionMs).toBe(250);
+    expect(stats.distribution.topTierCount).toBe(1); // 180
+    expect(stats.distribution.fastCount).toBe(2); // 220, 250
+    expect(stats.distribution.typicalCount).toBe(1); // 310
+    expect(stats.distribution.slowCount).toBe(1); // 420
+  });
+
+  it('accurately compares two saved sessions side-by-side', () => {
+    const sessionA: SavedSession = {
+      id: 'session-a',
+      name: 'Run A',
+      timestamp: 1000000,
+      mode: 'standard',
+      totalDurationMs: 60000,
+      lapCount: 3,
+      bestLapMs: 18000,
+      slowestLapMs: 22000,
+      avgLapMs: 20000,
+      consistencyScore: 90,
+      rawLaps: [20000, 18000, 22000],
+    };
+
+    const sessionB: SavedSession = {
+      id: 'session-b',
+      name: 'Run B',
+      timestamp: 2000000,
+      mode: 'standard',
+      totalDurationMs: 54000,
+      lapCount: 3,
+      bestLapMs: 16000,
+      slowestLapMs: 20000,
+      avgLapMs: 18000,
+      consistencyScore: 95,
+      rawLaps: [18000, 16000, 20000],
+    };
+
+    const comparison = compareStopwatchSessions(sessionA, sessionB);
+
+    expect(comparison.totalDurationDiffMs).toBe(-6000); // 6s faster
+    expect(comparison.totalDurationImprovementPct).toBe(10); // 10% improvement
+    expect(comparison.bestLapDiffMs).toBe(-2000); // 2s better lap
+    expect(comparison.avgLapDiffMs).toBe(-2000);
+    expect(comparison.consistencyDiff).toBe(5); // +5% consistency
+    expect(comparison.lapByLapDeltas).toHaveLength(3);
+    expect(comparison.lapByLapDeltas[0]?.deltaMs).toBe(-2000);
+  });
+});

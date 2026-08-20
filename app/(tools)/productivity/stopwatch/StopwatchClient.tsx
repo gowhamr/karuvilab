@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import { 
   Play, 
   Pause, 
-  Square, 
   RotateCcw, 
   Flag, 
   Settings2, 
@@ -21,16 +20,24 @@ import {
   ArrowUpCircle, 
   ArrowDownCircle, 
   Sparkles,
-  ChevronRight,
-  ShieldCheck
+  ShieldCheck,
+  History,
+  Trophy,
+  GitCompare,
+  Trash2,
+  BookmarkPlus,
+  BarChart2,
+  X
 } from "lucide-react";
 import * as Popover from '@radix-ui/react-popover';
+import * as Dialog from '@radix-ui/react-dialog';
 import { cn } from "@/src/lib/utils";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
 import { useStopwatchStore } from "@/src/features/stopwatch/store";
 import { 
   PrecisionMode,
   LapRecord,
+  SavedSession,
   formatStopwatchTime, 
   formatDeltaTime,
   computeLapRecords,
@@ -43,12 +50,16 @@ import {
   playLapChime,
   playBeep,
   unlockAudioContext,
-  getReactionBenchmarkTier
+  getReactionBenchmarkTier,
+  computeSessionPaceTrend,
+  computeLapDistribution,
+  computeReactionStats,
+  compareStopwatchSessions,
+  useStopwatchSessionStore
 } from "@/src/features/stopwatch";
 import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { QRModal } from "@/components/ui/QRModal";
-import { ShareButton } from "@/components/ui/ShareButton";
 import { useToast } from "@/components/ui/Toast";
 import { blobManager } from "@/src/lib/blob-manager";
 
@@ -62,6 +73,14 @@ export default function StopwatchClient() {
   const settings = useStopwatchStore((s) => s.settings);
   const updateSettings = useStopwatchStore((s) => s.updateSettings);
 
+  // Phase 5 Session Store & Personal Records
+  const sessions = useStopwatchSessionStore((s) => s.sessions);
+  const personalRecords = useStopwatchSessionStore((s) => s.personalRecords);
+  const saveSessionAction = useStopwatchSessionStore((s) => s.saveSession);
+  const deleteSessionAction = useStopwatchSessionStore((s) => s.deleteSession);
+  const clearAllSessionsAction = useStopwatchSessionStore((s) => s.clearAllSessions);
+  const recordReactionScoreAction = useStopwatchSessionStore((s) => s.recordReactionScore);
+
   const [tabMode, setTabMode] = useState<StopwatchTabMode>('standard');
   const [precision, setPrecision] = useState<PrecisionMode>(settings.precision || 'milliseconds');
 
@@ -71,6 +90,12 @@ export default function StopwatchClient() {
   const [elapsed, setElapsed] = useState(0);
   const [rawLaps, setRawLaps] = useState<number[]>([]);
   const [isQrOpen, setIsQrOpen] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [historyTab, setHistoryTab] = useState<'sessions' | 'records' | 'compare'>('sessions');
+
+  // Comparison State
+  const [compareSessionAId, setCompareSessionAId] = useState<string | null>(null);
+  const [compareSessionBId, setCompareSessionBId] = useState<string | null>(null);
 
   // Countdown Start Mode State
   const [countdownFrom, setCountdownFrom] = useState(3);
@@ -89,11 +114,12 @@ export default function StopwatchClient() {
   const [reactionStartTime, setReactionStartTime] = useState<number | null>(null);
   const [reactionScore, setReactionScore] = useState<number | null>(null);
   const [reactionHistory, setReactionHistory] = useState<number[]>([]);
+  const [reactionFalseStarts, setReactionFalseStarts] = useState(0);
   const reactionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Screen Wake Lock
   const shouldWakeLock = isRunning || isIntervalRunning || isCountingDown || reactionState === 'waiting';
-  const { isLocked: isWakeLocked, isSupported: isWakeSupported } = useWakeLock(shouldWakeLock);
+  const { isLocked: isWakeLocked } = useWakeLock(shouldWakeLock);
 
   // Animation Frame for Precision Stopwatch
   const requestRef = useRef<number | null>(null);
@@ -130,6 +156,11 @@ export default function StopwatchClient() {
   const lapRecords = useMemo(() => computeLapRecords(rawLaps, elapsed), [rawLaps, elapsed]);
   const stats = useMemo(() => computeStopwatchStats(rawLaps, elapsed), [rawLaps, elapsed]);
 
+  // Phase 5 Derived Analytics: Pace Trends & Distributions
+  const paceTrend = useMemo(() => computeSessionPaceTrend(lapRecords), [lapRecords]);
+  const lapDistribution = useMemo(() => computeLapDistribution(lapRecords, 4), [lapRecords]);
+  const reactionStats = useMemo(() => computeReactionStats(reactionHistory, reactionFalseStarts), [reactionHistory, reactionFalseStarts]);
+
   // Core Stopwatch Actions
   const toggleStart = useCallback(() => {
     unlockAudioContext();
@@ -163,10 +194,55 @@ export default function StopwatchClient() {
     setRawLaps([]);
   }, []);
 
+  // Save Current Session to History
+  const handleSaveSession = () => {
+    if (elapsed === 0) {
+      toast("Cannot save an empty session.", "error");
+      return;
+    }
+    const sessionName = `Session ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    saveSessionAction({
+      name: sessionName,
+      mode: tabMode,
+      totalDurationMs: elapsed,
+      lapCount: rawLaps.length,
+      bestLapMs: stats.fastestLapMs,
+      slowestLapMs: stats.slowestLapMs,
+      avgLapMs: stats.avgLapMs,
+      consistencyScore: stats.consistencyScore,
+      rawLaps,
+    });
+    toast(`Saved "${sessionName}" to history.`, "success");
+  };
+
+  // Reaction Timer Implementation
+  const handleReactionClick = useCallback(() => {
+    unlockAudioContext();
+    if (reactionState === 'idle' || reactionState === 'result' || reactionState === 'early') {
+      setReactionState('waiting');
+      const delay = Math.floor(Math.random() * 3000) + 1500;
+      reactionTimeoutRef.current = setTimeout(() => {
+        setReactionState('ready');
+        setReactionStartTime(performance.now());
+        if (settings.soundEnabled) playBeep(1000, 100);
+      }, delay);
+    } else if (reactionState === 'waiting') {
+      if (reactionTimeoutRef.current) clearTimeout(reactionTimeoutRef.current);
+      setReactionFalseStarts((c) => c + 1);
+      setReactionState('early');
+    } else if (reactionState === 'ready' && reactionStartTime !== null) {
+      const score = Math.round(performance.now() - reactionStartTime);
+      setReactionScore(score);
+      setReactionHistory((prev) => [score, ...prev.slice(0, 19)]);
+      recordReactionScoreAction(score);
+      setReactionState('result');
+      if (settings.soundEnabled) playLapChime();
+    }
+  }, [reactionState, reactionStartTime, settings.soundEnabled, recordReactionScoreAction]);
+
   // Keyboard Shortcuts Handler
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't trigger shortcuts when user is typing in form inputs
       if (['INPUT', 'SELECT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) {
         return;
       }
@@ -193,10 +269,11 @@ export default function StopwatchClient() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [tabMode, isRunning, toggleStart, handleLap, handleReset]);
+  }, [tabMode, isRunning, toggleStart, handleLap, handleReset, handleReactionClick]);
 
   // Countdown Start Mode Implementation
   const startCountdownSequence = () => {
+    unlockAudioContext();
     setIsCountingDown(true);
     setCountdownValue(countdownFrom);
     handleReset();
@@ -210,7 +287,7 @@ export default function StopwatchClient() {
         setCountdownValue(current);
         if (settings.soundEnabled) playCountdownBeep(false);
       } else if (current === 0) {
-        setCountdownValue(0); // "GO!"
+        setCountdownValue(0);
         if (settings.soundEnabled) playCountdownBeep(true);
       } else {
         clearInterval(interval);
@@ -225,6 +302,7 @@ export default function StopwatchClient() {
 
   // Interval (HIIT) Timer Implementation
   const startInterval = () => {
+    unlockAudioContext();
     setIsIntervalRunning(true);
     setIntervalState('prep');
     setIntervalTimeRemaining(3);
@@ -256,7 +334,6 @@ export default function StopwatchClient() {
           return prev - 1;
         }
 
-        // Transition phases
         if (intervalState === 'prep') {
           setIntervalState('work');
           if (settings.soundEnabled) playCountdownBeep(true);
@@ -286,31 +363,6 @@ export default function StopwatchClient() {
       if (intervalTimerRef.current) clearInterval(intervalTimerRef.current);
     };
   }, [isIntervalRunning, intervalState, currentRound, settings]);
-
-  // Reaction Timer Implementation
-  const handleReactionClick = () => {
-    if (reactionState === 'idle' || reactionState === 'result' || reactionState === 'early') {
-      // Start waiting for green
-      setReactionState('waiting');
-      const delay = Math.floor(Math.random() * 3000) + 1500; // 1.5s - 4.5s
-      reactionTimeoutRef.current = setTimeout(() => {
-        setReactionState('ready');
-        setReactionStartTime(performance.now());
-        if (settings.soundEnabled) playBeep(1000, 100);
-      }, delay);
-    } else if (reactionState === 'waiting') {
-      // Clicked too early!
-      if (reactionTimeoutRef.current) clearTimeout(reactionTimeoutRef.current);
-      setReactionState('early');
-    } else if (reactionState === 'ready' && reactionStartTime !== null) {
-      // Recorded successful click
-      const score = Math.round(performance.now() - reactionStartTime);
-      setReactionScore(score);
-      setReactionHistory((prev) => [score, ...prev.slice(0, 9)]);
-      setReactionState('result');
-      if (settings.soundEnabled) playLapChime();
-    }
-  };
 
   // Export Handlers
   const handleCopySummary = async () => {
@@ -376,7 +428,6 @@ export default function StopwatchClient() {
         {displayString}
       </div>
 
-      {/* Sub-status Indicator Bar */}
       <div className="flex flex-wrap items-center justify-center gap-3 mt-2 text-xs font-semibold text-text-muted">
         {isRunning && (
           <span className="flex items-center gap-1.5 text-success animate-pulse">
@@ -400,7 +451,6 @@ export default function StopwatchClient() {
   // Render Tactile Action Controls
   const renderControls = () => (
     <div className="flex items-center justify-center gap-4 sm:gap-6 mt-6 sm:mt-8 w-full">
-      {/* Lap / Split Button */}
       <button
         type="button"
         onClick={handleLap}
@@ -417,7 +467,6 @@ export default function StopwatchClient() {
         <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-0.5">Lap</span>
       </button>
 
-      {/* Main Start / Pause / Resume Button */}
       <button
         type="button"
         onClick={toggleStart}
@@ -444,7 +493,6 @@ export default function StopwatchClient() {
         )}
       </button>
 
-      {/* Reset Button */}
       <button
         type="button"
         onClick={handleReset}
@@ -482,7 +530,6 @@ export default function StopwatchClient() {
           <h3 className="font-bold text-xs uppercase tracking-widest text-text-muted mb-3">Stopwatch Settings</h3>
           
           <div className="space-y-4 text-xs">
-            {/* Audio Toggle */}
             <label className="flex items-center justify-between cursor-pointer p-1.5 hover:bg-surface-2 rounded-lg">
               <span className="font-semibold text-text flex items-center gap-2">
                 {settings.soundEnabled ? <Volume2 className="w-4 h-4 text-blue" /> : <VolumeX className="w-4 h-4 text-text-muted" />}
@@ -496,7 +543,6 @@ export default function StopwatchClient() {
               />
             </label>
 
-            {/* Dashboard Theme (Only shown in dashboard mode) */}
             {isDashboard && (
               <div className="space-y-1.5 pt-2 border-t border-border/60">
                 <label className="font-bold text-text-muted">Dashboard Theme</label>
@@ -514,7 +560,6 @@ export default function StopwatchClient() {
               </div>
             )}
 
-            {/* Dashboard Clock Size */}
             {isDashboard && (
               <div className="space-y-1.5">
                 <label className="font-bold text-text-muted">Clock Display Scale</label>
@@ -560,7 +605,6 @@ export default function StopwatchClient() {
             </tr>
           </thead>
           <tbody className="divide-y divide-border/60">
-            {/* Show latest lap first */}
             {[...lapRecords].reverse().map((lap) => {
               return (
                 <tr 
@@ -602,6 +646,14 @@ export default function StopwatchClient() {
     );
   };
 
+  // Phase 5 Session Comparison Computed
+  const sessionComparison = useMemo(() => {
+    const sA = sessions.find((s) => s.id === compareSessionAId);
+    const sB = sessions.find((s) => s.id === compareSessionBId);
+    if (!sA || !sB) return null;
+    return compareStopwatchSessions(sA, sB);
+  }, [sessions, compareSessionAId, compareSessionBId]);
+
   // If in Fullscreen Dashboard Mode
   if (isDashboard) {
     return (
@@ -633,6 +685,237 @@ export default function StopwatchClient() {
   return (
     <div className="w-full min-w-0 max-w-full space-y-6">
       <QRModal url={typeof window !== 'undefined' ? window.location.href : ''} isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
+
+      {/* History & Personal Records Modal */}
+      <Dialog.Root open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 bg-black/60 backdrop-blur-sm z-modal animate-in fade-in" />
+          <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl max-h-[85vh] overflow-y-auto bg-surface border border-border shadow-2xl rounded-3xl p-6 z-modal space-y-6">
+            <div className="flex items-center justify-between border-b border-border pb-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-2xl bg-blue/10 text-blue border border-blue/20">
+                  <Trophy className="w-6 h-6" />
+                </div>
+                <div>
+                  <Dialog.Title className="text-lg font-bold text-text">Session History & Records</Dialog.Title>
+                  <p className="text-xs text-text-muted">IndexedDB local storage • 100% private to your browser</p>
+                </div>
+              </div>
+              <Dialog.Close className="p-2 rounded-xl hover:bg-surface-2 text-text-muted hover:text-text cursor-pointer">
+                <X className="w-5 h-5" />
+              </Dialog.Close>
+            </div>
+
+            {/* History Modal Tabs */}
+            <div className="flex gap-2 border-b border-border/60 pb-3">
+              <button
+                type="button"
+                onClick={() => setHistoryTab('sessions')}
+                className={cn("px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5", historyTab === 'sessions' ? "bg-blue text-white" : "bg-surface-2 text-text-muted hover:text-text")}
+              >
+                <History className="w-4 h-4" />
+                <span>Saved Sessions ({sessions.length})</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setHistoryTab('records')}
+                className={cn("px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5", historyTab === 'records' ? "bg-blue text-white" : "bg-surface-2 text-text-muted hover:text-text")}
+              >
+                <Trophy className="w-4 h-4" />
+                <span>Personal Records</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setHistoryTab('compare')}
+                className={cn("px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5", historyTab === 'compare' ? "bg-blue text-white" : "bg-surface-2 text-text-muted hover:text-text")}
+              >
+                <GitCompare className="w-4 h-4" />
+                <span>Compare Sessions</span>
+              </button>
+            </div>
+
+            {/* Tab 1: Sessions List */}
+            {historyTab === 'sessions' && (
+              <div className="space-y-4">
+                {sessions.length === 0 ? (
+                  <div className="text-center py-12 text-text-muted space-y-2">
+                    <History className="w-8 h-8 mx-auto opacity-40" />
+                    <p className="text-sm font-semibold">No saved sessions yet</p>
+                    <p className="text-xs">Record laps and click &ldquo;Save Session&rdquo; to persist them locally.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="flex justify-end">
+                      <button
+                        type="button"
+                        onClick={clearAllSessionsAction}
+                        className="text-xs text-red-400 hover:text-red-300 font-semibold flex items-center gap-1 cursor-pointer"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" /> Clear All History
+                      </button>
+                    </div>
+
+                    <div className="divide-y divide-border/60 border border-border rounded-2xl overflow-hidden">
+                      {sessions.map((s) => (
+                        <div key={s.id} className="p-4 bg-surface hover:bg-surface-2/40 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-text text-sm">{s.name}</span>
+                              <span className="bg-surface-2 text-text-muted px-2 py-0.5 rounded-full uppercase font-mono text-[10px]">
+                                {s.mode}
+                              </span>
+                            </div>
+                            <div className="text-text-muted flex flex-wrap gap-3">
+                              <span>📅 {new Date(s.timestamp).toLocaleDateString()}</span>
+                              <span>⏱️ {formatStopwatchTime(s.totalDurationMs, 'centiseconds')}</span>
+                              <span>🚩 {s.lapCount} laps</span>
+                              {s.bestLapMs !== null && <span>⭐ Best: {formatStopwatchTime(s.bestLapMs, 'centiseconds')}</span>}
+                              {s.consistencyScore !== null && <span>🎯 {s.consistencyScore}%</span>}
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setCompareSessionAId(s.id);
+                                setHistoryTab('compare');
+                              }}
+                              className="px-3 py-1.5 rounded-xl bg-surface-2 hover:bg-surface border border-border text-text font-semibold cursor-pointer"
+                            >
+                              Compare
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => deleteSessionAction(s.id)}
+                              className="p-2 rounded-xl text-text-muted hover:text-red-400 cursor-pointer"
+                              title="Delete Session"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Tab 2: Personal Records */}
+            {historyTab === 'records' && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <MetricCard
+                  label="Personal Best Lap"
+                  value={personalRecords.bestLapMs !== null ? formatStopwatchTime(personalRecords.bestLapMs, 'milliseconds') : '—'}
+                  sub="Fastest individual lap ever recorded"
+                  accent
+                />
+                <MetricCard
+                  label="Fastest Reaction Time"
+                  value={personalRecords.bestReactionTimeMs !== null ? `${personalRecords.bestReactionTimeMs} ms` : '—'}
+                  sub="Best reaction benchmark response"
+                />
+                <MetricCard
+                  label="Best Consistency Score"
+                  value={personalRecords.bestConsistencyScore !== null ? `${personalRecords.bestConsistencyScore}%` : '—'}
+                  sub="Highest lap-to-lap rhythm accuracy"
+                />
+                <MetricCard
+                  label="Total Sessions Completed"
+                  value={personalRecords.totalSessionsCompleted.toString()}
+                  sub={`Total Tracked: ${formatStopwatchTime(personalRecords.totalDurationTrackedMs, 'seconds')}`}
+                />
+              </div>
+            )}
+
+            {/* Tab 3: Session Comparison */}
+            {historyTab === 'compare' && (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-text-muted">Session A (Baseline)</label>
+                    <select
+                      value={compareSessionAId || ''}
+                      onChange={(e) => setCompareSessionAId(e.target.value)}
+                      className="w-full bg-surface-2 border border-border rounded-xl p-2.5 text-xs text-text outline-none"
+                    >
+                      <option value="">Select Session A...</option>
+                      {sessions.map((s) => (
+                        <option key={s.id} value={s.id}>
+                          {s.name} ({new Date(s.timestamp).toLocaleDateString()} - {formatStopwatchTime(s.totalDurationMs, 'centiseconds')})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-text-muted">Session B (Comparison)</label>
+                    <select
+                      value={compareSessionBId || ''}
+                      onChange={(e) => setCompareSessionBId(e.target.value)}
+                      className="w-full bg-surface-2 border border-border rounded-xl p-2.5 text-xs text-text outline-none"
+                    >
+                      <option value="">Select Session B...</option>
+                      {sessions.map((s) => (
+                        <option key={s.id} value={s.id}>
+                          {s.name} ({new Date(s.timestamp).toLocaleDateString()} - {formatStopwatchTime(s.totalDurationMs, 'centiseconds')})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {sessionComparison ? (
+                  <div className="border border-border rounded-2xl p-4 bg-surface-2/30 space-y-4 text-xs">
+                    <div className="grid grid-cols-3 gap-3 text-center border-b border-border/60 pb-4">
+                      <div>
+                        <div className="text-text-muted">Metric</div>
+                        <div className="font-bold text-sm mt-1">Total Time</div>
+                        <div className="font-bold text-sm mt-1">Best Lap</div>
+                        <div className="font-bold text-sm mt-1">Avg Lap</div>
+                        <div className="font-bold text-sm mt-1">Consistency</div>
+                      </div>
+                      <div>
+                        <div className="text-text-muted">{sessionComparison.sessionA.name}</div>
+                        <div className="font-mono mt-1">{formatStopwatchTime(sessionComparison.sessionA.totalDurationMs, 'centiseconds')}</div>
+                        <div className="font-mono mt-1">{sessionComparison.sessionA.bestLapMs ? formatStopwatchTime(sessionComparison.sessionA.bestLapMs, 'centiseconds') : '—'}</div>
+                        <div className="font-mono mt-1">{sessionComparison.sessionA.avgLapMs ? formatStopwatchTime(sessionComparison.sessionA.avgLapMs, 'centiseconds') : '—'}</div>
+                        <div className="font-mono mt-1">{sessionComparison.sessionA.consistency ? `${sessionComparison.sessionA.consistency}%` : '—'}</div>
+                      </div>
+                      <div>
+                        <div className="text-text-muted">{sessionComparison.sessionB.name}</div>
+                        <div className="font-mono mt-1">{formatStopwatchTime(sessionComparison.sessionB.totalDurationMs, 'centiseconds')}</div>
+                        <div className="font-mono mt-1">{sessionComparison.sessionB.bestLapMs ? formatStopwatchTime(sessionComparison.sessionB.bestLapMs, 'centiseconds') : '—'}</div>
+                        <div className="font-mono mt-1">{sessionComparison.sessionB.avgLapMs ? formatStopwatchTime(sessionComparison.sessionB.avgLapMs, 'centiseconds') : '—'}</div>
+                        <div className="font-mono mt-1">{sessionComparison.sessionB.consistency ? `${sessionComparison.sessionB.consistency}%` : '—'}</div>
+                      </div>
+                    </div>
+
+                    <div className="text-center font-bold text-sm">
+                      {sessionComparison.totalDurationImprovementPct > 0 ? (
+                        <span className="text-emerald-400">
+                          🚀 Session B is {sessionComparison.totalDurationImprovementPct}% faster ({formatStopwatchTime(Math.abs(sessionComparison.totalDurationDiffMs), 'centiseconds')} lead)
+                        </span>
+                      ) : sessionComparison.totalDurationImprovementPct < 0 ? (
+                        <span className="text-amber-400">
+                          ⏱️ Session B is {Math.abs(sessionComparison.totalDurationImprovementPct)}% slower ({formatStopwatchTime(Math.abs(sessionComparison.totalDurationDiffMs), 'centiseconds')} gap)
+                        </span>
+                      ) : (
+                        <span className="text-text">Sessions have identical duration</span>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-6 text-text-muted text-xs">
+                    Select two sessions above to compare their performance side-by-side.
+                  </div>
+                )}
+              </div>
+            )}
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
 
       {/* Mode Switcher Segmented Control */}
       <div className="flex items-center justify-between gap-2 flex-wrap border-b border-border/80 pb-4">
@@ -683,8 +966,18 @@ export default function StopwatchClient() {
           </button>
         </div>
 
-        {/* Right Settings and Controls */}
+        {/* Right Settings & History Button */}
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsHistoryOpen(true)}
+            className="flex items-center gap-1.5 bg-surface hover:bg-surface-2 border border-border px-3 py-2 rounded-xl text-xs font-bold text-text-muted hover:text-text transition-colors cursor-pointer"
+            title="Session History & Records"
+          >
+            <Trophy className="w-4 h-4 text-amber-400" />
+            <span className="hidden sm:inline">Records & History</span>
+          </button>
+
           {tabMode === 'standard' && (
             <div className="hidden sm:flex items-center gap-1 bg-surface-2 p-1 rounded-xl border border-border text-xs">
               <button
@@ -723,7 +1016,6 @@ export default function StopwatchClient() {
               {renderMainClock()}
               {renderControls()}
 
-              {/* Keyboard Shortcuts Hint */}
               <div className="flex items-center justify-center gap-4 text-[11px] text-text-muted pt-4 border-t border-border/40 w-full">
                 <span><kbd className="px-1.5 py-0.5 rounded bg-surface-2 border border-border font-mono">Space</kbd> Start/Pause</span>
                 <span><kbd className="px-1.5 py-0.5 rounded bg-surface-2 border border-border font-mono">L</kbd> Lap</span>
@@ -732,7 +1024,7 @@ export default function StopwatchClient() {
             </div>
           }
           optionsPanel={
-            <div className="space-y-4">
+            <div className="space-y-5">
               <h3 className="font-bold text-xs uppercase tracking-widest text-text-muted">Display Precision</h3>
               <div className="grid grid-cols-3 gap-1 bg-surface-2 p-1 rounded-xl border border-border text-xs">
                 <button
@@ -783,6 +1075,37 @@ export default function StopwatchClient() {
                   </div>
                 </div>
               )}
+
+              {/* Phase 5 Pace Trend Progression */}
+              {paceTrend && (
+                <div className="pt-4 border-t border-border/60 space-y-2">
+                  <h3 className="font-bold text-xs uppercase tracking-widest text-text-muted flex items-center justify-between">
+                    <span>Pace Progression</span>
+                    <span className={cn(
+                      "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase",
+                      paceTrend.trend === 'improving' ? "bg-emerald-500/20 text-emerald-400" :
+                      paceTrend.trend === 'slowing' ? "bg-amber-500/20 text-amber-400" :
+                      "bg-surface-2 text-text-muted"
+                    )}>
+                      {paceTrend.trend === 'improving' ? "🚀 Speeding Up" : paceTrend.trend === 'slowing' ? "🐢 Slowing Down" : "⚖️ Steady Pace"}
+                    </span>
+                  </h3>
+                  <div className="bg-surface-2/40 border border-border rounded-xl p-3 text-xs space-y-1.5">
+                    <div className="flex justify-between text-text-muted">
+                      <span>First Half Avg:</span>
+                      <strong className="text-text font-mono">{formatStopwatchTime(paceTrend.firstHalfAvgMs, precision)}</strong>
+                    </div>
+                    <div className="flex justify-between text-text-muted">
+                      <span>Second Half Avg:</span>
+                      <strong className="text-text font-mono">{formatStopwatchTime(paceTrend.secondHalfAvgMs, precision)}</strong>
+                    </div>
+                    <div className="flex justify-between text-text-muted">
+                      <span>Pace Slope:</span>
+                      <strong className="text-text font-mono">{paceTrend.slopeMsPerLap > 0 ? `+${paceTrend.slopeMsPerLap}` : paceTrend.slopeMsPerLap} ms/lap</strong>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           }
           output={
@@ -795,49 +1118,85 @@ export default function StopwatchClient() {
                   </span>
                 </div>
 
-                {/* Export & Action Buttons */}
-                {lapRecords.length > 0 && (
-                  <div className="flex items-center gap-1.5">
+                {/* Export & Save Action Buttons */}
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  {elapsed > 0 && (
                     <button
                       type="button"
-                      onClick={handleCopySummary}
-                      className="flex items-center gap-1 bg-surface-2 hover:bg-surface border border-border rounded-xl px-2.5 py-1.5 text-xs font-medium text-text-muted hover:text-text transition-colors cursor-pointer"
-                      title="Copy text summary"
+                      onClick={handleSaveSession}
+                      className="flex items-center gap-1 bg-blue/10 text-blue hover:bg-blue/20 border border-blue/30 rounded-xl px-2.5 py-1.5 text-xs font-bold transition-colors cursor-pointer"
+                      title="Save Session to Local History"
                     >
-                      <Copy className="w-3.5 h-3.5" />
-                      <span className="hidden sm:inline">Copy</span>
+                      <BookmarkPlus className="w-3.5 h-3.5" />
+                      <span>Save</span>
                     </button>
-                    <button
-                      type="button"
-                      onClick={handleDownloadCSV}
-                      className="flex items-center gap-1 bg-surface-2 hover:bg-surface border border-border rounded-xl px-2.5 py-1.5 text-xs font-medium text-text-muted hover:text-text transition-colors cursor-pointer"
-                      title="Download CSV"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      <span>CSV</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleDownloadJSON}
-                      className="flex items-center gap-1 bg-surface-2 hover:bg-surface border border-border rounded-xl px-2.5 py-1.5 text-xs font-medium text-text-muted hover:text-text transition-colors cursor-pointer"
-                      title="Download JSON"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      <span>JSON</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setIsQrOpen(true)}
-                      className="flex items-center gap-1 bg-surface-2 hover:bg-surface border border-border rounded-xl px-2.5 py-1.5 text-xs font-medium text-text-muted hover:text-text transition-colors cursor-pointer"
-                      title="Share QR"
-                    >
-                      <Share2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                )}
+                  )}
+                  {lapRecords.length > 0 && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={handleCopySummary}
+                        className="flex items-center gap-1 bg-surface-2 hover:bg-surface border border-border rounded-xl px-2.5 py-1.5 text-xs font-medium text-text-muted hover:text-text transition-colors cursor-pointer"
+                        title="Copy text summary"
+                      >
+                        <Copy className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">Copy</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleDownloadCSV}
+                        className="flex items-center gap-1 bg-surface-2 hover:bg-surface border border-border rounded-xl px-2.5 py-1.5 text-xs font-medium text-text-muted hover:text-text transition-colors cursor-pointer"
+                        title="Download CSV"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                        <span>CSV</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleDownloadJSON}
+                        className="flex items-center gap-1 bg-surface-2 hover:bg-surface border border-border rounded-xl px-2.5 py-1.5 text-xs font-medium text-text-muted hover:text-text transition-colors cursor-pointer"
+                        title="Download JSON"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                        <span>JSON</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setIsQrOpen(true)}
+                        className="flex items-center gap-1 bg-surface-2 hover:bg-surface border border-border rounded-xl px-2.5 py-1.5 text-xs font-medium text-text-muted hover:text-text transition-colors cursor-pointer"
+                        title="Share QR"
+                      >
+                        <Share2 className="w-3.5 h-3.5" />
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
 
               {renderLapsList()}
+
+              {/* Phase 5 Lap Distribution Bar Chart */}
+              {lapDistribution.length > 1 && (
+                <div className="pt-4 border-t border-border/60 space-y-2">
+                  <h4 className="text-xs font-bold uppercase tracking-widest text-text-muted flex items-center gap-1.5">
+                    <BarChart2 className="w-3.5 h-3.5 text-blue" />
+                    <span>Lap Time Distribution</span>
+                  </h4>
+                  <div className="space-y-1.5">
+                    {lapDistribution.map((bin, idx) => (
+                      <div key={idx} className="space-y-1">
+                        <div className="flex justify-between text-[11px] text-text-muted">
+                          <span>{bin.label}</span>
+                          <span>{bin.count} laps ({bin.pct}%)</span>
+                        </div>
+                        <div className="w-full h-1.5 rounded-full bg-surface-2 overflow-hidden">
+                          <div className="h-full bg-blue rounded-full" style={{ width: `${bin.pct}%` }} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           }
         />
@@ -905,7 +1264,6 @@ export default function StopwatchClient() {
               </p>
             </div>
 
-            {/* Interval Configuration Controls */}
             {!isIntervalRunning && intervalState === 'idle' && (
               <div className="flex flex-wrap items-center gap-3 text-xs">
                 <div className="flex items-center gap-1.5">
@@ -947,7 +1305,6 @@ export default function StopwatchClient() {
             )}
           </div>
 
-          {/* Active Interval Dashboard */}
           <div className="flex flex-col items-center justify-center py-6 text-center space-y-6">
             <div className="space-y-1">
               <span className={cn(
@@ -965,13 +1322,11 @@ export default function StopwatchClient() {
               </div>
             </div>
 
-            {/* Big Countdown Timer */}
             <div className="text-7xl sm:text-9xl font-black font-mono tracking-tighter tabular-nums">
               {String(Math.floor(intervalTimeRemaining / 60)).padStart(2, '0')}:
               {String(intervalTimeRemaining % 60).padStart(2, '0')}
             </div>
 
-            {/* Controls */}
             <div className="flex items-center gap-4">
               {intervalState === 'idle' || intervalState === 'complete' ? (
                 <button
@@ -1065,13 +1420,36 @@ export default function StopwatchClient() {
             )}
           </div>
 
+          {/* Phase 5 Reaction Analytics Summary */}
+          {reactionStats.attemptCount > 0 && (
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <MetricCard
+                label="Best Reaction"
+                value={reactionStats.bestReactionMs !== null ? `${reactionStats.bestReactionMs} ms` : '—'}
+                accent
+              />
+              <MetricCard
+                label="Average Reaction"
+                value={reactionStats.avgReactionMs !== null ? `${reactionStats.avgReactionMs} ms` : '—'}
+              />
+              <MetricCard
+                label="Median Reaction"
+                value={reactionStats.medianReactionMs !== null ? `${reactionStats.medianReactionMs} ms` : '—'}
+              />
+              <MetricCard
+                label="Consistency Index"
+                value={reactionStats.consistencyScore !== null ? `${reactionStats.consistencyScore}%` : '—'}
+              />
+            </div>
+          )}
+
           {/* Reaction History Table */}
           {reactionHistory.length > 0 && (
             <div className="border border-border rounded-2xl p-4 bg-surface space-y-3">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-text uppercase tracking-wider">Past Attempts</span>
+                <span className="font-bold text-text uppercase tracking-wider">Session Attempts ({reactionHistory.length})</span>
                 <span className="text-text-muted">
-                  Best: <strong className="text-emerald-400">{Math.min(...reactionHistory)} ms</strong> • Avg: <strong>{Math.round(reactionHistory.reduce((a,b)=>a+b,0)/reactionHistory.length)} ms</strong>
+                  False Starts: <strong className="text-amber-400">{reactionStats.falseStartsCount}</strong>
                 </span>
               </div>
               <div className="flex flex-wrap gap-2">
