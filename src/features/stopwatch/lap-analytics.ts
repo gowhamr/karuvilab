@@ -28,8 +28,8 @@ export function computeLapRecords(rawLaps: number[], totalElapsedMs: number): La
     const prevLapTime = i > 0 ? rawLaps[i - 1]! : lapTime;
     const diffFromPrev = i > 0 ? lapTime - prevLapTime : 0;
     const diffFromAvg = lapTime - avgTime;
-    const isFastest = n >= 2 && lapTime === minTime;
-    const isSlowest = n >= 2 && lapTime === maxTime;
+    const isFastest = n >= 2 && minTime !== maxTime && lapTime === minTime;
+    const isSlowest = n >= 2 && minTime !== maxTime && lapTime === maxTime;
     const pctOfTotal = totalElapsedMs > 0 ? (lapTime / totalElapsedMs) * 100 : 0;
 
     records.push({

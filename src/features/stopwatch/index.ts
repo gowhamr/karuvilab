@@ -9,3 +9,5 @@ export * from './session-analytics';
 export * from './reaction-analytics';
 export * from './comparison-utils';
 export * from './session-store';
+export * from './components/LapPaceChart';
+export * from './components/ReactionDistributionChart';

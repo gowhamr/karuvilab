@@ -55,7 +55,9 @@ import {
   computeLapDistribution,
   computeReactionStats,
   compareStopwatchSessions,
-  useStopwatchSessionStore
+  useStopwatchSessionStore,
+  LapPaceChart,
+  ReactionDistributionChart
 } from "@/src/features/stopwatch";
 import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -1175,6 +1177,11 @@ export default function StopwatchClient() {
 
               {renderLapsList()}
 
+              {/* Phase 6 Lap Pace Curve SVG Visualization */}
+              {lapRecords.length >= 2 && (
+                <LapPaceChart laps={lapRecords} precision={precision} className="pt-3 border-t border-border/60" />
+              )}
+
               {/* Phase 5 Lap Distribution Bar Chart */}
               {lapDistribution.length > 1 && (
                 <div className="pt-4 border-t border-border/60 space-y-2">
@@ -1441,6 +1448,11 @@ export default function StopwatchClient() {
                 value={reactionStats.consistencyScore !== null ? `${reactionStats.consistencyScore}%` : '—'}
               />
             </div>
+          )}
+
+          {/* Phase 6 Reaction Distribution Chart */}
+          {reactionStats.attemptCount > 0 && (
+            <ReactionDistributionChart analytics={reactionStats} />
           )}
 
           {/* Reaction History Table */}
