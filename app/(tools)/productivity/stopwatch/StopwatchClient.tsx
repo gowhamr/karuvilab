@@ -41,7 +41,9 @@ import {
   useWakeLock,
   playCountdownBeep,
   playLapChime,
-  playBeep
+  playBeep,
+  unlockAudioContext,
+  getReactionBenchmarkTier
 } from "@/src/features/stopwatch";
 import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -113,12 +115,24 @@ export default function StopwatchClient() {
     };
   }, [isRunning]);
 
+  // Immediate elapsed time sync when user switches back from another tab/app
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && isRunning && startTime !== null) {
+        setElapsed(performance.now() - startTime);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [isRunning, startTime]);
+
   // Derived Lap Records & Statistics
   const lapRecords = useMemo(() => computeLapRecords(rawLaps, elapsed), [rawLaps, elapsed]);
   const stats = useMemo(() => computeStopwatchStats(rawLaps, elapsed), [rawLaps, elapsed]);
 
   // Core Stopwatch Actions
   const toggleStart = useCallback(() => {
+    unlockAudioContext();
     if (isRunning) {
       setIsRunning(false);
     } else {
@@ -1038,18 +1052,15 @@ export default function StopwatchClient() {
               </div>
             )}
 
-            {reactionState === 'result' && (
+            {reactionState === 'result' && reactionScore !== null && (
               <div className="space-y-3">
                 <div className="text-6xl font-black font-mono tracking-tight text-blue">
                   {reactionScore} ms
                 </div>
-                <div className="text-sm font-bold">
-                  {reactionScore! < 200 ? "🚀 Godlike Reflexes!" :
-                   reactionScore! < 260 ? "⚡ Pro Reflexes" :
-                   reactionScore! < 340 ? "👍 Good Human Average" :
-                   "🐢 Slow Reaction"}
+                <div className={cn("text-sm font-bold", getReactionBenchmarkTier(reactionScore).className)}>
+                  {getReactionBenchmarkTier(reactionScore).label}
                 </div>
-                <p className="text-xs text-text-muted">Click to try again</p>
+                <p className="text-xs text-text-muted">Click or press Space to test again</p>
               </div>
             )}
           </div>

@@ -15,11 +15,18 @@ function getAudioContext(): AudioContext | null {
       }
     }
     if (audioCtx && audioCtx.state === 'suspended') {
-      audioCtx.resume();
+      audioCtx.resume().catch(() => {});
     }
     return audioCtx;
   } catch {
     return null;
+  }
+}
+
+export function unlockAudioContext(): void {
+  const ctx = getAudioContext();
+  if (ctx && ctx.state === 'suspended') {
+    ctx.resume().catch(() => {});
   }
 }
 

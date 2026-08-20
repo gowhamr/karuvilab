@@ -4,6 +4,7 @@ import {
   splitTimeComponents,
   formatStopwatchTime,
   formatDeltaTime,
+  getReactionBenchmarkTier,
 } from '../../features/stopwatch/timing-engine';
 import {
   computeLapRecords,
@@ -224,3 +225,44 @@ describe('Export Serialization Fidelity (JSON, CSV, Plain Text)', () => {
     expect(textStr).toContain('🐢 Slowest');
   });
 });
+
+describe('Phase 4 Hardening: Long Durations, Rapid Cycles & Scientific Reaction Tiers', () => {
+  it('formats extreme long durations (> 24 hours) accurately', () => {
+    const twentyFiveHours = 25 * 3600000 + 12 * 60000 + 34 * 1000 + 567; // 25:12:34.567
+    expect(formatStopwatchTime(twentyFiveHours, 'milliseconds')).toBe('25:12:34.567');
+    expect(formatStopwatchTime(twentyFiveHours, 'seconds')).toBe('25:12:34');
+  });
+
+  it('maintains mathematical precision across 100 rapid pause/resume cycles without drift', () => {
+    let accumulated = 0;
+    let baseTime = 100000;
+
+    for (let i = 0; i < 100; i++) {
+      const start = baseTime;
+      const now = start + 50; // 50ms pulse
+      accumulated = calculateElapsed(start, now, accumulated);
+      baseTime += 100; // simulated gap
+    }
+
+    expect(accumulated).toBe(5000); // 100 * 50ms = 5000ms exactly
+  });
+
+  it('accurately classifies reaction times into neutral scientific benchmark tiers', () => {
+    const elite = getReactionBenchmarkTier(185);
+    expect(elite.tier).toBe('top-tier');
+    expect(elite.label).toContain('<200 ms');
+
+    const fast = getReactionBenchmarkTier(230);
+    expect(fast.tier).toBe('fast');
+    expect(fast.label).toContain('200–260 ms');
+
+    const typical = getReactionBenchmarkTier(290);
+    expect(typical.tier).toBe('typical');
+    expect(typical.label).toContain('260–340 ms');
+
+    const slow = getReactionBenchmarkTier(410);
+    expect(slow.tier).toBe('slow');
+    expect(slow.label).toContain('>340 ms');
+  });
+});
+

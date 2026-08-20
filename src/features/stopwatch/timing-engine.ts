@@ -92,3 +92,46 @@ export function formatDeltaTime(deltaMs: number, precision: PrecisionMode = 'cen
   const absFormatted = formatStopwatchTime(Math.abs(deltaMs), precision);
   return `${sign}${absFormatted}`;
 }
+
+export interface ReactionTierInfo {
+  tier: 'top-tier' | 'fast' | 'typical' | 'slow';
+  label: string;
+  badge: string;
+  className: string;
+}
+
+/**
+ * Classifies reaction time according to scientific human benchmark baselines.
+ */
+export function getReactionBenchmarkTier(scoreMs: number): ReactionTierInfo {
+  if (scoreMs < 200) {
+    return {
+      tier: 'top-tier',
+      label: 'Excellent Reflexes (<200 ms)',
+      badge: '⚡ Top Tier',
+      className: 'text-emerald-400',
+    };
+  }
+  if (scoreMs <= 260) {
+    return {
+      tier: 'fast',
+      label: 'Fast / Above Average (200–260 ms)',
+      badge: '🎯 Fast',
+      className: 'text-blue',
+    };
+  }
+  if (scoreMs <= 340) {
+    return {
+      tier: 'typical',
+      label: 'Typical Human Baseline (260–340 ms)',
+      badge: '⏱️ Typical',
+      className: 'text-amber-400',
+    };
+  }
+  return {
+    tier: 'slow',
+    label: 'Slower Response (>340 ms)',
+    badge: '🐢 Slower',
+    className: 'text-text-muted',
+  };
+}
