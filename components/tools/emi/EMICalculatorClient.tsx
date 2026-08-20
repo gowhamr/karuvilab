@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo } from "react";
-import { m, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect, useMemo } from "react";
 import { useEmiStore } from "@/src/features/emi-calculator/store";
 import { useSessionStore } from "@/src/store/useSessionStore";
 import { SessionRestoredBanner } from "@/components/ui/SessionRestoredBanner";
@@ -132,26 +131,6 @@ export default function EMICalculatorClient() {
     setShowRestoredBanner(false);
   };
 
-  const [isSticky, setIsSticky] = useState(false);
-  const resultRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!resultRef.current) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (entry) {
-          setIsSticky(!entry.isIntersecting && entry.boundingClientRect.bottom < 0);
-        }
-      },
-      { threshold: 0 }
-    );
-
-    observer.observe(resultRef.current);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <div className="relative space-y-12">
       <SessionRestoredBanner 
@@ -159,29 +138,6 @@ export default function EMICalculatorClient() {
         onClear={handleClearSession}
         onDismiss={() => setShowRestoredBanner(false)}
       />
-
-      {/* Mobile Sticky Bar Floating Above BottomNav */}
-      <AnimatePresence>
-        {isSticky && result && (
-          <m.div
-            initial={{ y: 40, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 40, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="md:hidden fixed left-4 right-4 z-dropdown bg-surface/95 backdrop-blur-md border border-border rounded-2xl p-3.5 shadow-2xl shadow-black/30 flex items-center justify-between"
-            style={{ bottom: 'calc(5rem + env(safe-area-inset-bottom, 0px))' }}
-          >
-            <div className="space-y-0.5 min-w-0">
-               <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">Monthly EMI</p>
-               <p className="text-base font-bold text-text truncate">{formatCurrency(result.monthlyEmi)}</p>
-            </div>
-            <div className="text-right space-y-0.5 shrink-0 pl-2">
-               <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">Total Interest</p>
-               <p className="text-xs font-semibold text-text">{formatCurrency(result.totalInterest)}</p>
-            </div>
-          </m.div>
-        )}
-      </AnimatePresence>
       
       {/* Top Section: Inputs & Summary */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
@@ -201,7 +157,7 @@ export default function EMICalculatorClient() {
         <div className="space-y-6 lg:sticky lg:top-8">
           <h2 className="text-xs font-bold uppercase tracking-wider text-text-muted px-2">Loan Summary</h2>
           
-          <div ref={resultRef} className="space-y-6">
+          <div className="space-y-6">
             <MetricCard
               label="Monthly EMI"
               value={formatCurrency(result.monthlyEmi)}
