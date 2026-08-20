@@ -6,6 +6,7 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import { useEmiStore } from "@/src/features/emi-calculator/store";
 import { checkAffordability } from "@/src/lib/emi-calculations";
 import { cn } from "@/src/lib/utils";
+import { ShieldCheck, AlertTriangle, AlertCircle } from "lucide-react";
 
 export function AffordabilityPanel({ currentEmi }: { currentEmi: number }) {
   const affordability = useEmiStore(state => state.affordability);
@@ -18,78 +19,95 @@ export function AffordabilityPanel({ currentEmi }: { currentEmi: number }) {
   [currentEmi, affordability]);
 
   const riskColors = {
-    low: "bg-green-500",
-    medium: "bg-orange-500",
+    low: "bg-emerald-500",
+    medium: "bg-amber-500",
     high: "bg-red-500"
   };
 
   const riskTextColors = {
-    low: "text-emerald-700 dark:text-emerald-400",
-    medium: "text-orange-700 dark:text-orange-400",
-    high: "text-red-700 dark:text-red-400"
+    low: "text-emerald-400",
+    medium: "text-amber-400",
+    high: "text-red-400"
   };
 
+  const riskIcons = {
+    low: ShieldCheck,
+    medium: AlertTriangle,
+    high: AlertCircle
+  };
+
+  const RiskIcon = riskIcons[result.riskLevel];
+
   return (
-    <div className="bg-surface border border-border rounded-2xl p-6">
-      <div className="mb-6">
+    <div className="bg-surface border border-border rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm">
+      <div className="flex items-center justify-between">
         <Checkbox
           id="enable-affordability"
-          label="Affordability Check"
+          label="Loan Affordability & DTI Assessment"
           checked={showAffordability}
           onChange={() => toggleSection('affordability')}
         />
       </div>
 
       {showAffordability && (
-        <div className="space-y-8 animate-in fade-in slide-in-from-top-2 duration-300">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="space-y-6 pt-6 border-t border-border/60 mt-4 animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
             <ToolInput
               label="Monthly Take-Home"
               type="number"
               value={String(affordability.monthlyIncome)}
               onChange={(val) => setAffordability({ monthlyIncome: Number(val) })}
+              description="Net salary / income"
             />
             <ToolInput
-              label="Existing EMIs"
+              label="Existing Other EMIs"
               type="number"
               value={String(affordability.existingEmis)}
               onChange={(val) => setAffordability({ existingEmis: Number(val) })}
+              description="Current active loan EMIs"
             />
             <ToolInput
-              label="Monthly Expenses"
+              label="Monthly Living Expenses"
               type="number"
               value={String(affordability.monthlyExpenses)}
               onChange={(val) => setAffordability({ monthlyExpenses: Number(val) })}
+              description="Rent, food, utilities, etc."
             />
           </div>
 
-          <div className="space-y-4">
-            <dl className="flex justify-between items-end">
-              <dt className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Risk Indicator</dt>
-              <dd className={cn("text-sm font-black uppercase tracking-widest", riskTextColors[result.riskLevel])}>
-                {result.riskLevel} Risk
-              </dd>
-            </dl>
+          <div className="space-y-3 bg-surface-2/40 border border-border/80 rounded-2xl p-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-text-muted">Debt-to-Income (DTI) Ratio</span>
+              <div className={cn("flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border", 
+                result.riskLevel === 'low' ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" :
+                result.riskLevel === 'medium' ? "bg-amber-500/10 text-amber-400 border-amber-500/20" :
+                "bg-red-500/10 text-red-400 border-red-500/20"
+              )}>
+                <RiskIcon className="w-3.5 h-3.5" />
+                <span>{result.riskLevel} Risk ({result.emiPercentOfDisposable.toFixed(1)}%)</span>
+              </div>
+            </div>
             
-            <div className="relative h-3 w-full bg-bg border border-border rounded-full overflow-hidden">
+            {/* Progress Bar */}
+            <div className="relative h-3 w-full bg-surface-2 border border-border rounded-full overflow-hidden">
               <div 
-                className={cn("h-full transition-all duration-1000 ease-out", riskColors[result.riskLevel])}
+                className={cn("h-full transition-all duration-700 ease-out rounded-full", riskColors[result.riskLevel])}
                 style={{ width: `${Math.min(result.emiPercentOfDisposable, 100)}%` }}
               />
             </div>
             
-            <div className="flex justify-between text-xs font-bold text-text-4 uppercase tracking-tighter">
-              <span>0%</span>
+            <div className="flex justify-between text-[10px] font-bold text-text-muted uppercase tracking-wider">
+              <span>0% Safe</span>
               <span>25%</span>
-              <span>50%</span>
+              <span>50% Max Recommended</span>
               <span>75%</span>
-              <span>100%</span>
+              <span>100% Critical</span>
             </div>
 
-            <p className={cn("text-xs font-bold leading-relaxed p-3 rounded-lg border", 
-              result.riskLevel === 'low' ? "bg-green-500/5 border-green-500/10 text-green-700" :
-              result.riskLevel === 'medium' ? "bg-orange-500/5 border-orange-500/10 text-orange-700" :
-              "bg-red-500/5 border-red-500/10 text-red-700"
+            <p className={cn("text-xs font-semibold leading-relaxed p-3.5 rounded-xl border mt-2", 
+              result.riskLevel === 'low' ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-300" :
+              result.riskLevel === 'medium' ? "bg-amber-500/10 border-amber-500/20 text-amber-300" :
+              "bg-red-500/10 border-red-500/20 text-red-300"
             )}>
               {result.message}
             </p>

@@ -2,7 +2,7 @@
 
 import React, { useMemo } from "react";
 import { X, Plus, ArrowRightLeft } from "lucide-react";
-import { useEmiStore, SavedScenario } from "@/src/features/emi-calculator/store";
+import { useEmiStore } from "@/src/features/emi-calculator/store";
 import { generateSchedule } from "@/src/lib/emi-calculations";
 import { formatCurrency } from "@/src/lib/utils";
 import { cn } from "@/src/lib/utils";
@@ -32,15 +32,15 @@ export function ComparisonView() {
   const minInterest = Math.min(...comparisonData.map(d => d.totalInterest));
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <ArrowRightLeft className="w-5 h-5 text-blue" />
-          <h3 className="text-sm font-black uppercase tracking-widest text-text">Scenario Comparison</h3>
+        <div className="flex items-center gap-2.5">
+          <ArrowRightLeft className="w-4 h-4 text-blue" />
+          <h3 className="text-sm font-bold uppercase tracking-wider text-text">Scenario Comparison</h3>
         </div>
         <button 
           onClick={clearComparison}
-          className="text-tiny font-bold uppercase tracking-widest-sm text-red-500 hover:text-red-600 transition-colors"
+          className="text-xs font-bold text-red-400 hover:text-red-300 transition-colors cursor-pointer"
         >
           Clear All
         </button>
@@ -48,21 +48,22 @@ export function ComparisonView() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {comparisonData.map((d) => (
-          <div key={d.id} className="bg-surface border border-border rounded-2xl p-5 relative group overflow-hidden">
+          <div key={d.id} className="bg-surface border border-border rounded-2xl p-5 relative group overflow-hidden shadow-sm">
             <button
               onClick={() => removeFromComparison(d.id)}
-              className="absolute top-2 right-2 p-1.5 bg-bg/50 rounded-lg text-text-4 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+              className="absolute top-2 right-2 p-1.5 bg-surface-2 rounded-lg text-text-muted hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100 cursor-pointer"
+              title="Remove scenario"
             >
-              <X className="w-3 h-3" />
+              <X className="w-3.5 h-3.5" />
             </button>
 
-            <div className="space-y-6">
+            <div className="space-y-4">
               <div>
-                <p className="text-tiny font-bold uppercase tracking-widest-sm text-blue mb-1">Scenario</p>
-                <p className="text-sm font-black text-text truncate">{d.name}</p>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-blue mb-0.5">Scenario</p>
+                <p className="text-sm font-bold text-text truncate">{d.name}</p>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <MetricItem 
                   label="Monthly EMI" 
                   value={formatCurrency(d.emi)} 
@@ -77,18 +78,18 @@ export function ComparisonView() {
                 />
                 <MetricItem 
                   label="Tenure" 
-                  value={`${d.tenure} Months`} 
+                  value={`${d.tenure} Months (${(d.tenure / 12).toFixed(1)} Yrs)`} 
                 />
               </div>
 
-              <dl className="pt-4 border-t border-border/50 grid grid-cols-2 gap-2 text-tiny font-bold text-text-4 uppercase tracking-tighter">
+              <dl className="pt-3 border-t border-border/60 grid grid-cols-2 gap-2 text-xs font-medium text-text-muted">
                 <div>
-                  <dt>Principal</dt>
-                  <dd className="text-text">{formatCurrency(d.config.loanAmount)}</dd>
+                  <dt className="text-[10px] uppercase text-text-muted">Principal</dt>
+                  <dd className="text-text font-bold text-xs">{formatCurrency(d.config.loanAmount)}</dd>
                 </div>
                 <div>
-                  <dt>Rate</dt>
-                  <dd className="text-text">{d.config.interestRate}%</dd>
+                  <dt className="text-[10px] uppercase text-text-muted">Rate</dt>
+                  <dd className="text-text font-bold text-xs">{d.config.interestRate}%</dd>
                 </div>
               </dl>
             </div>
@@ -98,12 +99,12 @@ export function ComparisonView() {
         {comparisonList.length < 4 && (
           <button
             onClick={addToComparison}
-            className="border-2 border-dashed border-border rounded-2xl flex flex-col items-center justify-center p-8 gap-3 text-text-4 hover:border-blue hover:text-blue hover:bg-blue/5 transition-all group"
+            className="border-2 border-dashed border-border rounded-2xl flex flex-col items-center justify-center p-6 gap-2 text-text-muted hover:border-blue hover:text-blue hover:bg-blue/5 transition-all group cursor-pointer min-h-[160px]"
           >
-            <div className="w-10 h-10 rounded-full bg-bg flex items-center justify-center group-hover:bg-blue group-hover:text-white transition-all">
-              <Plus className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-full bg-surface-2 flex items-center justify-center group-hover:bg-blue group-hover:text-white transition-all">
+              <Plus className="w-4 h-4" />
             </div>
-            <span className="text-tiny font-bold uppercase tracking-widest-sm">Add Current</span>
+            <span className="text-xs font-bold uppercase tracking-wider">Save Current</span>
           </button>
         )}
       </div>
@@ -113,14 +114,14 @@ export function ComparisonView() {
 
 function MetricItem({ label, value, isBest, diff }: { label: string, value: string, isBest?: boolean, diff?: number }) {
   return (
-    <dl className="space-y-1">
-      <dt className="text-tiny font-bold text-text-4 uppercase tracking-tighter">{label}</dt>
-      <dd className={cn("text-lg font-black tabular-nums", isBest ? "text-green-600" : "text-text")}>
+    <dl className="space-y-0.5">
+      <dt className="text-[10px] font-bold text-text-muted uppercase tracking-wider">{label}</dt>
+      <dd className={cn("text-base font-bold tabular-nums", isBest ? "text-emerald-400" : "text-text")}>
         {value}
       </dd>
       {diff !== undefined && diff > 0 && (
-        <dd className="text-tiny font-bold text-red-500 uppercase tracking-tighter">
-          +{formatCurrency(diff)} extra
+        <dd className="text-[10px] font-semibold text-amber-400">
+          +{formatCurrency(diff)} diff
         </dd>
       )}
     </dl>

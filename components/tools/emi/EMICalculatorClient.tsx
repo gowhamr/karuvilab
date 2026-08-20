@@ -156,15 +156,15 @@ export default function EMICalculatorClient() {
             initial={{ y: 100 }}
             animate={{ y: 0 }}
             exit={{ y: 100 }}
-            className="md:hidden fixed bottom-0 left-0 right-0 z-nav bg-surface/90 backdrop-blur-md border-t border-border p-4 shadow-2xl flex items-center justify-between"
+            className="md:hidden fixed bottom-0 left-0 right-0 z-nav bg-surface/95 backdrop-blur-md border-t border-border p-3.5 shadow-2xl flex items-center justify-between"
           >
             <div className="space-y-0.5">
-               <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Monthly EMI</p>
-               <p className="text-lg font-black text-text">{formatCurrency(result.monthlyEmi)}</p>
+               <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">Monthly EMI</p>
+               <p className="text-base font-bold text-text">{formatCurrency(result.monthlyEmi)}</p>
             </div>
             <div className="text-right space-y-0.5">
-               <p className="text-tiny font-bold uppercase tracking-widest-sm text-text-4">Total Interest</p>
-               <p className="text-sm font-bold text-text-3">{formatCurrency(result.totalInterest)}</p>
+               <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">Total Interest</p>
+               <p className="text-xs font-semibold text-text">{formatCurrency(result.totalInterest)}</p>
             </div>
           </m.div>
         )}
@@ -174,19 +174,19 @@ export default function EMICalculatorClient() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div className="lg:col-span-2 space-y-8">
           <div className="bg-surface border border-border rounded-2xl sm:rounded-4xl p-4 sm:p-8 shadow-sm">
-            <h2 className="text-sm font-black uppercase tracking-widest-lg text-blue mb-8 flex items-center gap-3">
+            <h2 className="text-sm font-bold uppercase tracking-wider text-blue mb-6 flex items-center gap-2.5">
               <Calculator className="w-4 h-4" />
               Loan Configuration
             </h2>
             <EmiInputs />
           </div>
 
-          <PrepaymentSection savings={result?.savings ?? undefined} />
+          <PrepaymentSection result={result} />
           <AffordabilityPanel currentEmi={result?.monthlyEmi || 0} />
         </div>
 
         <div className="space-y-6 lg:sticky lg:top-8">
-          <h2 className="text-tiny font-bold uppercase tracking-widest-sm text-text-4 px-2">Loan Summary</h2>
+          <h2 className="text-xs font-bold uppercase tracking-wider text-text-muted px-2">Loan Summary</h2>
           
           <div ref={resultRef} className="space-y-6">
             <MetricCard
@@ -206,7 +206,7 @@ export default function EMICalculatorClient() {
               value={formatCurrency(result?.totalInterest || 0)}
               icon={TrendingDown}
               loading={isLoading || !result}
-              className="bg-bg/50"
+              className="bg-surface-2/40"
             />
           </div>
 
@@ -217,16 +217,16 @@ export default function EMICalculatorClient() {
             loading={isLoading || !result}
           />
 
-          <div className="p-4 sm:p-6 bg-blue/5 border border-blue/10 rounded-2xl sm:rounded-4xl space-y-3 relative overflow-hidden">
+          <div className="p-4 sm:p-6 bg-blue/5 border border-blue/10 rounded-2xl sm:rounded-4xl space-y-2 relative overflow-hidden">
             { (isLoading || !result) && <div className="absolute inset-0 bg-surface/50 shimmer-wrapper z-content" /> }
             <div className="flex items-center gap-2 text-blue">
               <Info className="w-4 h-4" />
-              <span className="text-tiny font-bold uppercase tracking-widest-sm">Effective Tenure</span>
+              <span className="text-xs font-bold uppercase tracking-wider">Effective Tenure</span>
             </div>
             <p className="text-2xl sm:text-3xl font-black text-text tabular-nums">
-              {result?.effectiveTenure || 0} <span className="text-sm text-text-4 font-bold">Months</span>
+              {result?.effectiveTenure || 0} <span className="text-sm text-text-muted font-bold">Months</span>
             </p>
-            <p className="text-xs text-text-3 font-medium leading-relaxed">
+            <p className="text-xs text-text-muted font-medium leading-relaxed">
               {(result?.effectiveTenure || 0) / 12 >= 1 
                 ? `${((result?.effectiveTenure || 0) / 12).toFixed(1)} years until debt-free.` 
                 : "Loan will be closed within a year."}

@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState, useMemo, useRef, useEffect } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import { AmortizationEntry } from "@/src/lib/emi-calculations";
 import { formatCurrency } from "@/src/lib/utils";
-import { cn } from "@/src/lib/utils";
 
 interface AmortisationTableProps {
   schedule: AmortizationEntry[];
@@ -51,17 +50,17 @@ export function AmortisationTable({ schedule }: AmortisationTableProps) {
   }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h3 className="text-sm font-black uppercase tracking-widest text-text">Amortisation Schedule</h3>
+        <h3 className="text-sm font-bold uppercase tracking-wider text-text">Amortisation Schedule</h3>
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold text-text-4 uppercase tracking-widest">Filter Year</span>
+          <span className="text-xs font-semibold text-text-muted">Filter:</span>
           <select 
             value={filterYear} 
             onChange={(e) => setFilterYear(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-            className="bg-surface border border-border rounded-lg px-3 py-1 text-xs font-bold outline-none focus:border-blue"
+            className="bg-surface-2 border border-border rounded-xl px-3 py-1.5 text-xs font-semibold text-text outline-none focus:border-blue cursor-pointer"
           >
-            <option value="all">All Years</option>
+            <option value="all">All Years ({years.length} Yrs)</option>
             {years.map(y => (
               <option key={y} value={y}>Year {y}</option>
             ))}
@@ -69,9 +68,9 @@ export function AmortisationTable({ schedule }: AmortisationTableProps) {
         </div>
       </div>
 
-      <div className="bg-surface border border-border rounded-2xl overflow-hidden" role="table" aria-label="Amortisation Schedule">
+      <div className="bg-surface border border-border rounded-2xl overflow-hidden shadow-sm" role="table" aria-label="Amortisation Schedule">
         <div 
-          className="grid grid-cols-5 bg-bg/50 border-b border-border px-4 py-3 text-tiny font-bold uppercase tracking-widest-sm text-text-4"
+          className="grid grid-cols-5 bg-surface-2/60 border-b border-border px-4 py-3 text-xs font-bold uppercase tracking-wider text-text-muted"
           role="row"
         >
           <span role="columnheader">Month</span>
@@ -92,16 +91,16 @@ export function AmortisationTable({ schedule }: AmortisationTableProps) {
               {visibleRows.map((entry) => (
                 <div 
                   key={entry.month} 
-                  className="grid grid-cols-5 px-4 h-12 items-center text-xs font-bold border-b border-border/30 last:border-0 hover:bg-blue/5 transition-colors"
+                  className="grid grid-cols-5 px-4 h-12 items-center text-xs font-semibold border-b border-border/40 last:border-0 hover:bg-blue/5 transition-colors"
                   role="row"
                 >
-                  <span className="text-text-3" role="rowheader">M{entry.month}</span>
-                  <span className="text-text" role="cell">{formatCurrency(entry.principal)}</span>
-                  <span className="text-text-4" role="cell">{formatCurrency(entry.interest)}</span>
-                  <span className="text-green-600" role="cell">
-                    {entry.prepayment > 0 ? formatCurrency(entry.prepayment) : '-'}
+                  <span className="text-text-muted font-mono" role="rowheader">M{entry.month}</span>
+                  <span className="text-text font-medium" role="cell">{formatCurrency(entry.principal)}</span>
+                  <span className="text-text-muted" role="cell">{formatCurrency(entry.interest)}</span>
+                  <span className="text-emerald-400 font-medium" role="cell">
+                    {entry.prepayment > 0 ? formatCurrency(entry.prepayment) : '—'}
                   </span>
-                  <span className="font-black text-blue" role="cell">{formatCurrency(entry.balance)}</span>
+                  <span className="font-bold text-blue font-mono" role="cell">{formatCurrency(entry.balance)}</span>
                 </div>
               ))}
             </div>
