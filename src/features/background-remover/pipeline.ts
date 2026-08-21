@@ -13,16 +13,15 @@
  */
 
 import { analyzeImageForRemoval, EngineRecommendation } from './engine-selector';
+import { removalEngineRegistry } from './engine-registry';
 import { createTransparentCanvas } from './postprocess';
-import { compositeCutoutWithBackdrop, CompositeOptions } from './backdrop-compositor';
-import { workerManager } from '@/src/workers/manager';
-import { safeImageProcess } from '@/src/features/image-compressor/utils/safe-process';
+import { compositeCutoutWithBackdrop } from './backdrop-compositor';
 import { TransformSettings, ExportSettings, BackdropType } from './types';
 
 export interface PipelineExecutionOptions {
   file: File;
   imageElement: HTMLImageElement;
-  engine: 'auto' | 'canvas' | 'u2netp' | 'rmbg';
+  engine: 'auto' | 'canvas' | 'u2netp' | 'rmbg' | string;
   bgColor?: string;
   tolerance?: number;
   threshold?: number;
@@ -41,7 +40,7 @@ export interface PipelineExecutionOptions {
 }
 
 export interface PipelineExecutionResult {
-  engineUsed: 'canvas' | 'u2netp' | 'rmbg';
+  engineUsed: string;
   recommendation: EngineRecommendation;
   transparentBlob: Blob;
   transparentCanvas: HTMLCanvasElement | ImageBitmap | OffscreenCanvas;
@@ -51,7 +50,7 @@ export interface PipelineExecutionResult {
 }
 
 /**
- * Executes the full end-to-end background removal pipeline
+ * Executes the full end-to-end background removal pipeline via RemovalEngine contract
  */
 export async function executeRemovalPipeline(
   options: PipelineExecutionOptions
@@ -79,83 +78,66 @@ export async function executeRemovalPipeline(
 
   const startTime = performance.now();
 
-  // Stage 1 & 2: Input Analysis & Recommendation
+  // Stage 1 & 2: Input Ingestion, Analysis & Engine Selection
   onProgress?.({ stage: 'Analyzing Image Characteristics', percent: 10 });
   const recommendation = analyzeImageForRemoval(imageElement);
-  const selectedEngine = requestedEngine === 'auto' ? recommendation.engine : requestedEngine;
+  const selectedEngineId = requestedEngine === 'auto' ? recommendation.engine : requestedEngine;
 
-  let transparentCanvas: HTMLCanvasElement | ImageBitmap | OffscreenCanvas;
-  let rawTensor: Float32Array | undefined;
-  let transparentBlob: Blob;
+  const engine = removalEngineRegistry.get(selectedEngineId);
 
-  // Stage 3: Mask Generation
-  if (selectedEngine === 'canvas') {
-    onProgress?.({ stage: 'Executing Instant Canvas Color Distance', percent: 40 });
-    const result = await safeImageProcess(async () => {
-      const buffer = await file.arrayBuffer();
-      const resultBytes = await workerManager.removeBackground(buffer, bgColor, tolerance);
-      return new Blob([resultBytes as any], { type: 'image/png' });
-    }, 'pipeline-canvas-bg');
-
-    if (!result.success || !result.data) {
-      throw result.error || new Error('Canvas background removal failed');
-    }
-
-    transparentBlob = result.data;
-    transparentCanvas = await createImageBitmap(transparentBlob);
-  } else {
-    // Neural Model (U2-NetP or RMBG 2.0)
-    const modelId = selectedEngine === 'u2netp' ? 'u2netp-mobile' : 'background-removal-rmbg';
-    onProgress?.({ stage: `Running AI Neural Model (${modelId})`, percent: 30 });
-
-    const { ai } = await import('@/src/ai/sdk');
-    const aiResult = await ai.removeBackground(file, {
-      modelId,
-      onProgress: (p) => {
-        onProgress?.({ stage: `AI Engine: ${p.stage}`, percent: 30 + Math.round(p.percent * 0.4) });
-      },
-      ...(abortSignal ? { abortSignal } : {}),
-      refineHair,
-      quality: 'auto'
-    });
-
-    rawTensor = aiResult.rawTensor;
-
-    // Stage 4: Refinement
-    onProgress?.({ stage: 'Refining Boundaries & Alpha Matte', percent: 75 });
-    const modelDim = selectedEngine === 'u2netp' ? 320 : 1024;
-    transparentCanvas = await createTransparentCanvas({
-      outputTensorData: aiResult.rawTensor || new Float32Array(modelDim * modelDim),
-      maskWidth: modelDim,
-      maskHeight: modelDim,
-      originalImage: imageElement,
-      threshold,
-      feather,
-      invert
-    });
-
-    transparentBlob = await new Promise<Blob>((resolve, reject) => {
-      if (transparentCanvas instanceof OffscreenCanvas) {
-        transparentCanvas.convertToBlob({ type: 'image/png' }).then(resolve).catch(reject);
-      } else {
-        const c = document.createElement('canvas');
-        c.width = transparentCanvas.width;
-        c.height = transparentCanvas.height;
-        const ctx = c.getContext('2d');
-        if (ctx) {
-          ctx.drawImage(transparentCanvas as any, 0, 0);
-          c.toBlob((b) => {
-            if (b) resolve(b);
-            else reject(new Error('Failed to create transparent PNG'));
-          }, 'image/png');
-        } else {
-          reject(new Error('Failed to create canvas context'));
-        }
+  // Stage 3: Alpha Mask Generation via Unified RemovalEngine Contract
+  onProgress?.({ stage: `Generating Alpha Mask via ${engine.name}`, percent: 30 });
+  const maskOutput = await engine.generateMask(
+    {
+      file,
+      imageElement,
+      width: imageElement.naturalWidth || imageElement.width,
+      height: imageElement.naturalHeight || imageElement.height,
+      options: {
+        bgColor,
+        tolerance,
+        refineHair
       }
-    });
-  }
+    },
+    onProgress,
+    abortSignal
+  );
 
-  // Stage 5 & 6: Compositing & Export
+  const rawTensor = maskOutput.maskTensor;
+
+  // Stage 4: Precision Refinement (Guided Filter, Threshold, Feather, Invert)
+  onProgress?.({ stage: 'Refining Boundaries & Alpha Matte', percent: 75 });
+  const transparentCanvas = await createTransparentCanvas({
+    outputTensorData: maskOutput.maskTensor,
+    maskWidth: maskOutput.maskWidth,
+    maskHeight: maskOutput.maskHeight,
+    originalImage: imageElement,
+    threshold,
+    feather,
+    invert
+  });
+
+  const transparentBlob = await new Promise<Blob>((resolve, reject) => {
+    if (transparentCanvas instanceof OffscreenCanvas) {
+      transparentCanvas.convertToBlob({ type: 'image/png' }).then(resolve).catch(reject);
+    } else {
+      const c = document.createElement('canvas');
+      c.width = transparentCanvas.width;
+      c.height = transparentCanvas.height;
+      const ctx = c.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(transparentCanvas as any, 0, 0);
+        c.toBlob((b) => {
+          if (b) resolve(b);
+          else reject(new Error('Failed to create transparent PNG'));
+        }, 'image/png');
+      } else {
+        reject(new Error('Failed to create canvas context'));
+      }
+    }
+  });
+
+  // Stage 5 & 6: Backdrop Compositing & Multi-Codec Export
   onProgress?.({ stage: 'Compositing Backdrop & Encoding Output', percent: 90 });
   const displayBlob = await compositeCutoutWithBackdrop({
     cutoutImage: transparentCanvas,
@@ -175,7 +157,7 @@ export async function executeRemovalPipeline(
   onProgress?.({ stage: 'Complete', percent: 100 });
 
   return {
-    engineUsed: selectedEngine,
+    engineUsed: engine.id,
     recommendation,
     transparentBlob,
     transparentCanvas,
