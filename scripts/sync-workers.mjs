@@ -31,6 +31,10 @@ const WORKERS = [
   {
     src: 'node_modules/dictionary-en/index.dic',
     dest: 'public/lib/dictionary/en.dic'
+  },
+  {
+    src: 'node_modules/monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon.ttf',
+    dest: 'public/lib/monaco/vs/base/browser/ui/codicons/codicon/codicon.ttf'
   }
 ];
 

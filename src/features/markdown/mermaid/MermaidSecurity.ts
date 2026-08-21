@@ -109,7 +109,7 @@ export class MermaidSecurity {
       maxTextSize: MERMAID_SECURITY_LIMITS.HARD_CAP_CHARS,
       maxEdges: MERMAID_SECURITY_LIMITS.HARD_CAP_EDGES,
       deterministicIds: true,
-      htmlLabels: false, // Required for html2canvas (PDF export) fidelity
+      htmlLabels: true, // Use true so complex flowcharts and nodes render properly using foreignObject
       theme: isDark ? 'dark' : 'default',
     };
   }
