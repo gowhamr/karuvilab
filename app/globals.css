@@ -611,3 +611,19 @@ body.sidebar-open {
   margin: 1rem 0;
   overflow-x: auto;
 }
+
+/* Fix Mermaid Diagram text layout (Tailwind Preflight Conflict) */
+.mermaid-mount-container svg {
+  max-width: 100% !important;
+  height: auto !important;
+}
+.mermaid-mount-container foreignObject {
+  overflow: visible !important;
+}
+.mermaid-mount-container foreignObject * {
+  line-height: normal !important;
+  margin: 0;
+}
+.mermaid-mount-container .label {
+  color: inherit;
+}

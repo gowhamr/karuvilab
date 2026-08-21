@@ -8,6 +8,7 @@ interface Option<T> {
   id: T;
   label: string;
   icon?: React.ReactNode;
+  className?: string;
 }
 
 interface SegmentedControlProps<T> {
@@ -61,7 +62,8 @@ export const SegmentedControl = React.memo(function SegmentedControl<T extends s
             className={cn(
               "relative flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-black uppercase tracking-widest transition-all outline-none focus-visible:ring-2 focus-visible:ring-blue/20",
               isActive ? "text-white" : "text-text-4 hover:text-text hover:bg-surface/50",
-              disabled && "cursor-not-allowed"
+              disabled && "cursor-not-allowed",
+              option.className
             )}
           >
             {isActive && (

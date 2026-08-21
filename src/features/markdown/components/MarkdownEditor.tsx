@@ -32,7 +32,7 @@ type EditorTab = "split" | "write" | "visual" | "preview";
 export function MarkdownEditor() {
   const { toast } = useToast();
   const [mode, setMode] = useState<"editor" | "upload">("editor");
-  const [activeTab, setActiveTab] = useState<EditorTab>("split");
+  const [activeTab, setActiveTab] = useState<EditorTab>("write");
   const [md, setMd] = useState(SAMPLE_MARKDOWN);
   const [uploadMd, setUploadMd] = useState("");
   const [fileName, setFileName] = useState("");
@@ -615,7 +615,7 @@ export function MarkdownEditor() {
             <div className="w-full sm:w-auto">
               <SegmentedControl
                 options={[
-                  { id: "split", label: "Split", icon: <Columns className="w-4 h-4" /> },
+                  { id: "split", label: "Split", icon: <Columns className="w-4 h-4" />, className: "hidden md:flex" },
                   { id: "write", label: "Write", icon: <FileEdit className="w-4 h-4" /> },
                   { id: "visual", label: "Visual", icon: <Type className="w-4 h-4" /> },
                   { id: "preview", label: "Preview", icon: <Eye className="w-4 h-4" /> },
@@ -912,7 +912,7 @@ export function MarkdownEditor() {
               {(activeTab === "preview" || activeTab === "split") && (
                 <div className={cn(
                   "flex flex-col min-w-0 h-full overflow-hidden bg-bg/40",
-                  activeTab === "split" ? "flex-1" : "w-full"
+                  activeTab === "split" ? "hidden md:flex flex-1" : "w-full flex"
                 )}>
                   <MarkdownPreview 
                     html={html} 
