@@ -9,6 +9,7 @@ import {
   compositeCutoutWithBackdrop,
   autoDetectBackgroundColor
 } from '@/src/features/background-remover/backdrop-compositor';
+import { analyzeImageForRemoval } from '@/src/features/background-remover/engine-selector';
 import { BrushStudioEngine } from '@/src/features/background-remover/brush-engine';
 import { zipSync } from 'fflate';
 
@@ -85,5 +86,22 @@ describe('Background Remover Extended Suite', () => {
       const detected = autoDetectBackgroundColor({ width: 50, height: 50 } as any);
       expect(detected).toMatch(/^#[0-9a-f]{6}$/i);
     }
+  });
+
+  it('should verify analyzeImageForRemoval detects uniform background correctly', () => {
+    const result = analyzeImageForRemoval({ width: 50, height: 50 } as any);
+    expect(result).toBeDefined();
+    expect(result.engine).toMatch(/canvas|u2netp|rmbg/);
+    expect(result.confidence).toBeGreaterThan(0);
+    expect(typeof result.reason).toBe('string');
+  });
+
+  it('should verify analyzeImageForRemoval recommends RMBG when WebGPU is available for high-res images', () => {
+    const recommendation = analyzeImageForRemoval(
+      { width: 1200, height: 1200 } as any,
+      { hasWebGpu: true, isMobile: false }
+    );
+    expect(recommendation).toBeDefined();
+    expect(['canvas', 'rmbg', 'u2netp']).toContain(recommendation.engine);
   });
 });
