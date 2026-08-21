@@ -1,5 +1,6 @@
-export function getDeviceTier() {
-    const mem = navigator.deviceMemory;
+export function getDeviceTier(overrideNav, overrideWidth) {
+    const nav = overrideNav || (typeof navigator !== 'undefined' ? navigator : undefined);
+    const mem = nav?.deviceMemory;
     if (mem !== undefined) {
         if (mem <= 4)
             return "low";
@@ -7,8 +8,9 @@ export function getDeviceTier() {
             return "standard";
         return "desktop";
     }
-    const cores = navigator.hardwareConcurrency ?? 4;
-    const isNarrowViewport = window.innerWidth < 768;
+    const cores = nav?.hardwareConcurrency ?? (typeof navigator !== 'undefined' ? navigator.hardwareConcurrency : 4) ?? 4;
+    const width = overrideWidth ?? (typeof window !== 'undefined' ? window.innerWidth : 1024);
+    const isNarrowViewport = width < 768;
     if (isNarrowViewport && cores <= 4)
         return "low";
     if (isNarrowViewport && cores > 4)

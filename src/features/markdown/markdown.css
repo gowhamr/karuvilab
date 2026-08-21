@@ -84,30 +84,61 @@
   margin: 2rem 0;
 }
 
-/* Mermaid Diagram Styling & Text Visibility */
+/* Mermaid Diagram Styling & High-Fidelity Text Rendering */
 .markdown-body .mermaid-container {
   margin: 1.5rem 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  overflow: hidden;
 }
+
 .markdown-body .mermaid-container svg {
-  max-width: 100%;
-  height: auto;
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+  margin: 0 auto;
 }
-.markdown-body .mermaid-container text,
-.markdown-body .mermaid-container tspan,
-.markdown-body .mermaid-container .nodeLabel,
-.markdown-body .mermaid-container .label,
-.markdown-body .mermaid-container .labelText,
-.markdown-body .mermaid-container .actor,
-.markdown-body .mermaid-container .messageText,
-.markdown-body .mermaid-container .loopText,
-.markdown-body .mermaid-container .noteText {
-  fill: var(--text, #f8fafc) !important;
-  color: var(--text, #f8fafc) !important;
-  font-family: inherit;
+
+/* Ensure foreignObject inside Mermaid SVG does not inherit markdown paragraph margins */
+.markdown-body .mermaid-container foreignObject {
+  overflow: visible !important;
 }
+
 .markdown-body .mermaid-container foreignObject div,
 .markdown-body .mermaid-container foreignObject span,
 .markdown-body .mermaid-container foreignObject p {
-  color: var(--text, #f8fafc) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.3 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  color: inherit !important;
+}
+
+/* Node text styling for high contrast in both themes */
+.markdown-body .mermaid-container .nodeLabel,
+.markdown-body .mermaid-container .label,
+.markdown-body .mermaid-container .labelText {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* SVG text elements font family and clarity */
+.markdown-body .mermaid-container text {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+}
+
+/* Edge labels background styling */
+.markdown-body .mermaid-container .edgeLabel rect,
+.markdown-body .mermaid-container .edgeLabel span {
+  background-color: var(--surface) !important;
+  fill: var(--surface) !important;
+  padding: 2px 4px;
+  border-radius: 4px;
 }
 

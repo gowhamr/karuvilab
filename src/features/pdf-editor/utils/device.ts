@@ -1,15 +1,20 @@
 export type DeviceTier = "low" | "standard" | "desktop";
 
-export function getDeviceTier(): DeviceTier {
-  const mem = (navigator as any).deviceMemory as number | undefined;
+export function getDeviceTier(
+  overrideNav?: { deviceMemory?: number; hardwareConcurrency?: number },
+  overrideWidth?: number
+): DeviceTier {
+  const nav = overrideNav || (typeof navigator !== 'undefined' ? navigator : undefined);
+  const mem = (nav as any)?.deviceMemory as number | undefined;
   if (mem !== undefined) {
     if (mem <= 4) return "low";
     if (mem <= 8) return "standard";
     return "desktop";
   }
 
-  const cores = navigator.hardwareConcurrency ?? 4;
-  const isNarrowViewport = window.innerWidth < 768;
+  const cores = nav?.hardwareConcurrency ?? (typeof navigator !== 'undefined' ? navigator.hardwareConcurrency : 4) ?? 4;
+  const width = overrideWidth ?? (typeof window !== 'undefined' ? window.innerWidth : 1024);
+  const isNarrowViewport = width < 768;
 
   if (isNarrowViewport && cores <= 4) return "low";
   if (isNarrowViewport && cores > 4) return "standard";

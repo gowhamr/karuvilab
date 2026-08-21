@@ -4,6 +4,7 @@ import React from "react";
 import Script from "next/script";
 import { EngineLoader } from "@/components/system/EngineLoader";
 import { MarkdownEditor } from "./components/MarkdownEditor";
+import { logger } from "@/src/lib/logger";
 import "./markdown.css";
 
 export default function MarkdownEditorWrapper() {
@@ -35,7 +36,7 @@ export default function MarkdownEditorWrapper() {
                 securityLevel: 'loose',
               });
             } catch (e) {
-              console.error("Mermaid init error:", e);
+              logger.error("Mermaid init error", { error: e });
             }
           }
         }}
@@ -44,6 +45,7 @@ export default function MarkdownEditorWrapper() {
       <EngineLoader 
         checkInit={checkInit}
         loadingMessage="Initializing Markdown Engine..."
+        errorMessage="Failed to load Markdown engine. Check your connection and retry."
       >
         <MarkdownEditor />
       </EngineLoader>

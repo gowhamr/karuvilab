@@ -190,6 +190,10 @@ const api = {
             onProgress({ percent: 100, message: "Done" });
         return html;
     },
+    async parseMarkdownToTipTap(text) {
+        const { markdownToTipTap } = await import("../features/markdown/transformer/markdown-tiptap");
+        return markdownToTipTap(text);
+    },
     async generateHashes(text, algos, encoding = 'hex', onProgress) {
         if (typeof text !== "string" || text.length > 10 * 1024 * 1024) {
             throw new Error("Input text too large or invalid (max 10MB)");

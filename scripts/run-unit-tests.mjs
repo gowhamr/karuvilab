@@ -1,6 +1,7 @@
 import { execSync } from 'node:child_process';
 import path from 'node:path';
 import fs from 'node:fs';
+import { waitForTestSuite } from './vitest-shim.mjs';
 
 function findTestFiles(dir) {
   let results = [];
@@ -48,14 +49,11 @@ async function run() {
 
   for (const file of files) {
     const rel = path.relative(process.cwd(), file);
+    process.exitCode = 0;
     try {
       console.log(`\n📄 Testing: ${rel}`);
-      const mod = await import(`file://${file}?v=${Date.now()}`);
-      if (typeof mod.waitForTestSuite === 'function') {
-        await mod.waitForTestSuite();
-      } else if (typeof mod.default?.waitForTestSuite === 'function') {
-        await mod.default.waitForTestSuite();
-      }
+      await import(`file://${file}?v=${Date.now()}`);
+      await waitForTestSuite();
       if (process.exitCode === 1) {
         failed++;
         failedSuites.push(rel);

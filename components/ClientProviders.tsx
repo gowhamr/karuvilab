@@ -14,6 +14,7 @@ const DeveloperPanel = dynamic(() => import("@/components/system/DeveloperPanel"
 import { FullscreenProvider } from "@/src/contexts/FullscreenContext";
 import { FocusModeControlsProvider } from "@/src/contexts/FocusModeControlsContext";
 import { HtmlPrecacher } from "@/components/system/HtmlPrecacher";
+import { MonacoProvider } from "@/src/core/monaco";
 
 function StorageMonitor() {
   useStorageMonitor();
@@ -76,7 +77,9 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
               <SearchManager />
               <DeveloperPanel />
               <HtmlPrecacher />
-              {children}
+              <MonacoProvider>
+                {children}
+              </MonacoProvider>
             </FocusModeControlsProvider>
           </FullscreenProvider>
         </ToastProvider>

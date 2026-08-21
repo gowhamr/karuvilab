@@ -37,24 +37,24 @@ const TOOLBAR_GROUPS: ToolbarGroup[] = [
   {
     label: "Format",
     items: [
-      { icon: Bold, title: "Bold", wrap: ["**", "**"] },
-      { icon: Italic, title: "Italic", wrap: ["*", "*"] },
-      { icon: Strikethrough, title: "Strikethrough", wrap: ["~~", "~~"] },
-      { icon: Code, title: "Inline Code", wrap: ["`", "`"] },
-      { icon: Heading1, title: "Heading 1", prefix: "# " },
-      { icon: Heading2, title: "Heading 2", prefix: "## " },
-      { icon: Quote, title: "Blockquote", prefix: "> " },
-      { icon: List, title: "Bullet List", prefix: "- " },
-      { icon: ListOrdered, title: "Ordered List", prefix: "1. " },
-      { icon: Link, title: "Link", wrap: ["[", "](url)"] },
-      { icon: ImageIcon, title: "Image", wrap: ["![alt](", ")"] },
+      { icon: Bold, title: "Bold (Ctrl+B)", wrap: ["**", "**"] },
+      { icon: Italic, title: "Italic (Ctrl+I)", wrap: ["*", "*"] },
+      { icon: Strikethrough, title: "Strikethrough (Ctrl+Shift+X)", wrap: ["~~", "~~"] },
+      { icon: Code, title: "Inline Code (`)", wrap: ["`", "`"] },
+      { icon: Heading1, title: "Heading 1 (# )", prefix: "# " },
+      { icon: Heading2, title: "Heading 2 (## )", prefix: "## " },
+      { icon: Quote, title: "Blockquote (> )", prefix: "> " },
+      { icon: List, title: "Bullet List (- )", prefix: "- " },
+      { icon: ListOrdered, title: "Ordered List (1. )", prefix: "1. " },
+      { icon: Link, title: "Link (Ctrl+K)", wrap: ["[", "](url)"] },
+      { icon: ImageIcon, title: "Image (![alt](url))", wrap: ["![alt](", ")"] },
     ]
   },
   {
     label: "Diagrams",
     items: [
-      { icon: Layout, title: "Flowchart", diagram: "flowchart" },
-      { icon: Share2, title: "Sequence", diagram: "sequence" },
+      { icon: Layout, title: "Flowchart Diagram", diagram: "flowchart" },
+      { icon: Share2, title: "Sequence Diagram", diagram: "sequence" },
       { icon: FileJson, title: "ER Diagram", diagram: "er" },
     ]
   }
@@ -92,6 +92,43 @@ export function Toolbar({
           </div>
         </React.Fragment>
       ))}
+
+      <div className="w-px h-4 bg-border mx-1" />
+
+      {/* Diagrams Dropdown Selector */}
+      <div className="flex items-center gap-1">
+        <select
+          title="Insert Diagram Template"
+          aria-label="Insert Diagram Template"
+          onChange={(e) => {
+            const val = e.target.value as keyof typeof DIAGRAM_SNIPPETS;
+            if (val && DIAGRAM_SNIPPETS[val]) {
+              onInsert("", "", DIAGRAM_SNIPPETS[val]);
+              e.target.value = "";
+            }
+          }}
+          defaultValue=""
+          className="px-2 py-1 bg-surface border border-border rounded-lg text-xs font-semibold text-text-3 hover:text-blue hover:border-blue transition-all cursor-pointer focus:outline-none"
+        >
+          <option value="" disabled>
+            + Diagram Template
+          </option>
+          <option value="flowchart">Flowchart TD</option>
+          <option value="sequence">Sequence Diagram</option>
+          <option value="class">Class Diagram</option>
+          <option value="state">State Machine</option>
+          <option value="er">ER Diagram</option>
+          <option value="gantt">Gantt Timeline</option>
+          <option value="gitgraph">Git Graph</option>
+          <option value="mindmap">Mindmap</option>
+          <option value="timeline">Roadmap Timeline</option>
+          <option value="pie">Pie Chart</option>
+          <option value="c4">C4 Architecture</option>
+          <option value="sankey">Sankey Beta</option>
+          <option value="xychart">XY Chart</option>
+          <option value="kanban">Kanban Board</option>
+        </select>
+      </div>
 
       <div className="w-px h-4 bg-border mx-1" />
       

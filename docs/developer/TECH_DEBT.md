@@ -7,6 +7,14 @@ Format: `[Date] [Severity] Description — context and resolution path`
 
 ## Open Items
 
+### TD-016 · `Markdown Editor` — `window.prompt` used for link insertion (UX Debt)
+- **Date logged:** 2026-08-21
+- **Severity:** Low (UX Debt)
+- **Source:** Markdown Editor Code Audit (BUG-15)
+- **Description:** `MarkdownVisualEditor.tsx` uses `window.prompt` for URL insertion in the Tiptap toolbar. This blocks the main thread (waiting on I/O) and does not match the KaruviLab design system.
+- **Resolution path:** Replace `window.prompt` with a custom inline popover input component that conforms to the KV design system.
+- **Blocked by:** Nothing. Readily implementable with existing UI components.
+
 ### TD-001 · `compress-pdf` — No real image downsampling
 - **Date logged:** 2026-07-26
 - **Severity:** Medium

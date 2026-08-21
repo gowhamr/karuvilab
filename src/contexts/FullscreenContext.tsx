@@ -99,11 +99,14 @@ export function FullscreenProvider({ children }: { children: ReactNode }) {
     function handleKeyDown(e: KeyboardEvent) {
       const targetId = activeToolId || currentToolId;
       
-      // Ignore if typing in an input
+      // Ignore if typing in an input, except for F11 and Escape
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName) || (e.target as HTMLElement)?.isContentEditable) {
-        // Only allow Esc to exit
         if (e.key === 'Escape' && isFullscreen) {
           exit();
+        }
+        if (e.key === 'F11' && targetId) {
+          e.preventDefault();
+          toggleDashboard(targetId);
         }
         return;
       }

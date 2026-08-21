@@ -32,6 +32,7 @@ import {
 import { markdownToTipTap, tipTapToMarkdown } from "../transformer/markdown-tiptap";
 import { MarkdownService } from "../MarkdownService";
 import { Table, TableRow, TableHeader, TableCell, TaskList, TaskItem, Image } from "../extensions";
+import Link from "@tiptap/extension-link";
 import {
   isCursorInTable,
   insertTable,
@@ -60,8 +61,9 @@ export function MarkdownVisualEditor({
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({
-        link: { openOnClick: false },
+      StarterKit.configure({}),
+      Link.configure({
+        openOnClick: false,
       }),
       Placeholder.configure({
         placeholder: "Start typing your markdown visually...",
@@ -92,7 +94,8 @@ export function MarkdownVisualEditor({
     },
     editorProps: {
       attributes: {
-        class: "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl focus:outline-none min-h-full p-4 md:p-6 text-text max-w-none"
+        "aria-label": "Markdown Visual Editor",
+        class: "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl focus:outline-none min-h-full p-3.5 sm:p-6 md:p-8 text-text max-w-none"
       }
     }
   });

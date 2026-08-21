@@ -1,0 +1,104 @@
+/**
+ * Pure Deterministic Timing Engine for Stopwatch
+ * Zero external dependencies. Uses monotonic timestamp math to eliminate drift.
+ */
+/**
+ * Calculates current elapsed time from monotonic timestamps without accumulated timer interval drift.
+ */
+export function calculateElapsed(startTimestamp, now, accumulatedMs) {
+    if (startTimestamp === null) {
+        return Math.max(0, accumulatedMs);
+    }
+    return Math.max(0, now - startTimestamp + accumulatedMs);
+}
+/**
+ * Splits total milliseconds into constituent calendar/clock components.
+ */
+export function splitTimeComponents(totalMs) {
+    const safeMs = Math.max(0, Math.floor(totalMs));
+    const hours = Math.floor(safeMs / 3600000);
+    const remAfterHours = safeMs % 3600000;
+    const minutes = Math.floor(remAfterHours / 60000);
+    const remAfterMins = remAfterHours % 60000;
+    const seconds = Math.floor(remAfterMins / 1000);
+    const milliseconds = remAfterMins % 1000;
+    const centiseconds = Math.floor(milliseconds / 10);
+    return {
+        hours,
+        minutes,
+        seconds,
+        centiseconds,
+        milliseconds,
+    };
+}
+/**
+ * Formats milliseconds into a display string according to precision mode.
+ * Supports boolean for legacy compatibility (`true` -> milliseconds, `false` -> centiseconds / no ms).
+ */
+export function formatStopwatchTime(totalMs, precision = 'milliseconds') {
+    const { hours, minutes, seconds, centiseconds, milliseconds } = splitTimeComponents(totalMs);
+    const mStr = String(minutes).padStart(2, '0');
+    const sStr = String(seconds).padStart(2, '0');
+    const hStr = String(hours).padStart(2, '0');
+    let mode;
+    if (typeof precision === 'boolean') {
+        mode = precision ? 'milliseconds' : 'centiseconds';
+    }
+    else {
+        mode = precision;
+    }
+    let fracStr = '';
+    if (mode === 'milliseconds') {
+        fracStr = `.${String(milliseconds).padStart(3, '0')}`;
+    }
+    else if (mode === 'centiseconds') {
+        fracStr = `.${String(centiseconds).padStart(2, '0')}`;
+    }
+    if (hours > 0) {
+        return `${hStr}:${mStr}:${sStr}${fracStr}`;
+    }
+    return `${mStr}:${sStr}${fracStr}`;
+}
+/**
+ * Formats a delta in milliseconds with leading + / - symbol.
+ */
+export function formatDeltaTime(deltaMs, precision = 'centiseconds') {
+    const sign = deltaMs > 0 ? '+' : deltaMs < 0 ? '-' : '±';
+    const absFormatted = formatStopwatchTime(Math.abs(deltaMs), precision);
+    return `${sign}${absFormatted}`;
+}
+/**
+ * Classifies reaction time according to scientific human benchmark baselines.
+ */
+export function getReactionBenchmarkTier(scoreMs) {
+    if (scoreMs < 200) {
+        return {
+            tier: 'top-tier',
+            label: 'Excellent Reflexes (<200 ms)',
+            badge: '⚡ Top Tier',
+            className: 'text-emerald-400',
+        };
+    }
+    if (scoreMs <= 260) {
+        return {
+            tier: 'fast',
+            label: 'Fast / Above Average (200–260 ms)',
+            badge: '🎯 Fast',
+            className: 'text-blue',
+        };
+    }
+    if (scoreMs <= 340) {
+        return {
+            tier: 'typical',
+            label: 'Typical Human Baseline (260–340 ms)',
+            badge: '⏱️ Typical',
+            className: 'text-amber-400',
+        };
+    }
+    return {
+        tier: 'slow',
+        label: 'Slower Response (>340 ms)',
+        badge: '🐢 Slower',
+        className: 'text-text-muted',
+    };
+}

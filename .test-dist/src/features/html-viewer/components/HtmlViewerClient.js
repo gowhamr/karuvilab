@@ -63,20 +63,8 @@ export default function HtmlViewerClient() {
     const logIdRef = useRef(0);
     // Initialize Monaco Engine
     useEffect(() => {
-        const isGithubPages = window.location.hostname.includes('github.io') || window.location.pathname.startsWith('/karuvilab');
-        const basePath = isGithubPages ? '/karuvilab' : '';
-        const localMonacoPath = `${basePath}/lib/monaco/vs`;
-        import("@monaco-editor/react").then(({ loader }) => {
-            loader.config({ paths: { vs: localMonacoPath } });
-            loader.init().then(monacoInstance => {
-                window.monaco = monacoInstance;
-            }).catch(() => {
-                loader.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs' } });
-                loader.init().then(monacoInstance => {
-                    window.monaco = monacoInstance;
-                });
-            });
-        });
+        // Monaco is now configured globally in src/core/monaco/MonacoLoader.ts
+        // The theme is karuvi-dark
     }, []);
     // Load from URL or LocalStorage
     useEffect(() => {
@@ -258,7 +246,7 @@ export default function HtmlViewerClient() {
                                         setCss(v);
                                     else
                                         setJs(v);
-                                }, placeholder: `Enter ${activeTab.toUpperCase()} code...` })) : (_jsx(EngineLoader, { checkInit: checkMonaco, loadingMessage: "Initializing Monaco Editor...", errorMessage: "Failed to load editor engine. Check your connection or retry.", children: _jsx(Editor, { theme: "vs-dark", language: activeTab === "js" ? "javascript" : activeTab, value: activeTab === "html" ? html : activeTab === "css" ? css : js, onChange: (v) => {
+                                }, placeholder: `Enter ${activeTab.toUpperCase()} code...` })) : (_jsx(EngineLoader, { checkInit: checkMonaco, loadingMessage: "Initializing Monaco Editor...", errorMessage: "Failed to load editor engine. Check your connection or retry.", children: _jsx(Editor, { theme: "karuvi-dark", language: activeTab === "js" ? "javascript" : activeTab, value: activeTab === "html" ? html : activeTab === "css" ? css : js, onChange: (v) => {
                                         if (activeTab === "html")
                                             setHtml(v || "");
                                         else if (activeTab === "css")

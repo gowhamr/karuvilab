@@ -93,7 +93,13 @@ const nextConfig = {
     async redirects() {
       return [
         { source: "/tools/calculators/age/:path*",        destination: "/calculators/age-calculator/",       permanent: true },
+        { source: "/tools/calculators/emi-calculator/:path*", destination: "/calculators/emi-calculator/",   permanent: true },
         { source: "/tools/calculators/emi/:path*",        destination: "/calculators/emi-calculator/",       permanent: true },
+        { source: "/calculators/emi/:path*",              destination: "/calculators/emi-calculator/",       permanent: true },
+        { source: "/emi-calculator/:path*",               destination: "/calculators/emi-calculator/",       permanent: true },
+        { source: "/emi/:path*",                          destination: "/calculators/emi-calculator/",       permanent: true },
+        { source: "/tools/emi-calculator/:path*",         destination: "/calculators/emi-calculator/",       permanent: true },
+        { source: "/tool/emi-calculator/:path*",          destination: "/calculators/emi-calculator/",       permanent: true },
         { source: "/tools/calculators/gst/:path*",        destination: "/calculators/gst-calculator/",       permanent: true },
         { source: "/tools/calculators/sip/:path*",        destination: "/calculators/sip-calculator/",       permanent: true },
         { source: "/tools/calculators/percentage/:path*", destination: "/calculators/percentage-calculator/",permanent: true },

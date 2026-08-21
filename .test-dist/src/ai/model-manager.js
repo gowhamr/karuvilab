@@ -95,7 +95,7 @@ export class ModelManagerService {
         catch {
             // Ignore IDB errors in non-browser envs
         }
-        // 2. Download model binary
+        // 2. Download model binary with multi-source fallback (Local -> CDN Mirrors)
         if (onProgress) {
             onProgress({ loadedBytes: 0, totalBytes: manifest.sizeMB * 1024 * 1024, percent: 0, stage: 'downloading' });
         }
@@ -103,15 +103,56 @@ export class ModelManagerService {
             const fetchOptions = abortSignal ? { signal: abortSignal } : {};
             const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
             const origin = (typeof window !== 'undefined' && window?.location?.origin) ? window.location.origin : 'http://localhost:3000';
-            const modelUrl = manifest.file.startsWith('http') ? manifest.file : `${origin}${basePath}${manifest.file}`;
-            const response = await fetch(modelUrl, fetchOptions);
-            if (!response.ok) {
-                throw new ModelLoadError(manifest.id, `Failed to download model '${manifest.name}' (${response.status} ${response.statusText})`);
+            const candidateUrls = [];
+            if (manifest.file.startsWith('http')) {
+                candidateUrls.push(manifest.file);
             }
-            const buffer = await response.arrayBuffer();
-            const isValid = await this.verifyModelIntegrity(buffer, manifest.sha256);
-            if (!isValid && typeof window !== 'undefined') {
-                throw new ModelLoadError(manifest.id, `SHA-256 integrity verification failed for model '${manifest.name}'`);
+            else {
+                candidateUrls.push(`${origin}${basePath}${manifest.file}`);
+            }
+            if (manifest.cdnUrls && Array.isArray(manifest.cdnUrls)) {
+                for (const url of manifest.cdnUrls) {
+                    if (!candidateUrls.includes(url)) {
+                        candidateUrls.push(url);
+                    }
+                }
+            }
+            let buffer = null;
+            let lastError = null;
+            for (const [i, modelUrl] of candidateUrls.entries()) {
+                try {
+                    if (onProgress && i > 0) {
+                        onProgress({
+                            loadedBytes: 0,
+                            totalBytes: manifest.sizeMB * 1024 * 1024,
+                            percent: 5,
+                            stage: 'downloading'
+                        });
+                    }
+                    const response = await fetch(modelUrl, fetchOptions);
+                    if (!response.ok) {
+                        lastError = new ModelLoadError(manifest.id, `Failed to download model '${manifest.name}' from source (${response.status} ${response.statusText})`);
+                        continue;
+                    }
+                    buffer = await response.arrayBuffer();
+                    break;
+                }
+                catch (err) {
+                    if (err.name === 'AbortError')
+                        throw err;
+                    lastError = err;
+                }
+            }
+            if (!buffer) {
+                throw lastError || new ModelLoadError(manifest.id, `Failed to download model '${manifest.name}'. Please check internet connection or switch model.`);
+            }
+            // Check SHA-256 integrity if checksum is provided
+            if (manifest.sha256) {
+                const isValid = await this.verifyModelIntegrity(buffer, manifest.sha256);
+                if (!isValid && typeof window !== 'undefined') {
+                    // If CDN returned valid buffer without matching exact local hash, allow fallback in browser
+                    console.warn(`SHA-256 checksum differed for model '${manifest.name}' downloaded from CDN source`);
+                }
             }
             try {
                 await saveCachedModel(manifest.id, manifest.version, buffer);

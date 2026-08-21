@@ -17,6 +17,7 @@ This file tracks every new dependency added to the project, its impact on bundle
 | 2026-07-10 | `react-image-crop` | ~3.8 KB | Interactive image crop UI | Custom canvas logic | Lightweight, robust, and accessible UI component for dragging and resizing crops. |
 | 2026-07-10 | `jsqr` | ~30 KB | QR Code Scanner fallback | `zxing` (too heavy, WASM/worker heavy), `html5-qrcode` (heavy, requires specific UI logic) | The native `BarcodeDetector` API is not supported on Firefox, Safari, and iOS. `jsqr` provides a lightweight pure-JS fallback specifically for QR codes. It does not violate the >20KB feature growth limit significantly given its dynamic import. |
 | 2026-08-02 | `onnxruntime-web` | ~0 KB (Dynamic Worker Import) | In-browser local neural network inference engine | TensorFlow.js (heavier, slower WASM SIMD execution) | Industry standard open-source ONNX inference runtime. Loaded dynamically in worker threads only—adds 0 KB to initial JS page loads. Powers privacy-first, offline-first local AI tools (Background Removal, OCR, Upscaling) without cloud APIs. |
+| 2026-08-21 | `@tiptap/extension-link` | ~1.5 KB | Markdown Visual Editor Link Support | Built-in StarterKit (does not include Link) | Required to fix a broken feature where users couldn't insert links in the visual markdown editor because `setLink` threw an error. |
 
 
 ### 2026-06-18

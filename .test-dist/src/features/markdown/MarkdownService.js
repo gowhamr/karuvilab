@@ -24,6 +24,23 @@ export class MarkdownService {
             return `<p class="text-error">Parse error: ${safeMsg}</p>`;
         }
     }
+    static async parseToTipTap(md) {
+        // For small documents (<100KB), run instant synchronous path (<5ms)
+        if (md.length < 100 * 1024) {
+            const { markdownToTipTap } = await import('./transformer/markdown-tiptap');
+            return markdownToTipTap(md);
+        }
+        // For large documents (>=100KB), offload AST generation to Web Worker via WorkerOrchestrator (P-04 / PERF-01)
+        try {
+            const { workerManager } = await import('@/src/workers/manager');
+            return await workerManager.parseMarkdownToTipTap(md);
+        }
+        catch (e) {
+            logger.error('Worker TipTap parse error, falling back to sync', { error: e });
+            const { markdownToTipTap } = await import('./transformer/markdown-tiptap');
+            return markdownToTipTap(md);
+        }
+    }
     static getStats(md) {
         const lines = md ? md.split('\n').length : 0;
         const words = md.trim() ? md.trim().split(/\s+/).filter(Boolean).length : 0;

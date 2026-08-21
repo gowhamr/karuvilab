@@ -209,16 +209,34 @@ class KaruviAiSdk {
             }));
         // 3. Ensure model loaded & verified
         await this.ensureModel(manifest.id, options.onProgress, options.abortSignal);
-        // 4. Preprocess image
+        const modelWidth = manifest.input.width || 320;
+        const modelHeight = manifest.input.height || 320;
+        // 4. Preprocess image to model dimensions
         const { preprocessImage } = await import('@/src/features/background-remover/preprocess');
-        const { tensorData } = await preprocessImage(bitmap, manifest.input.width || 1024, manifest.input.height || 1024);
+        const { tensorData } = await preprocessImage(bitmap, modelWidth, modelHeight);
         // 5. Execute ONNX inference
         const inferenceResult = await this.run({
             model: manifest.id,
             input: { input: tensorData },
             ...(options.abortSignal ? { abortSignal: options.abortSignal } : {})
         });
-        const rawData = inferenceResult?.output?.data || new Float32Array((manifest.input.width || 1024) * (manifest.input.height || 1024));
+        let rawData;
+        if (inferenceResult) {
+            const outputKey = Object.keys(inferenceResult)[0] || 'output';
+            const outputTensor = inferenceResult[outputKey] || inferenceResult.output;
+            if (outputTensor?.data instanceof Float32Array) {
+                rawData = outputTensor.data;
+            }
+            else if (outputTensor instanceof Float32Array) {
+                rawData = outputTensor;
+            }
+            else {
+                rawData = new Float32Array(modelWidth * modelHeight);
+            }
+        }
+        else {
+            rawData = new Float32Array(modelWidth * modelHeight);
+        }
         // 6. Postprocess alpha mask with Guided Filter if requested
         const { createTransparentCanvas } = await import('@/src/features/background-remover/postprocess');
         let processedTensor = rawData;
@@ -226,8 +244,8 @@ class KaruviAiSdk {
             const { applyGuidedFilter } = await import('@/src/features/background-remover/guided-filter');
             // Create temporary guide context
             const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = manifest.input.width || 1024;
-            tempCanvas.height = manifest.input.height || 1024;
+            tempCanvas.width = modelWidth;
+            tempCanvas.height = modelHeight;
             const ctx = tempCanvas.getContext('2d');
             if (ctx) {
                 ctx.drawImage(bitmap, 0, 0, tempCanvas.width, tempCanvas.height);
@@ -237,8 +255,8 @@ class KaruviAiSdk {
         }
         const resultCanvas = await createTransparentCanvas({
             outputTensorData: processedTensor,
-            maskWidth: manifest.input.width || 1024,
-            maskHeight: manifest.input.height || 1024,
+            maskWidth: modelWidth,
+            maskHeight: modelHeight,
             originalImage: bitmap
         });
         let blob;

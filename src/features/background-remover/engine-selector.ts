@@ -6,6 +6,8 @@
 
 export type RecommendedEngine = 'canvas' | 'u2netp' | 'rmbg';
 
+export type ProcessingStrategy = 'fast' | 'balanced' | 'quality';
+
 export interface EngineRecommendation {
   engine: RecommendedEngine;
   confidence: number;
@@ -13,6 +15,57 @@ export interface EngineRecommendation {
   isBackgroundUniform: boolean;
   detectedColor?: string;
   colorVariance: number;
+}
+
+export interface StrategyResolution {
+  engine: RecommendedEngine;
+  strategy: ProcessingStrategy;
+  title: string;
+  badge: string;
+  description: string;
+  estimatedTimeMs: number;
+}
+
+/**
+ * Resolves optimal engine based on user preference strategy (Fast / Balanced / Best Quality)
+ */
+export function resolveEngineFromStrategy(
+  strategy: ProcessingStrategy,
+  recommendation: EngineRecommendation,
+  options?: { hasWebGpu?: boolean; isMobile?: boolean }
+): StrategyResolution {
+  if (strategy === 'fast') {
+    return {
+      engine: 'canvas',
+      strategy: 'fast',
+      title: '⚡ Fast (Instant Canvas)',
+      badge: '0 MB • Sub-15ms',
+      description: 'Zero download footprint. Deterministic color distance removal.',
+      estimatedTimeMs: 15
+    };
+  }
+
+  if (strategy === 'quality') {
+    return {
+      engine: 'rmbg',
+      strategy: 'quality',
+      title: '✨ Best Quality (RMBG 2.0 HD)',
+      badge: '168 MB • BiRefNet',
+      description: 'Bilateral reference deep neural network for complex hair and studio portraits.',
+      estimatedTimeMs: options?.hasWebGpu ? 350 : 1200
+    };
+  }
+
+  // Balanced mode: Use recommendation
+  const isCanvas = recommendation.engine === 'canvas';
+  return {
+    engine: recommendation.engine,
+    strategy: 'balanced',
+    title: `⚖️ Balanced (${isCanvas ? 'Instant Canvas' : recommendation.engine === 'u2netp' ? 'U²-NetP Mobile' : 'RMBG 2.0'})`,
+    badge: isCanvas ? '0 MB • Instant' : recommendation.engine === 'u2netp' ? '4.4 MB • Offline' : '168 MB • High-Res',
+    description: recommendation.reason,
+    estimatedTimeMs: isCanvas ? 15 : recommendation.engine === 'u2netp' ? 180 : 350
+  };
 }
 
 /**

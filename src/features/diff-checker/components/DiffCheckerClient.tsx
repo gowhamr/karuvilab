@@ -1,6 +1,7 @@
 "use client";
 import { useState, useMemo, useRef, useCallback } from "react";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { DiffEditor } from "@monaco-editor/react";
 import { Upload, AlignJustify, Columns, Eye, EyeOff } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { useToast } from "@/components/ui/Toast";

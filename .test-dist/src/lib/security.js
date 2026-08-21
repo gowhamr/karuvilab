@@ -50,16 +50,19 @@ const DEFAULT_SANITIZE_CONFIG = {
         'blockquote', 'p', 'a', 'ul', 'ol', 'li', 'b', 'i', 'strong', 'em',
         'strike', 'code', 'pre', 'hr', 'br', 'div', 'span', 'img', 'del',
         'svg', 'path', 'rect', 'circle', 'line', 'polyline', 'polygon', 'g',
+        'text', 'tspan', 'marker', 'defs', 'use', 'clipPath', 'foreignObject', 'foreignobject',
         'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'caption', 'sub', 'sup', 'details', 'summary'
     ],
     ALLOWED_ATTR: [
         'href', 'src', 'alt', 'title', 'class', 'className', 'target', 'rel',
         'width', 'height', 'viewBox', 'fill', 'stroke', 'stroke-width',
         'stroke-linecap', 'stroke-linejoin', 'points', 'd', 'rx', 'ry', 'cx', 'cy', 'r',
+        'x', 'y', 'dx', 'dy', 'text-anchor', 'dominant-baseline', 'font-size', 'font-family', 'font-weight',
+        'transform', 'marker-end', 'marker-start', 'xmlns', 'style',
         'id', 'colspan', 'rowspan', 'scope', 'open', 'name'
     ],
     ADD_ATTR: ['target', 'rel'],
-    FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'base'],
+    FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'base'],
     FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onmouseenter', 'onmouseleave'],
 };
 /**

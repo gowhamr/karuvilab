@@ -161,6 +161,9 @@ class WorkerManager {
     async parseMarkdown(text, abortSignal) {
         return workerOrchestrator.dispatch("parseMarkdown", [text], undefined, undefined, abortSignal);
     }
+    async parseMarkdownToTipTap(text, abortSignal) {
+        return workerOrchestrator.dispatch("parseMarkdownToTipTap", [text], undefined, undefined, abortSignal);
+    }
     async parseLogs(logText, onProgress, abortSignal) {
         return workerOrchestrator.dispatch("parseLogs", [logText], undefined, onProgress, abortSignal);
     }

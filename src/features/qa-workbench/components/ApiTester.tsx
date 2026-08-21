@@ -13,6 +13,19 @@ export function ApiTester() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const requestLanguage = React.useMemo(() => {
+    try {
+      const parsed = JSON.parse(headers);
+      const ct = (parsed["Content-Type"] || parsed["content-type"] || "").toLowerCase();
+      if (ct.includes("xml")) return "xml";
+      if (ct.includes("html")) return "html";
+      if (ct.includes("css")) return "css";
+      if (ct.includes("javascript")) return "javascript";
+      if (ct.includes("json")) return "json";
+    } catch (e) {}
+    return "text";
+  }, [headers]);
+
   const handleSend = async () => {
     setLoading(true);
     setError(null);
@@ -97,8 +110,9 @@ export function ApiTester() {
             <div className="h-32">
               <Editor
                 height="100%"
+                path="kv://api/request-headers.json"
                 language="json"
-                theme="vs-dark"
+                theme="karuvi-dark"
                 value={headers}
                 onChange={(val) => setHeaders(val || "")}
                 options={{ minimap: { enabled: false }, fontSize: 13, scrollBeyondLastLine: false }}
@@ -113,8 +127,9 @@ export function ApiTester() {
             <div className="h-64">
               <Editor
                 height="100%"
-                language="json"
-                theme="vs-dark"
+                path="kv://api/request-body.json"
+                language={requestLanguage}
+                theme="karuvi-dark"
                 value={body}
                 onChange={(val) => setBody(val || "")}
                 options={{ minimap: { enabled: false }, fontSize: 13, scrollBeyondLastLine: false }}
@@ -148,8 +163,15 @@ export function ApiTester() {
               <div className="h-full absolute inset-0">
                 <Editor
                   height="100%"
-                  language={typeof response.data === "object" ? "json" : "text"}
-                  theme="vs-dark"
+                  path="kv://api/response.json"
+                  language={
+                    response.headers["content-type"]?.includes("application/xml") || response.headers["content-type"]?.includes("text/xml") ? "xml" :
+                    response.headers["content-type"]?.includes("text/html") ? "html" :
+                    response.headers["content-type"]?.includes("text/css") ? "css" :
+                    response.headers["content-type"]?.includes("application/javascript") ? "javascript" :
+                    (typeof response.data === "object" || response.headers["content-type"]?.includes("application/json")) ? "json" : "text"
+                  }
+                  theme="karuvi-dark"
                   value={typeof response.data === "object" ? JSON.stringify(response.data, null, 2) : response.data}
                   options={{ readOnly: true, minimap: { enabled: false }, fontSize: 13, wordWrap: "on" }}
                 />

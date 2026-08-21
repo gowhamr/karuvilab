@@ -100,8 +100,9 @@ export default function JsonToTsClient() {
           <div className="bg-surface border border-border rounded-2xl overflow-hidden h-[600px] shadow-sm relative">
             <Editor
               height="100%"
+              path="kv://json/input.json"
               language="json"
-              theme="vs-dark"
+              theme="karuvi-dark"
               value={input}
               onChange={(val) => {
                 if (val && val.length > 5 * 1024 * 1024) {
@@ -131,8 +132,9 @@ export default function JsonToTsClient() {
           <div className="bg-surface border border-border rounded-2xl overflow-hidden h-[600px] shadow-sm relative">
             <Editor
               height="100%"
+              path="kv://ts/output.ts"
               language="typescript"
-              theme="vs-dark"
+              theme="karuvi-dark"
               value={output}
               options={{
                 readOnly: true,
