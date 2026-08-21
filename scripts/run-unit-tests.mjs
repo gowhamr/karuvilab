@@ -44,6 +44,8 @@ async function run() {
   let passed = 0;
   let failed = 0;
 
+  const failedSuites = [];
+
   for (const file of files) {
     const rel = path.relative(process.cwd(), file);
     try {
@@ -56,6 +58,7 @@ async function run() {
       }
       if (process.exitCode === 1) {
         failed++;
+        failedSuites.push(rel);
         process.exitCode = 0;
       } else {
         passed++;
@@ -63,12 +66,16 @@ async function run() {
     } catch (err) {
       console.error(`❌ Suite Error in ${rel}:`, err.message);
       failed++;
+      failedSuites.push(`${rel} (${err.message})`);
       process.exitCode = 0;
     }
   }
 
   console.log(`\n========================================`);
   console.log(`Unit Test Execution Summary: ${passed} Passed, ${failed} Failed`);
+  if (failedSuites.length > 0) {
+    console.log(`Failed Suites:\n${failedSuites.map(s => ` - ${s}`).join('\n')}`);
+  }
   console.log(`========================================\n`);
 
   if (failed > 0) {

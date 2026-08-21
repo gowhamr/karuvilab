@@ -1,9 +1,18 @@
 /**
- * KaruviLab (KV) AI Background Remover - Backdrop Compositor
- * Provides instant solid color & studio background replacements for Canvas & AI cutouts.
+ * KaruviLab (KV) AI Background Remover - Backdrop Compositor & Transform Engine
+ * Supports:
+ * - Transparent PNG
+ * - Solid Color Presets & Custom Hex
+ * - 7 Studio Gradients
+ * - Custom Background Image Replacement
+ * - Original Background Bokeh Blur
+ * - Transformations: Rotation, Flip H/V, Padding & Aspect Ratio
+ * - Multi-Format Export: PNG, WebP, JPEG with quality and custom dimensions
  */
 
-export type BackdropType = 'transparent' | 'solid' | 'studio';
+import { BackdropType, TransformSettings, ExportSettings } from './types';
+
+export type { BackdropType };
 
 export interface StudioPreset {
   id: string;
@@ -110,29 +119,82 @@ export const STUDIO_PRESETS: StudioPreset[] = [
 
 export interface CompositeOptions {
   cutoutImage: HTMLImageElement | ImageBitmap | HTMLCanvasElement | OffscreenCanvas;
+  originalImage?: HTMLImageElement | ImageBitmap | null | undefined;
+  customBgImage?: HTMLImageElement | ImageBitmap | null | undefined;
   width: number;
   height: number;
   backdropType: BackdropType;
-  solidColor?: string;
-  studioPresetId?: string;
+  solidColor?: string | undefined;
+  studioPresetId?: string | undefined;
+  blurRadius?: number | undefined;
+  transforms?: TransformSettings | undefined;
+  exportSettings?: ExportSettings | undefined;
 }
 
 /**
- * Composite cutout foreground onto a target backdrop (transparent, solid color, or studio gradient)
+ * Composite cutout foreground onto target backdrop with transforms and export formatting
  */
 export async function compositeCutoutWithBackdrop(options: CompositeOptions): Promise<Blob> {
-  const { cutoutImage, width, height, backdropType, solidColor = '#ffffff', studioPresetId } = options;
+  const {
+    cutoutImage,
+    originalImage,
+    customBgImage,
+    width,
+    height,
+    backdropType,
+    solidColor = '#ffffff',
+    studioPresetId,
+    blurRadius = 15,
+    transforms,
+    exportSettings
+  } = options;
+
+  // 1. Calculate Target Canvas Dimensions based on Aspect Ratio
+  let targetWidth = width;
+  let targetHeight = height;
+
+  if (transforms && transforms.aspectRatio && transforms.aspectRatio !== 'original') {
+    switch (transforms.aspectRatio) {
+      case '1:1':
+        const side = Math.max(width, height);
+        targetWidth = side;
+        targetHeight = side;
+        break;
+      case '4:5':
+        targetWidth = width;
+        targetHeight = Math.round(width * 1.25);
+        break;
+      case '16:9':
+        targetWidth = width;
+        targetHeight = Math.round(width * (9 / 16));
+        break;
+      case '9:16':
+        targetWidth = width;
+        targetHeight = Math.round(width * (16 / 9));
+        break;
+      case '3:4':
+        targetWidth = width;
+        targetHeight = Math.round(width * (4 / 3));
+        break;
+    }
+  }
+
+  // Handle Custom Export Dimensions
+  if (exportSettings?.customWidth && exportSettings?.customHeight) {
+    targetWidth = exportSettings.customWidth;
+    targetHeight = exportSettings.customHeight;
+  }
 
   let canvas: HTMLCanvasElement | OffscreenCanvas;
   let ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D | null = null;
 
   if (typeof OffscreenCanvas !== 'undefined') {
-    canvas = new OffscreenCanvas(width, height);
+    canvas = new OffscreenCanvas(targetWidth, targetHeight);
     ctx = canvas.getContext('2d');
   } else {
     canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
     ctx = canvas.getContext('2d');
   }
 
@@ -140,26 +202,65 @@ export async function compositeCutoutWithBackdrop(options: CompositeOptions): Pr
     throw new Error('Failed to create compositing canvas context');
   }
 
-  // 1. Draw Backdrop
+  // 2. Draw Backdrop
   if (backdropType === 'solid') {
     ctx.fillStyle = solidColor;
-    ctx.fillRect(0, 0, width, height);
+    ctx.fillRect(0, 0, targetWidth, targetHeight);
   } else if (backdropType === 'studio') {
     const preset = STUDIO_PRESETS.find((p) => p.id === studioPresetId) || STUDIO_PRESETS[0]!;
-    preset.draw(ctx, width, height);
+    preset.draw(ctx, targetWidth, targetHeight);
+  } else if (backdropType === 'custom-image' && customBgImage) {
+    ctx.drawImage(customBgImage, 0, 0, targetWidth, targetHeight);
+  } else if (backdropType === 'blur' && originalImage) {
+    ctx.save();
+    ctx.filter = `blur(${blurRadius}px)`;
+    ctx.drawImage(originalImage, -20, -20, targetWidth + 40, targetHeight + 40);
+    ctx.restore();
   } else {
-    // Transparent: clear background
-    ctx.clearRect(0, 0, width, height);
+    // Transparent: clear canvas
+    ctx.clearRect(0, 0, targetWidth, targetHeight);
   }
 
-  // 2. Draw Foreground Cutout
-  ctx.drawImage(cutoutImage, 0, 0, width, height);
+  // 3. Apply Transforms & Draw Foreground Cutout
+  ctx.save();
 
-  // 3. Export Blob
+  const centerX = targetWidth / 2;
+  const centerY = targetHeight / 2;
+  ctx.translate(centerX, centerY);
+
+  if (transforms) {
+    if (transforms.rotation) {
+      ctx.rotate((transforms.rotation * Math.PI) / 180);
+    }
+    const scaleX = transforms.flipH ? -1 : 1;
+    const scaleY = transforms.flipV ? -1 : 1;
+    ctx.scale(scaleX, scaleY);
+  }
+
+  // Calculate draw dimensions respecting padding
+  const paddingPercent = transforms?.padding ? transforms.padding / 100 : 0;
+  const drawWidth = width * (1 - paddingPercent);
+  const drawHeight = height * (1 - paddingPercent);
+
+  ctx.drawImage(
+    cutoutImage,
+    -drawWidth / 2,
+    -drawHeight / 2,
+    drawWidth,
+    drawHeight
+  );
+
+  ctx.restore();
+
+  // 4. Export Blob with requested Format & Quality
+  const format = exportSettings?.format || (backdropType === 'transparent' ? 'png' : 'jpeg');
+  const quality = exportSettings?.quality ?? 0.95;
+  const mimeType = format === 'png' ? 'image/png' : format === 'webp' ? 'image/webp' : 'image/jpeg';
+
   if (canvas instanceof OffscreenCanvas) {
     return await canvas.convertToBlob({
-      type: backdropType === 'transparent' ? 'image/png' : 'image/jpeg',
-      quality: 0.95
+      type: mimeType,
+      quality
     });
   } else {
     return await new Promise<Blob>((resolve, reject) => {
@@ -168,8 +269,8 @@ export async function compositeCutoutWithBackdrop(options: CompositeOptions): Pr
           if (b) resolve(b);
           else reject(new Error('Failed to convert canvas to blob'));
         },
-        backdropType === 'transparent' ? 'image/png' : 'image/jpeg',
-        0.95
+        mimeType,
+        quality
       );
     });
   }
@@ -179,16 +280,32 @@ export async function compositeCutoutWithBackdrop(options: CompositeOptions): Pr
  * Auto-detect the predominant background color by sampling the 4 corners and borders of an image
  */
 export function autoDetectBackgroundColor(img: HTMLImageElement | ImageBitmap): string {
-  const width = img instanceof HTMLImageElement ? (img.naturalWidth || img.width) : img.width;
-  const height = img instanceof HTMLImageElement ? (img.naturalHeight || img.height) : img.height;
+  if (typeof document === 'undefined' && typeof OffscreenCanvas === 'undefined') {
+    return '#ffffff';
+  }
 
-  const sampleCanvas = document.createElement('canvas');
-  sampleCanvas.width = Math.min(width, 100);
-  sampleCanvas.height = Math.min(height, 100);
-  const ctx = sampleCanvas.getContext('2d');
-  if (!ctx) return '#ffffff';
+  const isImg = typeof HTMLImageElement !== 'undefined' && img instanceof HTMLImageElement;
+  const width = isImg ? (img.naturalWidth || img.width) : (img as any).width || 100;
+  const height = isImg ? (img.naturalHeight || img.height) : (img as any).height || 100;
 
-  ctx.drawImage(img, 0, 0, sampleCanvas.width, sampleCanvas.height);
+  let sampleCanvas: HTMLCanvasElement | OffscreenCanvas;
+  let ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D | null = null;
+
+  if (typeof OffscreenCanvas !== 'undefined') {
+    sampleCanvas = new OffscreenCanvas(Math.min(width, 100), Math.min(height, 100));
+    ctx = sampleCanvas.getContext('2d');
+  } else if (typeof document !== 'undefined') {
+    sampleCanvas = document.createElement('canvas');
+    sampleCanvas.width = Math.min(width, 100);
+    sampleCanvas.height = Math.min(height, 100);
+    ctx = sampleCanvas.getContext('2d');
+  } else {
+    return '#ffffff';
+  }
+
+  if (!ctx || typeof ctx.getImageData !== 'function') return '#ffffff';
+
+  ctx.drawImage(img as any, 0, 0, sampleCanvas.width, sampleCanvas.height);
   const data = ctx.getImageData(0, 0, sampleCanvas.width, sampleCanvas.height).data;
 
   // Sample corner pixel colors: top-left, top-right, bottom-left, bottom-right

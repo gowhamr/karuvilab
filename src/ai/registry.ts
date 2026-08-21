@@ -51,7 +51,7 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     ],
     sha256: '309c8469258dda742793dce0ebea8e6dd393174f89934733ecc8b14c76f4ddd8',
     sizeMB: 4.7,
-    backend: ['wasm', 'webgpu'],
+    backend: ['wasm'],
     input: { width: 320, height: 320, channels: 3, dataType: 'float32', shape: [1, 3, 320, 320] },
     output: { channels: 1, dataType: 'float32', shape: [1, 1, 320, 320] },
     category: 'segmentation',

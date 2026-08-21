@@ -50,7 +50,7 @@ export const U2NETP_MODEL_MANIFEST: ModelManifest = {
   ],
   sha256: '309c8469258dda742793dce0ebea8e6dd393174f89934733ecc8b14c76f4ddd8',
   sizeMB: 4.7,
-  backend: ['wasm', 'webgpu'],
+  backend: ['wasm'],
   input: {
     width: 320,
     height: 320,

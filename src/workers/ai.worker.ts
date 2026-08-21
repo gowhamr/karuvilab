@@ -8,7 +8,7 @@ import * as Comlink from 'comlink';
 import { ModelManifest, ModelBackend, CapabilitiesResult, AiRuntimeStatus, ModelProgress } from '../ai/types';
 import { detectCapabilities } from '../ai/capabilities';
 import { modelManager } from '../ai/model-manager';
-import { createAiSession, AiSession } from '../ai/runtime';
+import { createAiSession, type AiSession } from '../ai/runtime';
 import { ModelNotFoundError, InferenceFailedError } from '../ai/errors';
 import { preprocessImage } from '../features/background-remover/preprocess';
 import { createTransparentCanvas } from '../features/background-remover/postprocess';

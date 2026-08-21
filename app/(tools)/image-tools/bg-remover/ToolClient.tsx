@@ -14,6 +14,9 @@ import {
   compositeCutoutWithBackdrop, 
   autoDetectBackgroundColor 
 } from "@/src/features/background-remover/backdrop-compositor";
+import { BrushStudioModal } from "@/src/features/background-remover/components/BrushStudioModal";
+import { BatchProcessingModal } from "@/src/features/background-remover/components/BatchProcessingModal";
+import { TransformSettings, ExportSettings } from "@/src/features/background-remover/types";
 import { useObjectUrlManager, useAsyncSafeState } from "@/src/lib/hooks";
 import { useToast } from "@/components/ui/Toast";
 import { ModelBackend } from "@/src/ai/types";
@@ -28,7 +31,8 @@ import {
   Sparkles, Download, Layers, ShieldCheck, 
   HardDrive, AlertCircle, ToggleLeft, ToggleRight,
   Palette, Zap, Trash2, Image as ImageIcon2, RefreshCw,
-  Pipette, Copy, Check
+  Pipette, Copy, Check, RotateCw, FlipHorizontal, FlipVertical,
+  Paintbrush, Sliders, ImagePlus
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { ToolWorkspace } from "@/components/ui/ToolWorkspace";
@@ -42,11 +46,20 @@ const SOLID_PRESETS = [
   { label: 'Mint', color: '#10b981' },
 ];
 
+const ASPECT_RATIO_PRESETS = [
+  { id: 'original', label: 'Original' },
+  { id: '1:1', label: '1:1 Square' },
+  { id: '4:5', label: '4:5 Portrait' },
+  { id: '16:9', label: '16:9 Landscape' },
+  { id: '9:16', label: '9:16 Story' },
+  { id: '3:4', label: '3:4 Passport' }
+];
+
 export default function ToolClient() {
   const { createUrl, revokeUrl } = useObjectUrlManager();
   const { toast } = useToast();
 
-  // Mode Selection: 'canvas' (Color/Tolerance) vs 'ai' (Neural Network)
+  // Mode Selection: 'canvas' vs 'ai'
   const [activeTab, setActiveTab] = useState<'canvas' | 'ai'>('canvas');
 
   // Shared file state
@@ -55,10 +68,13 @@ export default function ToolClient() {
   const [resultTransparentUrl, setResultTransparentUrl] = useState<string | null>(null);
   const [resultDisplayUrl, setResultDisplayUrl] = useState<string | null>(null);
 
-  // Background Replacement Settings (Applies to both Canvas and AI outputs)
+  // Background Replacement Settings
   const [backdropType, setBackdropType] = useState<BackdropType>('transparent');
   const [replacementSolidColor, setReplacementSolidColor] = useState('#ffffff');
   const [selectedStudioPresetId, setSelectedStudioPresetId] = useState('studio-soft-spotlight');
+  const [customBgImage, setCustomBgImage] = useState<HTMLImageElement | null>(null);
+  const [customBgUrl, setCustomBgUrl] = useState<string | null>(null);
+  const [blurRadius, setBlurRadius] = useState<number>(15);
 
   // Canvas Mode Controls
   const [bgColor, setBgColor] = useState("#ffffff");
@@ -76,7 +92,28 @@ export default function ToolClient() {
   const [progress, setProgress] = useState<{ percent: number; stage: string } | null>(null);
   const [aiError, setAiError] = useState<string | null>(null);
   const [isCachedModel, setIsCachedModel] = useState<boolean>(false);
+
+  // Transforms & Framing
+  const [transforms, setTransforms] = useState<TransformSettings>({
+    rotation: 0,
+    flipH: false,
+    flipV: false,
+    padding: 0,
+    aspectRatio: 'original'
+  });
+
+  // Export Settings
+  const [exportSettings, setExportSettings] = useState<ExportSettings>({
+    format: 'png',
+    quality: 0.95,
+    maintainAspect: true
+  });
+  const [showExportOptions, setShowExportOptions] = useState(false);
+
+  // Modals
   const [isManagerOpen, setIsManagerOpen] = useState(false);
+  const [isBrushStudioOpen, setIsBrushStudioOpen] = useState(false);
+  const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
 
   // Split comparison slider & visual settings
   const [sliderPosition, setSliderPosition] = useState(50);
@@ -104,7 +141,7 @@ export default function ToolClient() {
     checkModelCache();
   }, [selectedModelId]);
 
-  const handleFilesSelected = (files: File[]) => {
+  const handleFilesSelected = useCallback((files: File[]) => {
     const selected = files[0];
     if (!selected) return;
 
@@ -136,13 +173,44 @@ export default function ToolClient() {
       const detected = autoDetectBackgroundColor(tempImg);
       setBgColor(detected);
     };
-  };
+  }, [originalUrl, resultTransparentUrl, resultDisplayUrl, createUrl, revokeUrl, toast]);
+
+  // Global Clipboard Paste Listener (Ctrl+V)
+  useEffect(() => {
+    const handlePaste = (e: ClipboardEvent) => {
+      if (e.clipboardData?.files && e.clipboardData.files.length > 0) {
+        const pastedFiles = Array.from(e.clipboardData.files).filter(f => f.type.startsWith('image/'));
+        if (pastedFiles.length > 0) {
+          handleFilesSelected(pastedFiles);
+          toast('Pasted image from clipboard', 'info');
+        }
+      }
+    };
+    window.addEventListener('paste', handlePaste);
+    return () => window.removeEventListener('paste', handlePaste);
+  }, [handleFilesSelected, toast]);
 
   const handleAutoDetectColor = () => {
     if (!imageRef.current) return;
     const detected = autoDetectBackgroundColor(imageRef.current);
     setBgColor(detected);
     toast(`Auto-detected background color: ${detected.toUpperCase()}`, 'info');
+  };
+
+  const handleCustomBgUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files?.[0]) return;
+    const bgFile = e.target.files[0];
+    if (customBgUrl) revokeUrl(customBgUrl);
+    const url = createUrl(bgFile);
+    setCustomBgUrl(url);
+
+    const img = new Image();
+    img.src = url;
+    img.onload = () => {
+      setCustomBgImage(img);
+      setBackdropType('custom-image');
+      toast('Loaded custom background image', 'success');
+    };
   };
 
   // Re-composite current transparent cutout onto chosen backdrop
@@ -155,11 +223,16 @@ export default function ToolClient() {
     try {
       const compositeBlob = await compositeCutoutWithBackdrop({
         cutoutImage: cutout,
+        originalImage: imageRef.current,
+        customBgImage,
         width,
         height,
         backdropType,
         solidColor: replacementSolidColor,
-        studioPresetId: selectedStudioPresetId
+        studioPresetId: selectedStudioPresetId,
+        blurRadius,
+        transforms,
+        exportSettings
       });
 
       if (resultDisplayUrl) revokeUrl(resultDisplayUrl);
@@ -168,14 +241,14 @@ export default function ToolClient() {
     } catch (err) {
       console.error('Failed to composite background:', err);
     }
-  }, [file, backdropType, replacementSolidColor, selectedStudioPresetId, resultDisplayUrl, createUrl, revokeUrl]);
+  }, [file, customBgImage, backdropType, replacementSolidColor, selectedStudioPresetId, blurRadius, transforms, exportSettings, resultDisplayUrl, createUrl, revokeUrl]);
 
-  // Update composite whenever backdrop settings change
+  // Update composite whenever backdrop settings or transforms change
   useEffect(() => {
     if (transparentCutoutCanvasRef.current) {
       updateCompositedResult(transparentCutoutCanvasRef.current);
     }
-  }, [backdropType, replacementSolidColor, selectedStudioPresetId, updateCompositedResult]);
+  }, [backdropType, replacementSolidColor, selectedStudioPresetId, customBgImage, blurRadius, transforms, exportSettings, updateCompositedResult]);
 
   // Canvas Mode Removal (Instant local pixel color matching)
   const removeBackgroundCanvas = useCallback(async () => {
@@ -196,7 +269,6 @@ export default function ToolClient() {
       const tUrl = createUrl(transparentBlob);
       setResultTransparentUrl(tUrl);
 
-      // Create ImageBitmap to allow instant background compositing
       const bitmap = await createImageBitmap(transparentBlob);
       transparentCutoutCanvasRef.current = bitmap;
       await updateCompositedResult(bitmap);
@@ -312,6 +384,17 @@ export default function ToolClient() {
     }
   }, [selectedModelId, threshold, feather, invert, resultTransparentUrl, createUrl, revokeUrl, updateCompositedResult]);
 
+  const handleBrushStudioApply = async (modifiedBlob: Blob) => {
+    if (resultTransparentUrl) revokeUrl(resultTransparentUrl);
+    const newTransparentUrl = createUrl(modifiedBlob);
+    setResultTransparentUrl(newTransparentUrl);
+
+    const bitmap = await createImageBitmap(modifiedBlob);
+    transparentCutoutCanvasRef.current = bitmap;
+    await updateCompositedResult(bitmap);
+    toast('Applied manual mask touch-ups!', 'success');
+  };
+
   const handleReset = () => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
@@ -319,11 +402,14 @@ export default function ToolClient() {
     if (originalUrl) revokeUrl(originalUrl);
     if (resultTransparentUrl) revokeUrl(resultTransparentUrl);
     if (resultDisplayUrl) revokeUrl(resultDisplayUrl);
+    if (customBgUrl) revokeUrl(customBgUrl);
 
     setFile(null);
     setOriginalUrl(null);
     setResultTransparentUrl(null);
     setResultDisplayUrl(null);
+    setCustomBgUrl(null);
+    setCustomBgImage(null);
     setCanvasError(null);
     setAiError(null);
     setIsProcessing(false);
@@ -349,12 +435,12 @@ export default function ToolClient() {
     const a = document.createElement('a');
     a.href = resultDisplayUrl;
     const baseName = file.name.replace(/\.[^/.]+$/, "");
-    const ext = backdropType === 'transparent' ? 'png' : 'jpg';
+    const ext = exportSettings.format;
     a.download = `${baseName}-${backdropType}-backdrop.${ext}`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    toast(`Downloaded image with ${backdropType} backdrop`, 'success');
+    toast(`Downloaded image with ${backdropType} backdrop (${ext.toUpperCase()})`, 'success');
   };
 
   const handleCopyImage = async () => {
@@ -362,7 +448,6 @@ export default function ToolClient() {
     try {
       const res = await fetch(resultDisplayUrl);
       const blob = await res.blob();
-      // Ensure PNG format for clipboard
       let pngBlob = blob;
       if (blob.type !== 'image/png') {
         const img = new Image();
@@ -399,11 +484,20 @@ export default function ToolClient() {
               <h1 className="text-lg font-black text-text tracking-tight">Background Remover</h1>
             </div>
             <p className="text-xs text-text-muted">
-              Choose between instant Canvas Color matching or deep learning AI Neural Network segmentation. 100% private, browser-only.
+              Instant Canvas color matching or AI Neural Network segmentation with Studio Backdrops & Manual Touch-up. 100% private, browser-only.
             </p>
           </div>
 
           <div className="flex items-center gap-2 self-start sm:self-auto">
+            <button
+              onClick={() => setIsBatchModalOpen(true)}
+              className="px-3 py-1.5 rounded-xl border border-blue/30 bg-blue/10 hover:bg-blue/20 text-blue text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+              title="Open Batch Background Remover"
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>Batch Mode</span>
+            </button>
+
             {activeTab === 'ai' && (
               <>
                 <ModelStatusBadge 
@@ -482,8 +576,8 @@ export default function ToolClient() {
               <DropZone
                 onFilesSelected={handleFilesSelected}
                 accept="image/*"
-                title="Drop image here to remove background"
-                subtitle="Supports PNG, JPEG, WebP. Processed 100% in your browser."
+                title="Drop image here or paste (Ctrl+V)"
+                subtitle="Supports PNG, JPEG, WebP, AVIF. Processed 100% in your browser."
                 icon={activeTab === 'ai' ? <Sparkles className="w-8 h-8 text-blue" /> : <Palette className="w-8 h-8 text-blue" />}
               />
             ) : (
@@ -737,6 +831,20 @@ export default function ToolClient() {
               </div>
             )}
 
+            {/* TOUCH-UP BRUSH STUDIO BUTTON */}
+            {resultTransparentUrl && imageRef.current && (
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsBrushStudioOpen(true)}
+                  className="w-full py-2.5 px-4 bg-surface-elevated hover:bg-surface border border-border hover:border-blue/50 text-text font-bold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm text-xs"
+                >
+                  <Paintbrush className="w-4 h-4 text-blue" />
+                  <span>Manual Touch-up (Brush Studio)</span>
+                </button>
+              </div>
+            )}
+
             {/* SHARED: Output Backdrop Replacement Controls */}
             <div className="space-y-3 pt-4 border-t border-border/80">
               <div className="flex items-center justify-between">
@@ -745,12 +853,12 @@ export default function ToolClient() {
               </div>
 
               {/* Backdrop Type Selector Tabs */}
-              <div className="grid grid-cols-3 gap-1.5 bg-surface-elevated p-1 rounded-xl border border-border">
+              <div className="grid grid-cols-5 gap-1 bg-surface-elevated p-1 rounded-xl border border-border text-[11px]">
                 <button
                   type="button"
                   onClick={() => setBackdropType('transparent')}
                   className={cn(
-                    "py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer",
+                    "py-1.5 px-1 rounded-lg font-bold transition-all cursor-pointer truncate",
                     backdropType === 'transparent' ? "bg-blue text-white shadow-sm" : "text-text-muted hover:text-text"
                   )}
                 >
@@ -760,7 +868,7 @@ export default function ToolClient() {
                   type="button"
                   onClick={() => setBackdropType('solid')}
                   className={cn(
-                    "py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer",
+                    "py-1.5 px-1 rounded-lg font-bold transition-all cursor-pointer truncate",
                     backdropType === 'solid' ? "bg-blue text-white shadow-sm" : "text-text-muted hover:text-text"
                   )}
                 >
@@ -770,11 +878,31 @@ export default function ToolClient() {
                   type="button"
                   onClick={() => setBackdropType('studio')}
                   className={cn(
-                    "py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer",
+                    "py-1.5 px-1 rounded-lg font-bold transition-all cursor-pointer truncate",
                     backdropType === 'studio' ? "bg-blue text-white shadow-sm" : "text-text-muted hover:text-text"
                   )}
                 >
                   Studio BG
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBackdropType('blur')}
+                  className={cn(
+                    "py-1.5 px-1 rounded-lg font-bold transition-all cursor-pointer truncate",
+                    backdropType === 'blur' ? "bg-blue text-white shadow-sm" : "text-text-muted hover:text-text"
+                  )}
+                >
+                  Blur BG
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBackdropType('custom-image')}
+                  className={cn(
+                    "py-1.5 px-1 rounded-lg font-bold transition-all cursor-pointer truncate",
+                    backdropType === 'custom-image' ? "bg-blue text-white shadow-sm" : "text-text-muted hover:text-text"
+                  )}
+                >
+                  Custom
                 </button>
               </div>
 
@@ -844,6 +972,122 @@ export default function ToolClient() {
                   ))}
                 </div>
               )}
+
+              {/* Background Blur Slider */}
+              {backdropType === 'blur' && (
+                <div className="bg-surface-elevated/50 p-3.5 rounded-2xl border border-border/60 space-y-2">
+                  <div className="flex justify-between text-xs font-bold text-text-muted">
+                    <span>Bokeh Blur Intensity</span>
+                    <span className="font-mono text-blue">{blurRadius}px</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="5"
+                    max="50"
+                    value={blurRadius}
+                    onChange={(e) => setBlurRadius(Number(e.target.value))}
+                    className="w-full cursor-pointer accent-blue h-1.5 bg-border rounded-lg"
+                  />
+                  <p className="text-[11px] text-text-muted">Applies soft DSLR-style background blur behind foreground subject.</p>
+                </div>
+              )}
+
+              {/* Custom Image Upload */}
+              {backdropType === 'custom-image' && (
+                <div className="bg-surface-elevated/50 p-3.5 rounded-2xl border border-border/60 space-y-2">
+                  <label className="w-full py-2 px-3 border border-dashed border-border hover:border-blue rounded-xl flex items-center justify-center gap-2 text-xs font-bold text-text cursor-pointer transition-colors">
+                    <ImagePlus className="w-4 h-4 text-blue" />
+                    <span>{customBgImage ? 'Change Background Image' : 'Upload Background Photo'}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleCustomBgUpload}
+                      className="hidden"
+                    />
+                  </label>
+                  {customBgUrl && (
+                    <div className="h-20 w-full rounded-xl border border-border overflow-hidden bg-bg/50">
+                      <img src={customBgUrl} alt="Custom background" className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* CANVAS TRANSFORMS & FRAMING */}
+            <div className="space-y-3 pt-4 border-t border-border/80">
+              <h4 className="text-sm font-bold text-text">Transforms & Framing</h4>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setTransforms(t => ({ ...t, rotation: (t.rotation + 90) % 360 }))}
+                  className="p-2 rounded-xl border border-border bg-surface hover:bg-surface-elevated text-xs font-bold text-text flex items-center gap-1.5 cursor-pointer"
+                  title="Rotate 90 degrees"
+                >
+                  <RotateCw className="w-3.5 h-3.5" />
+                  <span>Rotate</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTransforms(t => ({ ...t, flipH: !t.flipH }))}
+                  className={cn(
+                    "p-2 rounded-xl border text-xs font-bold flex items-center gap-1.5 cursor-pointer",
+                    transforms.flipH ? "border-blue bg-blue/10 text-blue" : "border-border bg-surface text-text hover:bg-surface-elevated"
+                  )}
+                  title="Flip Horizontally"
+                >
+                  <FlipHorizontal className="w-3.5 h-3.5" />
+                  <span>Flip H</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTransforms(t => ({ ...t, flipV: !t.flipV }))}
+                  className={cn(
+                    "p-2 rounded-xl border text-xs font-bold flex items-center gap-1.5 cursor-pointer",
+                    transforms.flipV ? "border-blue bg-blue/10 text-blue" : "border-border bg-surface text-text hover:bg-surface-elevated"
+                  )}
+                  title="Flip Vertically"
+                >
+                  <FlipVertical className="w-3.5 h-3.5" />
+                  <span>Flip V</span>
+                </button>
+              </div>
+
+              {/* Aspect Ratio Framing */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-text-muted">Aspect Ratio:</label>
+                <div className="grid grid-cols-3 gap-1 bg-surface-elevated p-1 rounded-xl border border-border text-[11px]">
+                  {ASPECT_RATIO_PRESETS.map((p) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => setTransforms(t => ({ ...t, aspectRatio: p.id }))}
+                      className={cn(
+                        "py-1 px-1 rounded-lg font-bold transition-all cursor-pointer truncate",
+                        transforms.aspectRatio === p.id ? "bg-blue text-white shadow-sm" : "text-text-muted hover:text-text"
+                      )}
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Canvas Padding Slider */}
+              <div className="space-y-1 pt-1">
+                <div className="flex justify-between text-xs font-bold text-text-muted">
+                  <span>Canvas Padding</span>
+                  <span className="font-mono text-blue">{transforms.padding}%</span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="40"
+                  value={transforms.padding}
+                  onChange={(e) => setTransforms(t => ({ ...t, padding: Number(e.target.value) }))}
+                  className="w-full cursor-pointer accent-blue h-1.5 bg-border rounded-lg"
+                />
+              </div>
             </div>
           </div>
         }
@@ -881,9 +1125,62 @@ export default function ToolClient() {
                       <span>Download with BG</span>
                     </button>
                   )}
+
+                  <button
+                    onClick={() => setShowExportOptions(!showExportOptions)}
+                    className={cn(
+                      "p-1.5 rounded-xl border transition-colors cursor-pointer",
+                      showExportOptions ? "border-blue bg-blue/10 text-blue" : "border-border bg-surface text-text-muted hover:text-text"
+                    )}
+                    title="Export format & quality settings"
+                  >
+                    <Sliders className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               )}
             </div>
+
+            {/* Export Settings Panel */}
+            {showExportOptions && resultDisplayUrl && (
+              <div className="p-3.5 bg-surface-elevated/70 border border-border rounded-2xl space-y-3 animate-in fade-in duration-150">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-text">Export Format & Quality</span>
+                  <div className="flex gap-1">
+                    {(['png', 'webp', 'jpeg'] as const).map(fmt => (
+                      <button
+                        key={fmt}
+                        type="button"
+                        onClick={() => setExportSettings(s => ({ ...s, format: fmt }))}
+                        className={cn(
+                          "px-2.5 py-1 rounded-lg text-xs font-bold uppercase transition-all cursor-pointer",
+                          exportSettings.format === fmt ? "bg-blue text-white shadow-sm" : "bg-surface text-text-muted hover:text-text"
+                        )}
+                      >
+                        {fmt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {exportSettings.format !== 'png' && (
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs font-bold text-text-muted">
+                      <span>Compression Quality</span>
+                      <span className="font-mono text-blue">{Math.round(exportSettings.quality * 100)}%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0.5"
+                      max="1.0"
+                      step="0.05"
+                      value={exportSettings.quality}
+                      onChange={(e) => setExportSettings(s => ({ ...s, quality: Number(e.target.value) }))}
+                      className="w-full cursor-pointer accent-blue h-1.5 bg-border rounded-lg"
+                    />
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Inference progress */}
             {isProcessing && progress && (
@@ -1043,7 +1340,7 @@ export default function ToolClient() {
                 <div className="space-y-2">
                   <h4 className="font-bold text-text text-sm">Alpha Matting & Studio Backdrop Compositing</h4>
                   <p>
-                    The postprocessor maps raw probabilities to smoothstep alpha curves: &alpha; = t&sup2; &times; (3 - 2t). The foreground cutout is blended onto solid hex backdrops or studio radial spotlight gradients via 2D Canvas matrix transforms.
+                    The postprocessor maps raw probabilities to smoothstep alpha curves: &alpha; = t&sup2; &times; (3 - 2t). The foreground cutout is blended onto solid hex backdrops, blur bokeh layers, or studio radial spotlight gradients via 2D Canvas matrix transforms.
                   </p>
                 </div>
               )}
@@ -1061,6 +1358,24 @@ export default function ToolClient() {
       <ModelManagerDialog
         isOpen={isManagerOpen}
         onClose={() => setIsManagerOpen(false)}
+      />
+
+      {/* Manual Mask Touch-up Brush Studio Modal */}
+      {transparentCutoutCanvasRef.current && imageRef.current && (
+        <BrushStudioModal
+          isOpen={isBrushStudioOpen}
+          onClose={() => setIsBrushStudioOpen(false)}
+          cutoutCanvas={transparentCutoutCanvasRef.current}
+          originalImage={imageRef.current}
+          onApply={handleBrushStudioApply}
+        />
+      )}
+
+      {/* Batch Processing Modal */}
+      <BatchProcessingModal
+        isOpen={isBatchModalOpen}
+        onClose={() => setIsBatchModalOpen(false)}
+        initialFiles={file ? [file] : []}
       />
     </div>
   );
