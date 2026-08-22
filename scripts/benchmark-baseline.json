@@ -2,105 +2,105 @@
   "markdown": {
     "10 KB": {
       "bytes": 10464,
-      "mdToAstMs": 25.59,
-      "astToMdMs": 4.92,
-      "totalRoundtripMs": 30.52,
+      "mdToAstMs": 39.58,
+      "astToMdMs": 2.73,
+      "totalRoundtripMs": 42.31,
       "astNodes": 120
     },
     "50 KB": {
       "bytes": 51448,
-      "mdToAstMs": 101.9,
-      "astToMdMs": 3.82,
-      "totalRoundtripMs": 105.72,
+      "mdToAstMs": 430.94,
+      "astToMdMs": 77.99,
+      "totalRoundtripMs": 508.93,
       "astNodes": 590
     },
     "100 KB": {
       "bytes": 102896,
-      "mdToAstMs": 279.5,
-      "astToMdMs": 191.33,
-      "totalRoundtripMs": 470.83,
+      "mdToAstMs": 285.22,
+      "astToMdMs": 114.93,
+      "totalRoundtripMs": 400.16,
       "astNodes": 1180
     },
     "250 KB": {
       "bytes": 256368,
-      "mdToAstMs": 487.65,
-      "astToMdMs": 19.75,
-      "totalRoundtripMs": 507.4,
+      "mdToAstMs": 1256.33,
+      "astToMdMs": 8.53,
+      "totalRoundtripMs": 1264.86,
       "astNodes": 2940
     },
     "500 KB": {
       "bytes": 512736,
-      "mdToAstMs": 463.74,
-      "astToMdMs": 43.34,
-      "totalRoundtripMs": 507.08,
+      "mdToAstMs": 607.42,
+      "astToMdMs": 71.27,
+      "totalRoundtripMs": 678.7,
       "astNodes": 5880
     },
     "1 MB": {
       "bytes": 1049016,
-      "mdToAstMs": 612.21,
-      "astToMdMs": 27.29,
-      "totalRoundtripMs": 639.51,
+      "mdToAstMs": 1995.06,
+      "astToMdMs": 184.78,
+      "totalRoundtripMs": 2179.84,
       "astNodes": 12030
     },
     "2 MB": {
       "bytes": 2097160,
-      "mdToAstMs": 9926.33,
-      "astToMdMs": 579.89,
-      "totalRoundtripMs": 10506.23,
+      "mdToAstMs": 2723.7,
+      "astToMdMs": 527.95,
+      "totalRoundtripMs": 3251.65,
       "astNodes": 24050
     }
   },
   "mermaid": {
     "batch_1": {
       "count": 1,
-      "preflightTotalMs": 33.614,
-      "preflightAvgMs": 33.614,
-      "securityTotalMs": 1.854,
-      "cacheSetMs": 19.357,
-      "cacheGetMs": 1.24,
+      "preflightTotalMs": 12.645,
+      "preflightAvgMs": 12.645,
+      "securityTotalMs": 11.164,
+      "cacheSetMs": 3.811,
+      "cacheGetMs": 0.552,
       "cacheHits": 1
     },
     "batch_5": {
       "count": 5,
-      "preflightTotalMs": 14.964,
-      "preflightAvgMs": 2.993,
-      "securityTotalMs": 0.044,
-      "cacheSetMs": 1.428,
-      "cacheGetMs": 0.102,
+      "preflightTotalMs": 8.652,
+      "preflightAvgMs": 1.73,
+      "securityTotalMs": 0.18,
+      "cacheSetMs": 2.199,
+      "cacheGetMs": 1.002,
       "cacheHits": 5
     },
     "batch_10": {
       "count": 10,
-      "preflightTotalMs": 1.26,
-      "preflightAvgMs": 0.126,
-      "securityTotalMs": 0.05,
-      "cacheSetMs": 0.295,
-      "cacheGetMs": 0.247,
+      "preflightTotalMs": 4.862,
+      "preflightAvgMs": 0.486,
+      "securityTotalMs": 0.241,
+      "cacheSetMs": 1.408,
+      "cacheGetMs": 1.611,
       "cacheHits": 10
     },
     "batch_25": {
       "count": 25,
-      "preflightTotalMs": 5.005,
-      "preflightAvgMs": 0.2,
-      "securityTotalMs": 0.107,
-      "cacheSetMs": 0.475,
-      "cacheGetMs": 0.396,
+      "preflightTotalMs": 3.894,
+      "preflightAvgMs": 0.156,
+      "securityTotalMs": 0.593,
+      "cacheSetMs": 2.936,
+      "cacheGetMs": 2.63,
       "cacheHits": 25
     },
     "batch_50": {
       "count": 50,
-      "preflightTotalMs": 1.045,
-      "preflightAvgMs": 0.021,
-      "securityTotalMs": 0.424,
-      "cacheSetMs": 3.987,
-      "cacheGetMs": 0.885,
+      "preflightTotalMs": 3.92,
+      "preflightAvgMs": 0.078,
+      "securityTotalMs": 1.167,
+      "cacheSetMs": 9.934,
+      "cacheGetMs": 0.823,
       "cacheHits": 50
     }
   },
   "monaco": {
     "headerPropertiesCount": 3,
     "requestPropertiesCount": 0,
-    "jsonValidationMs": 1.288
+    "jsonValidationMs": 0.669
   },
   "bgRemover": {
     "720p": {
@@ -108,28 +108,28 @@
       "height": 720,
       "pixels": 921600,
       "memEstMB": 3.5,
-      "selectTimeMs": 6.128
+      "selectTimeMs": 2.001
     },
     "1080p": {
       "width": 1920,
       "height": 1080,
       "pixels": 2073600,
       "memEstMB": 7.9,
-      "selectTimeMs": 0.09
+      "selectTimeMs": 0.097
     },
     "2K": {
       "width": 2560,
       "height": 1440,
       "pixels": 3686400,
       "memEstMB": 14.1,
-      "selectTimeMs": 0.052
+      "selectTimeMs": 0.073
     },
     "4K": {
       "width": 3840,
       "height": 2160,
       "pixels": 8294400,
       "memEstMB": 31.6,
-      "selectTimeMs": 0.049
+      "selectTimeMs": 0.065
     }
   },
   "exportPipeline": {}
