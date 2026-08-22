@@ -5,6 +5,9 @@ import { useMonaco } from "@monaco-editor/react";
 import { configureMonacoLoader } from "./MonacoLoader";
 import { configureMonacoWorkers } from "./MonacoWorkers";
 import { defineMonacoThemes } from "./MonacoTheme";
+import { configureJsonLanguageService } from "./schemas";
+import { configureLanguageDefaults } from "./MonacoLanguages";
+import { configureMermaidLanguage } from "./MonacoMermaid";
 // Configure the loader immediately so it applies to all Monaco instances
 // We pass empty string for basePath, but could be adjusted if deployed under subpath
 configureMonacoLoader("");
@@ -16,7 +19,10 @@ export function MonacoProvider({ children }) {
         if (monaco) {
             // Define our KaruviLab themes
             defineMonacoThemes(monaco);
-            // Optional: Set global defaults, e.g. disabling telemetry, formatting options
+            // Initialize Language Services
+            configureJsonLanguageService(monaco);
+            configureLanguageDefaults(monaco);
+            configureMermaidLanguage(monaco);
             setIsReady(true);
         }
     }, [monaco]);

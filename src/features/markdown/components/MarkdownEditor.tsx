@@ -27,6 +27,7 @@ import { MarkdownPreview } from "./MarkdownPreview";
 import { MarkdownVisualEditor } from "./MarkdownVisualEditor";
 import { SAMPLE_MARKDOWN } from "../constants";
 import { MermaidExportBarrier } from "../mermaid/export-barrier";
+import { waitForDocumentReady } from "../mermaid/utils/export-barrier";
 
 type EditorTab = "split" | "write" | "visual" | "preview";
 
@@ -501,9 +502,16 @@ export function MarkdownEditor() {
         return;
       }
 
-      toast("Generating PDF...", "info");
+      toast("Preparing PDF export...", "info");
 
       try {
+        // 1. Wait for document readiness: Mermaid rendering queue, web fonts, and images
+        const readiness = await waitForDocumentReady(element, 8000);
+        if (readiness.revisionChanged) {
+          toast("Document modified during export preparation. Please retry.", "error");
+          return;
+        }
+
         const html2pdf = (await import("html2pdf.js")).default;
         
         const opt = {
@@ -528,7 +536,7 @@ export function MarkdownEditor() {
         // Remove interactive UI buttons
         clone.querySelectorAll(".copy-code-btn, .mmd-copy, button, .flex.items-center.justify-between").forEach(el => el.remove());
 
-                // Utilize specialized MermaidExporter to convert all complex SVG diagrams to Raster PNGs
+        // 2. Utilize specialized MermaidExporter to convert all complex SVG diagrams to high-DPI raster PNGs
         await MermaidExportBarrier.adaptForPdf(clone, 2);
 
         const allElements = [clone, ...Array.from(clone.querySelectorAll("*"))];

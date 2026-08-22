@@ -246,7 +246,7 @@ export default function HtmlViewerClient() {
                                         setCss(v);
                                     else
                                         setJs(v);
-                                }, placeholder: `Enter ${activeTab.toUpperCase()} code...` })) : (_jsx(EngineLoader, { checkInit: checkMonaco, loadingMessage: "Initializing Monaco Editor...", errorMessage: "Failed to load editor engine. Check your connection or retry.", children: _jsx(Editor, { theme: "karuvi-dark", language: activeTab === "js" ? "javascript" : activeTab, value: activeTab === "html" ? html : activeTab === "css" ? css : js, onChange: (v) => {
+                                }, placeholder: `Enter ${activeTab.toUpperCase()} code...` })) : (_jsx(EngineLoader, { checkInit: checkMonaco, loadingMessage: "Initializing Monaco Editor...", errorMessage: "Failed to load editor engine. Check your connection or retry.", children: _jsx(Editor, { theme: "karuvi-dark", path: `kv://html/main.${activeTab}`, language: activeTab === "js" ? "javascript" : activeTab, value: activeTab === "html" ? html : activeTab === "css" ? css : js, onChange: (v) => {
                                         if (activeTab === "html")
                                             setHtml(v || "");
                                         else if (activeTab === "css")

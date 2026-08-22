@@ -13,5 +13,7 @@ export * from './components/MermaidErrorCard.js';
 export * from './components/MermaidPlaceholder.js';
 export * from './components/MermaidModal.js';
 export * from './components/MermaidDiagramBlock.js';
+export * from './MermaidExporter.js';
+export * from './export-barrier.js';
 export * from './utils/export-image.js';
 export * from './utils/export-barrier.js';

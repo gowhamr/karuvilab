@@ -37,8 +37,8 @@ export function useFocusTrap(ref: RefObject<HTMLElement | null>, active: boolean
         return;
       }
 
-      const firstEl = focusableEls[0]!;
-      const lastEl = focusableEls[focusableEls.length - 1]!;
+      const firstEl = focusableEls[0]?;
+      const lastEl = focusableEls[focusableEls.length - 1]?;
 
       if (e.shiftKey) {
         // Shift + Tab: Wrap from first to last element
@@ -60,7 +60,7 @@ export function useFocusTrap(ref: RefObject<HTMLElement | null>, active: boolean
       if (el && !el.contains(e.target as Node)) {
         const focusableEls = getFocusableElements();
         if (focusableEls.length > 0) {
-          focusableEls[0]!.focus();
+          focusableEls[0]?.focus();
         } else {
           el.focus();
         }
@@ -73,7 +73,7 @@ export function useFocusTrap(ref: RefObject<HTMLElement | null>, active: boolean
     // Initial focus placement
     const focusable = getFocusableElements();
     if (focusable.length > 0 && !el.contains(document.activeElement)) {
-      focusable[0]!.focus();
+      focusable[0]?.focus();
     } else if (!el.contains(document.activeElement)) {
       el.focus();
     }
