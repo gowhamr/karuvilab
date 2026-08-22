@@ -37,19 +37,19 @@ export function useFocusTrap(ref: RefObject<HTMLElement | null>, active: boolean
         return;
       }
 
-      const firstEl = focusableEls[0]?;
-      const lastEl = focusableEls[focusableEls.length - 1]?;
+      const firstEl = focusableEls[0];
+      const lastEl = focusableEls[focusableEls.length - 1];
 
       if (e.shiftKey) {
         // Shift + Tab: Wrap from first to last element
         if (document.activeElement === firstEl || !el.contains(document.activeElement)) {
-          lastEl.focus();
+          lastEl?.focus();
           e.preventDefault();
         }
       } else {
         // Tab: Wrap from last to first element
         if (document.activeElement === lastEl || !el.contains(document.activeElement)) {
-          firstEl.focus();
+          firstEl?.focus();
           e.preventDefault();
         }
       }
