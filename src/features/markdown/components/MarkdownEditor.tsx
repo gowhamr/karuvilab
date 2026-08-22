@@ -50,7 +50,6 @@ export function MarkdownEditor() {
   const { isFullscreen, activeToolId } = useFullscreenContext();
   const isThisToolFullscreen = isFullscreen && activeToolId === "markdown";
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const editorRef = useRef<any>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const uploadPreviewRef = useRef<HTMLDivElement>(null);
