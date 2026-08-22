@@ -35,14 +35,14 @@ export function useFocusTrap(ref, active = true) {
             if (e.shiftKey) {
                 // Shift + Tab: Wrap from first to last element
                 if (document.activeElement === firstEl || !el.contains(document.activeElement)) {
-                    lastEl.focus();
+                    lastEl?.focus();
                     e.preventDefault();
                 }
             }
             else {
                 // Tab: Wrap from last to first element
                 if (document.activeElement === lastEl || !el.contains(document.activeElement)) {
-                    firstEl.focus();
+                    firstEl?.focus();
                     e.preventDefault();
                 }
             }
@@ -52,7 +52,7 @@ export function useFocusTrap(ref, active = true) {
             if (el && !el.contains(e.target)) {
                 const focusableEls = getFocusableElements();
                 if (focusableEls.length > 0) {
-                    focusableEls[0].focus();
+                    focusableEls[0]?.focus();
                 }
                 else {
                     el.focus();
@@ -64,7 +64,7 @@ export function useFocusTrap(ref, active = true) {
         // Initial focus placement
         const focusable = getFocusableElements();
         if (focusable.length > 0 && !el.contains(document.activeElement)) {
-            focusable[0].focus();
+            focusable[0]?.focus();
         }
         else if (!el.contains(document.activeElement)) {
             el.focus();

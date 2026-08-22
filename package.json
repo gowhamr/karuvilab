@@ -1,5 +1,6 @@
 {
   "name": "karuvilab",
+  "type": "module",
   "version": "2.1.0",
   "description": "KaruviLab – fast, private browser tools",
   "private": true,

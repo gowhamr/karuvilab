@@ -39,7 +39,7 @@ export async function ToolShell({ title, description, category, children, toolId
         examples: content?.examples ?? reg.examples,
         commonErrors: content?.commonErrors ?? reg.commonErrors,
         alternatives: content?.alternatives ?? reg.alternatives,
-        relatedTools: relatedTools,
+        relatedTools: relatedTools ?? [],
     };
     const parsedContent = {
         detailedDescription: mergedContent.detailedDescription ? await parseAndSanitizeMarkdown(mergedContent.detailedDescription) : '',

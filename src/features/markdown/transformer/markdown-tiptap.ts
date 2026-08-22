@@ -1,6 +1,23 @@
 import { marked } from 'marked';
 import { TipTapDoc, TipTapNode, TipTapMark } from './types';
 
+function areMarksEqual(a?: TipTapMark[], b?: TipTapMark[]): boolean {
+  if (!a && !b) return true;
+  if (!a || !b) return false;
+  if (a.length !== b.length) return false;
+  if (a.length === 0) return true;
+  for (let i = 0; i < a.length; i++) {
+    const ma = a[i];
+    const mb = b[i];
+    if (ma.type !== mb.type) return false;
+    if (ma.attrs || mb.attrs) {
+      if (!ma.attrs || !mb.attrs) return false;
+      if (ma.attrs.href !== mb.attrs.href || ma.attrs.title !== mb.attrs.title) return false;
+    }
+  }
+  return true;
+}
+
 function parseInline(tokens: any[] = [], marks: TipTapMark[] = []): TipTapNode[] {
   const nodes: TipTapNode[] = [];
   for (const token of tokens) {
@@ -9,16 +26,16 @@ function parseInline(tokens: any[] = [], marks: TipTapMark[] = []): TipTapNode[]
       const text = typeof token.raw === 'string' ? token.raw : (typeof token.text === 'string' ? token.text : '');
       nodes.push({ type: 'text', text, marks: marks.length > 0 ? marks : undefined });
     } else if (token.type === 'strong') {
-      nodes.push(...parseInline(token.tokens, [...marks, { type: 'bold' }]));
+      nodes.push(...parseInline(token.tokens, marks.concat({ type: 'bold' })));
     } else if (token.type === 'em') {
-      nodes.push(...parseInline(token.tokens, [...marks, { type: 'italic' }]));
+      nodes.push(...parseInline(token.tokens, marks.concat({ type: 'italic' })));
     } else if (token.type === 'del') {
-      nodes.push(...parseInline(token.tokens, [...marks, { type: 'strike' }]));
+      nodes.push(...parseInline(token.tokens, marks.concat({ type: 'strike' })));
     } else if (token.type === 'codespan') {
       const text = typeof token.text === 'string' ? token.text : '';
-      nodes.push({ type: 'text', text, marks: [...marks, { type: 'code' }] });
+      nodes.push({ type: 'text', text, marks: marks.concat({ type: 'code' }) });
     } else if (token.type === 'link') {
-      const linkMarks: TipTapMark[] = [...marks, { type: 'link', attrs: { href: token.href, title: token.title || null } }];
+      const linkMarks: TipTapMark[] = marks.concat({ type: 'link', attrs: { href: token.href, title: token.title || null } });
       nodes.push(...parseInline(token.tokens, linkMarks));
     } else if (token.type === 'image') {
       nodes.push({
@@ -39,7 +56,7 @@ function parseInline(tokens: any[] = [], marks: TipTapMark[] = []): TipTapNode[]
     }
   }
   
-  // Merge consecutive text nodes with same marks
+  // Merge consecutive text nodes with same marks using fast comparator
   const merged: TipTapNode[] = [];
   for (const node of nodes) {
     const last = merged[merged.length - 1];
@@ -49,7 +66,7 @@ function parseInline(tokens: any[] = [], marks: TipTapMark[] = []): TipTapNode[]
       node.type === 'text' &&
       typeof last.text === 'string' &&
       typeof node.text === 'string' &&
-      JSON.stringify(last.marks || []) === JSON.stringify(node.marks || [])
+      areMarksEqual(last.marks, node.marks)
     ) {
       last.text += node.text;
     } else {
