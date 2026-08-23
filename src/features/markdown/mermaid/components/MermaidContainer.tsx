@@ -71,10 +71,10 @@ export function MermaidContainer({
             )}
           </div>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
             <button
               onClick={() => setIsModalOpen(true)}
-              className="p-1.5 hover:bg-surface rounded-lg text-text-4 hover:text-blue transition-all"
+              className="p-1.5 hover:bg-surface rounded-lg text-text-4 hover:text-blue transition-all cursor-pointer"
               title="Expand Diagram (Fullscreen)"
               aria-label="Expand Diagram"
             >
@@ -83,7 +83,7 @@ export function MermaidContainer({
 
             <button
               onClick={handleDownloadSvg}
-              className="p-1.5 hover:bg-surface rounded-lg text-text-4 hover:text-blue transition-all"
+              className="p-1.5 hover:bg-surface rounded-lg text-text-4 hover:text-blue transition-all cursor-pointer"
               title="Download SVG"
               aria-label="Download SVG"
             >
@@ -92,7 +92,7 @@ export function MermaidContainer({
 
             <button
               onClick={handleDownloadPng}
-              className="p-1.5 hover:bg-surface rounded-lg text-text-4 hover:text-blue transition-all"
+              className="p-1.5 hover:bg-surface rounded-lg text-text-4 hover:text-blue transition-all cursor-pointer"
               title="Download PNG (High-DPI)"
               aria-label="Download PNG"
             >
@@ -101,31 +101,25 @@ export function MermaidContainer({
 
             <button
               onClick={() => setShowSource(!showSource)}
-              className={`p-1.5 hover:bg-surface rounded-lg transition-all ${
+              className={`p-1.5 hover:bg-surface rounded-lg transition-all cursor-pointer ${
                 showSource ? "text-blue bg-surface" : "text-text-4 hover:text-text"
               }`}
-              title="View Mermaid Source"
-              aria-label="View Mermaid Source"
+              title={showSource ? "Hide Diagram Source" : "View Diagram Source"}
+              aria-label="Toggle Diagram Source"
             >
               <Code className="w-3.5 h-3.5" />
             </button>
 
             <button
               onClick={handleCopySource}
-              className="flex items-center gap-1 px-2.5 py-1 bg-surface border border-border rounded-lg text-text-muted hover:text-blue hover:border-blue transition-all text-xs font-semibold"
-              title="Copy Diagram Source"
+              className="p-1.5 hover:bg-surface rounded-lg text-text-4 hover:text-blue transition-all cursor-pointer"
+              title={copied ? "Copied source code!" : "Copy Diagram Source"}
               aria-label="Copy Diagram Source"
             >
               {copied ? (
-                <>
-                  <Check className="w-3 h-3 text-success" />
-                  <span className="text-success">Copied</span>
-                </>
+                <Check className="w-3.5 h-3.5 text-success" />
               ) : (
-                <>
-                  <Copy className="w-3 h-3" />
-                  <span>Source</span>
-                </>
+                <Copy className="w-3.5 h-3.5" />
               )}
             </button>
           </div>
