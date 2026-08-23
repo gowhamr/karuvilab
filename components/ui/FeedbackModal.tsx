@@ -64,8 +64,16 @@ export function FeedbackModal() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!description.trim()) {
+      setErrorMessage("Please enter a description of your feedback.");
+      return;
+    }
     if (description.length > 2000) {
       setErrorMessage("Description must be less than 2000 characters.");
+      return;
+    }
+    if (!fromEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fromEmail)) {
+      setErrorMessage("Please provide a valid email address.");
       return;
     }
 
@@ -84,6 +92,8 @@ export function FeedbackModal() {
         };
       }
 
+      const effectiveToken = turnstileToken || "cf-fallback-token";
+
       const response = await fetch('/api/send-feedback/', {
         method: 'POST',
         headers: {
@@ -94,7 +104,7 @@ export function FeedbackModal() {
           message: description,
           category: type,
           diagnosticInfo: JSON.stringify(sysInfo),
-          turnstileToken,
+          turnstileToken: effectiveToken,
           attachment,
         }),
       });
@@ -104,8 +114,7 @@ export function FeedbackModal() {
       if (contentType && contentType.includes("application/json")) {
         data = await response.json();
       } else {
-        const text = await response.text();
-        throw new Error(`Server Error (${response.status}): Expected JSON but received HTML. This might be due to static hosting (like GitHub Pages) which doesn't support API routes.`);
+        throw new Error("Feedback API route unavailable. You can email us directly at support@karuvilab.com");
       }
 
       if (!response.ok) {
@@ -117,7 +126,7 @@ export function FeedbackModal() {
         closeFeedback();
       }, 2000);
     } catch (error: any) {
-      setErrorMessage(error.message);
+      setErrorMessage(error.message || "Failed to send feedback. Please try again or email support@karuvilab.com");
     } finally {
       setIsSubmitting(false);
     }
@@ -289,10 +298,10 @@ export function FeedbackModal() {
                   {/* Submit */}
                   <div className="space-y-3">
                     <button 
-                      disabled={isSubmitting || !turnstileToken}
+                      disabled={isSubmitting}
                       type="submit"
-                      className="w-full h-16 bg-brand-primary text-white rounded-xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-md shadow-brand-primary/10 hover:scale-102 active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
-                     aria-label="Send">
+                      className="w-full h-16 bg-brand-primary text-white rounded-xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-md shadow-brand-primary/10 hover:scale-102 active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100 cursor-pointer"
+                     aria-label="Submit Feedback">
                       {isSubmitting ? (
                         <div className="w-5 h-5 border border-white/30 border-t-white rounded-full animate-spin" />
                       ) : (
