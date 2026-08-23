@@ -86,24 +86,36 @@ export class MermaidExporter {
             clone.setAttribute('xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
             // 2. Explicitly resolve dimensions
             const bbox = svg.getBoundingClientRect ? svg.getBoundingClientRect() : null;
-            let width = parseFloat(clone.getAttribute('width') || '0');
-            let height = parseFloat(clone.getAttribute('height') || '0');
+            let width = 0;
+            let height = 0;
+            const rawWidth = clone.getAttribute('width') || '';
+            const rawHeight = clone.getAttribute('height') || '';
+            if (rawWidth && !rawWidth.includes('%')) {
+                width = parseFloat(rawWidth) || 0;
+            }
+            if (rawHeight && !rawHeight.includes('%')) {
+                height = parseFloat(rawHeight) || 0;
+            }
             if ((!width || !height) && bbox && bbox.width > 0 && bbox.height > 0) {
                 width = bbox.width;
                 height = bbox.height;
             }
             if ((!width || !height) && clone.getAttribute('viewBox')) {
-                const parts = clone.getAttribute('viewBox').split(/\s+/).map(Number);
-                if (parts.length === 4 && parts[2] && parts[3]) {
-                    width = parts[2];
-                    height = parts[3];
+                const parts = clone.getAttribute('viewBox').trim().split(/[\s,]+/).map(Number);
+                const p2 = parts[2];
+                const p3 = parts[3];
+                if (parts.length === 4 && p2 !== undefined && p3 !== undefined && !isNaN(p2) && !isNaN(p3) && p2 > 0 && p3 > 0) {
+                    width = p2;
+                    height = p3;
                 }
             }
-            if (width > 0 && !clone.getAttribute('width'))
-                clone.setAttribute('width', width.toString());
-            if (height > 0 && !clone.getAttribute('height'))
-                clone.setAttribute('height', height.toString());
-            if (!clone.getAttribute('viewBox') && width > 0 && height > 0) {
+            if (width <= 0)
+                width = 800;
+            if (height <= 0)
+                height = 600;
+            clone.setAttribute('width', width.toString());
+            clone.setAttribute('height', height.toString());
+            if (!clone.getAttribute('viewBox')) {
                 clone.setAttribute('viewBox', `0 0 ${width} ${height}`);
             }
             // 3. Fix foreignObject namespaces for strict XML parsers
@@ -240,21 +252,26 @@ export class MermaidExporter {
             }
             catch (e) {
                 errorCount++;
-                logger.warn(`Failed to rasterize Mermaid diagram #${idx + 1} for PDF`, { error: e });
-                // Error isolation: Render graceful error banner instead of failing entire export
-                const fallbackCard = document.createElement('div');
-                fallbackCard.className = 'mermaid-export-error';
-                fallbackCard.style.padding = '12px';
-                fallbackCard.style.margin = '16px 0';
-                fallbackCard.style.border = '1px dashed #ef4444';
-                fallbackCard.style.borderRadius = '8px';
-                fallbackCard.style.backgroundColor = '#fef2f2';
-                fallbackCard.style.color = '#991b1b';
-                fallbackCard.style.fontSize = '12px';
-                fallbackCard.style.fontFamily = 'monospace';
-                fallbackCard.textContent = `[Diagram #${idx + 1}: Render fallback - complex vector structure retained]`;
-                if (svgNode.parentNode) {
-                    svgNode.parentNode.replaceChild(fallbackCard, svgNode);
+                logger.warn(`Failed to rasterize Mermaid diagram #${idx + 1} for PDF, falling back to vector SVG`, { error: e });
+                // Error isolation: retain vector SVG in the DOM with explicit width/height
+                try {
+                    const rawWidth = svgNode.getAttribute('width') || '';
+                    const rawHeight = svgNode.getAttribute('height') || '';
+                    if (!rawWidth || rawWidth.includes('%') || !rawHeight || rawHeight.includes('%')) {
+                        const viewBox = svgNode.getAttribute('viewBox');
+                        if (viewBox) {
+                            const parts = viewBox.trim().split(/[\s,]+/).map(Number);
+                            const p2 = parts[2];
+                            const p3 = parts[3];
+                            if (parts.length === 4 && p2 !== undefined && p3 !== undefined && p2 > 0 && p3 > 0) {
+                                svgNode.setAttribute('width', p2.toString());
+                                svgNode.setAttribute('height', p3.toString());
+                            }
+                        }
+                    }
+                }
+                catch {
+                    // Ignore fallback sizing error
                 }
             }
         }));

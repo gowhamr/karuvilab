@@ -5,6 +5,22 @@ Format: `## [Version] YYYY-MM-DD — Summary`
 
 ---
 
+## [2.1.1] 2026-08-22 — Markdown Subsystem, Offline Mermaid & Technical Debt Remediation
+
+### Added
+- **Offline Mermaid Diagram Engine (Markdown Tool Suite):**
+  - Converted Mermaid diagram engine to on-demand dynamic import (`import('mermaid')`) via `MermaidRenderManager.ts`.
+  - Purged 3.56MB static `mermaid.min.js` duplicate asset and removed build sync rule.
+  - Hardened SVG dimension extraction and viewBox parsing (`MermaidExporter.ts`).
+  - Added off-screen preview rendering and diagram placeholder resolution for PDF exports across Write, Visual, Split, and Preview tabs.
+  - Replaced synchronous `window.prompt` in TipTap visual mode with an accessible, design-token-compliant Link Dialog modal (`MarkdownVisualEditor.tsx`).
+
+- **Architecture & Technical Debt Resolutions:**
+  - Audited and updated `docs/developer/TECH_DEBT.md` with resolved items (TD-002, TD-003, TD-004, TD-005, TD-006, TD-007, TD-008, TD-010, TD-011, TD-013, TD-014, TD-015, TD-016).
+  - Validated 100% test pass on `mermaid-subsystem.test.ts` (52 tests) and `markdown-modes.test.ts` (15 tests).
+
+---
+
 ## [2.1.0] 2026-07-26 — ELS Security Domain & Production Readiness
 
 ### Added

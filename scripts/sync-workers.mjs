@@ -16,10 +16,6 @@ const WORKERS = [
     dest: 'public/pdf.min.mjs'
   },
   {
-    src: 'node_modules/mermaid/dist/mermaid.min.js',
-    dest: 'public/lib/markdown/mermaid.min.js'
-  },
-  {
     src: 'node_modules/monaco-editor/min/vs',
     dest: 'public/lib/monaco/vs',
     isDir: true

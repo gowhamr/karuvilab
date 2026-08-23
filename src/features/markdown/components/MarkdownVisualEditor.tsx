@@ -27,7 +27,8 @@ import {
   ArrowUp,
   ArrowRight,
   ArrowLeft,
-  Plus
+  Plus,
+  X
 } from "lucide-react";
 import { markdownToTipTap, tipTapToMarkdown } from "../transformer/markdown-tiptap";
 import { MarkdownService } from "../MarkdownService";
@@ -58,6 +59,36 @@ export function MarkdownVisualEditor({
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
   const [inTable, setInTable] = useState(false);
+  const [linkModalOpen, setLinkModalOpen] = useState(false);
+  const [linkUrl, setLinkUrl] = useState("");
+  const linkInputRef = useRef<HTMLInputElement>(null);
+
+  const handleOpenLinkModal = () => {
+    if (!editor) return;
+    const previousUrl = editor.getAttributes("link").href || "";
+    setLinkUrl(previousUrl);
+    setLinkModalOpen(true);
+    setTimeout(() => linkInputRef.current?.focus(), 50);
+  };
+
+  const handleSaveLink = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!editor) return;
+    const trimmed = linkUrl.trim();
+    if (trimmed) {
+      const formatted = /^https?:\/\//i.test(trimmed) || trimmed.startsWith('/') || trimmed.startsWith('#') || trimmed.startsWith('mailto:') ? trimmed : `https://${trimmed}`;
+      editor.chain().focus().setLink({ href: formatted }).run();
+    } else {
+      editor.chain().focus().unsetLink().run();
+    }
+    setLinkModalOpen(false);
+  };
+
+  const handleRemoveLink = () => {
+    if (!editor) return;
+    editor.chain().focus().unsetLink().run();
+    setLinkModalOpen(false);
+  };
 
   const editor = useEditor({
     extensions: [
@@ -253,14 +284,7 @@ export function MarkdownVisualEditor({
             <Code className="w-4 h-4" />
           </ToolbarButton>
           <ToolbarButton
-            onClick={() => {
-              const url = window.prompt("Enter URL");
-              if (url) {
-                editor.chain().focus().setLink({ href: url }).run();
-              } else if (url === "") {
-                editor.chain().focus().unsetLink().run();
-              }
-            }}
+            onClick={handleOpenLinkModal}
             isActive={editor.isActive("link")}
             label="Insert / Edit Link"
           >
@@ -443,6 +467,86 @@ export function MarkdownVisualEditor({
       <div className="flex-1 overflow-y-auto min-h-0 bg-transparent" style={{ fontSize: `${fontSize}px` }}>
         <EditorContent editor={editor} className="min-h-full outline-none" />
       </div>
+
+      {/* Accessible Link Dialog */}
+      {linkModalOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-modal"
+          onClick={() => setLinkModalOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Link editor dialog"
+        >
+          <div 
+            className="bg-surface border border-border rounded-2xl p-5 shadow-2xl max-w-md w-full space-y-4 animate-in fade-in zoom-in-95 duration-150"
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") setLinkModalOpen(false);
+            }}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="p-2 rounded-xl bg-blue/10 text-blue">
+                  <LinkIcon className="w-4 h-4" />
+                </div>
+                <h3 className="text-sm font-bold text-text">
+                  {editor?.isActive("link") ? "Edit Hyperlink" : "Insert Hyperlink"}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setLinkModalOpen(false)}
+                className="p-1.5 rounded-lg text-text-muted hover:text-text hover:bg-surface-2 transition-colors cursor-pointer"
+                aria-label="Close dialog"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveLink} className="space-y-4">
+              <div>
+                <label htmlFor="markdown-link-url-input" className="block text-xs font-semibold text-text-muted mb-1.5">
+                  Destination URL
+                </label>
+                <input
+                  id="markdown-link-url-input"
+                  ref={linkInputRef}
+                  type="text"
+                  value={linkUrl}
+                  onChange={(e) => setLinkUrl(e.target.value)}
+                  placeholder="https://example.com"
+                  className="w-full px-3.5 py-2.5 bg-surface-2 border border-border rounded-xl text-text placeholder:text-text-muted/50 text-sm focus:outline-none focus:border-blue focus:ring-1 focus:ring-blue transition-all"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-2">
+                {editor?.isActive("link") && (
+                  <button
+                    type="button"
+                    onClick={handleRemoveLink}
+                    className="px-3.5 py-2 text-xs font-semibold text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-colors cursor-pointer mr-auto"
+                  >
+                    Remove Link
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setLinkModalOpen(false)}
+                  className="px-3.5 py-2 text-xs font-semibold text-text-muted hover:text-text hover:bg-surface-2 rounded-xl transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 text-xs font-bold text-white bg-blue hover:bg-blue-600 rounded-xl transition-all shadow-md shadow-blue/20 active:scale-95 cursor-pointer"
+                >
+                  Apply
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -167,9 +167,11 @@ const api = {
             onProgress({ percent: 10, message: "Loading parser..." });
         const { marked } = await import("marked");
         const MERMAID_LANGS = new Set([
-            'mermaid', 'flowchart', 'flowcharttd', 'flowchartlr',
+            'mermaid', 'flowchart', 'flowcharttd', 'flowchartlr', 'flowcharttb', 'flowchartbt', 'flowchartrl',
             'sequencediagram', 'sequence', 'classdiagram', 'class', 'erdiagram', 'er',
-            'gantt', 'pie', 'gitgraph', 'git', 'mindmap', 'timeline', 'xychart', 'sankey'
+            'gantt', 'pie', 'gitgraph', 'git', 'mindmap', 'timeline', 'xychart', 'sankey',
+            'state', 'statediagram', 'statediagram-v2', 'c4', 'c4context', 'c4container', 'c4component',
+            'kanban', 'journey', 'quadrantchart', 'requirementdiagram', 'block', 'architecture'
         ]);
         const renderer = new marked.Renderer();
         renderer.code = ({ text: codeText, lang }) => {

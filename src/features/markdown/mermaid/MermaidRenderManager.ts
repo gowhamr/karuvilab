@@ -41,6 +41,31 @@ export class MermaidRenderManager {
     return MermaidRenderManager.instance;
   }
 
+  private mermaidPromise: Promise<any> | null = null;
+  private mermaidInstance: any = null;
+
+  public async getMermaid(): Promise<any> {
+    if (this.mermaidInstance) return this.mermaidInstance;
+    if (typeof window !== 'undefined' && (window as any).mermaid) {
+      this.mermaidInstance = (window as any).mermaid;
+      return this.mermaidInstance;
+    }
+    if (!this.mermaidPromise) {
+      this.mermaidPromise = (async () => {
+        try {
+          const mod = await import('mermaid');
+          const instance = mod.default || mod;
+          this.mermaidInstance = instance;
+          return instance;
+        } catch (err) {
+          this.mermaidPromise = null;
+          throw err;
+        }
+      })();
+    }
+    return this.mermaidPromise;
+  }
+
   /**
    * Determine active theme mode ('dark' | 'light')
    */
@@ -56,9 +81,9 @@ export class MermaidRenderManager {
   /**
    * Initialize Mermaid engine with deterministic seed and strict security config.
    */
-  public initializeEngine(theme?: MermaidThemeMode): void {
+  public async initializeEngine(theme?: MermaidThemeMode): Promise<void> {
     if (typeof window === 'undefined') return;
-    const mermaid = (window as any).mermaid;
+    const mermaid = await this.getMermaid();
     if (!mermaid || typeof mermaid.initialize !== 'function') return;
 
     const targetTheme = theme || this.getActiveTheme();
@@ -213,9 +238,9 @@ export class MermaidRenderManager {
           }
         }
 
-        this.initializeEngine(theme);
+        await this.initializeEngine(theme);
 
-        const mermaid = (window as any).mermaid;
+        const mermaid = await this.getMermaid();
         if (!mermaid || typeof mermaid.render !== 'function') {
           throw new Error('Mermaid library not loaded');
         }

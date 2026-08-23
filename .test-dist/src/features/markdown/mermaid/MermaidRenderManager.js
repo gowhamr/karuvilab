@@ -28,6 +28,31 @@ export class MermaidRenderManager {
         }
         return MermaidRenderManager.instance;
     }
+    mermaidPromise = null;
+    mermaidInstance = null;
+    async getMermaid() {
+        if (this.mermaidInstance)
+            return this.mermaidInstance;
+        if (typeof window !== 'undefined' && window.mermaid) {
+            this.mermaidInstance = window.mermaid;
+            return this.mermaidInstance;
+        }
+        if (!this.mermaidPromise) {
+            this.mermaidPromise = (async () => {
+                try {
+                    const mod = await import('mermaid');
+                    const instance = mod.default || mod;
+                    this.mermaidInstance = instance;
+                    return instance;
+                }
+                catch (err) {
+                    this.mermaidPromise = null;
+                    throw err;
+                }
+            })();
+        }
+        return this.mermaidPromise;
+    }
     /**
      * Determine active theme mode ('dark' | 'light')
      */
@@ -42,10 +67,10 @@ export class MermaidRenderManager {
     /**
      * Initialize Mermaid engine with deterministic seed and strict security config.
      */
-    initializeEngine(theme) {
+    async initializeEngine(theme) {
         if (typeof window === 'undefined')
             return;
-        const mermaid = window.mermaid;
+        const mermaid = await this.getMermaid();
         if (!mermaid || typeof mermaid.initialize !== 'function')
             return;
         const targetTheme = theme || this.getActiveTheme();
@@ -186,8 +211,8 @@ export class MermaidRenderManager {
                     // Ignore font loading errors
                 }
             }
-            this.initializeEngine(theme);
-            const mermaid = window.mermaid;
+            await this.initializeEngine(theme);
+            const mermaid = await this.getMermaid();
             if (!mermaid || typeof mermaid.render !== 'function') {
                 throw new Error('Mermaid library not loaded');
             }

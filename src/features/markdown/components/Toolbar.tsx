@@ -64,11 +64,11 @@ export function Toolbar({
   onInsert, onClear, onLoadSample, scrollSync, onToggleScrollSync 
 }: ToolbarProps) {
   return (
-    <div className="flex flex-wrap items-center gap-1 p-2 bg-bg border-b border-border">
+    <div className="flex items-center gap-1 p-1.5 sm:p-2 bg-bg border-b border-border overflow-x-auto no-scrollbar sm:flex-wrap min-w-0 max-w-full">
       {TOOLBAR_GROUPS.map((group, gIdx) => (
         <React.Fragment key={group.label}>
-          {gIdx > 0 && <div className="w-px h-4 bg-border mx-1" />}
-          <div className="flex flex-wrap gap-1">
+          {gIdx > 0 && <div className="w-px h-4 bg-border mx-0.5 shrink-0" />}
+          <div className="flex items-center gap-1 shrink-0">
             {group.items.map((item, iIdx) => (
               <button
                 key={iIdx}
@@ -84,7 +84,7 @@ export function Toolbar({
                     onInsert(item.wrap[0] || "", item.wrap[1] || "");
                   }
                 }}
-                className="p-1.5 rounded-lg hover:bg-surface border border-transparent hover:border-border text-text-3 hover:text-blue transition-all"
+                className="w-8 h-8 min-w-8 flex items-center justify-center rounded-lg hover:bg-surface border border-transparent hover:border-border text-text-3 hover:text-blue transition-all cursor-pointer shrink-0"
               >
                 <item.icon className="w-4 h-4" />
               </button>
@@ -93,10 +93,10 @@ export function Toolbar({
         </React.Fragment>
       ))}
 
-      <div className="w-px h-4 bg-border mx-1" />
+      <div className="w-px h-4 bg-border mx-0.5 shrink-0" />
 
       {/* Diagrams Dropdown Selector */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center shrink-0">
         <select
           title="Insert Diagram Template"
           aria-label="Insert Diagram Template"
@@ -108,7 +108,7 @@ export function Toolbar({
             }
           }}
           defaultValue=""
-          className="px-2 py-1 bg-surface border border-border rounded-lg text-xs font-semibold text-text-3 hover:text-blue hover:border-blue transition-all cursor-pointer focus:outline-none"
+          className="h-8 px-2.5 bg-surface border border-border rounded-lg text-xs font-semibold text-text-3 hover:text-blue hover:border-blue transition-all cursor-pointer focus:outline-none shrink-0"
         >
           <option value="" disabled>
             + Diagram Template
@@ -130,43 +130,43 @@ export function Toolbar({
         </select>
       </div>
 
-      <div className="w-px h-4 bg-border mx-1" />
+      <div className="w-px h-4 bg-border mx-0.5 shrink-0" />
       
       <button
         title="Insert Table"
         aria-label="Insert Table"
         onClick={() => onInsert("\n| Col 1 | Col 2 |\n|-------|-------|\n| Cell  | Cell  |\n")}
-        className="p-1.5 rounded-lg hover:bg-surface border border-border text-text-3 hover:text-blue transition-all"
+        className="w-8 h-8 min-w-8 flex items-center justify-center rounded-lg hover:bg-surface border border-transparent hover:border-border text-text-3 hover:text-blue transition-all cursor-pointer shrink-0"
       >
         <TableIcon className="w-4 h-4" />
       </button>
 
-      <div className="w-px h-4 bg-border mx-1" />
+      <div className="w-px h-4 bg-border mx-0.5 shrink-0" />
 
       <button
         title={scrollSync ? "Disable Scroll Sync" : "Enable Scroll Sync"}
         aria-label={scrollSync ? "Disable Scroll Sync" : "Enable Scroll Sync"}
         onClick={onToggleScrollSync}
-        className={`p-1.5 rounded-lg border transition-all ${scrollSync ? 'bg-blue/10 border-blue/20 text-blue' : 'bg-transparent border-transparent text-text-4 hover:border-border hover:bg-surface'}`}
+        className={`w-8 h-8 min-w-8 flex items-center justify-center rounded-lg border transition-all cursor-pointer shrink-0 ${scrollSync ? 'bg-blue/10 border-blue/20 text-blue' : 'bg-transparent border-transparent text-text-4 hover:border-border hover:bg-surface'}`}
       >
         <RefreshCw className={`w-4 h-4 ${scrollSync ? 'animate-spin-slow' : ''}`} />
       </button>
 
-      <div className="ml-auto flex gap-1">
+      <div className="ml-auto flex items-center gap-1 shrink-0">
         <button
           title="Load Sample"
           aria-label="Load Sample Markdown"
           onClick={onLoadSample}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue/5 text-blue text-tiny font-bold uppercase tracking-widest-sm hover:bg-blue/10 transition-all border border-blue/10"
+          className="flex items-center gap-1.5 h-8 px-2.5 rounded-lg bg-blue/5 text-blue text-tiny font-bold uppercase tracking-widest-sm hover:bg-blue/10 transition-all border border-blue/10 cursor-pointer shrink-0"
         >
-          <Sparkles className="w-3 h-3" />
-          Sample
+          <Sparkles className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">Sample</span>
         </button>
         <button
           title="Clear All"
           aria-label="Clear All Content"
           onClick={onClear}
-          className="p-1.5 rounded-lg hover:bg-error/5 text-text-4 hover:text-error transition-all"
+          className="w-8 h-8 min-w-8 flex items-center justify-center rounded-lg hover:bg-error/5 text-text-4 hover:text-error border border-transparent hover:border-error/20 transition-all cursor-pointer shrink-0"
         >
           <Trash2 className="w-4 h-4" />
         </button>

@@ -42,10 +42,30 @@ export class MarkdownService {
         }
     }
     static getStats(md) {
-        const lines = md ? md.split('\n').length : 0;
-        const words = md.trim() ? md.trim().split(/\s+/).filter(Boolean).length : 0;
-        const chars = md.length;
+        if (!md)
+            return { lines: 0, words: 0, chars: 0, readMin: 1 };
+        let lines = 1;
+        let words = 0;
+        let inWord = false;
+        const len = md.length;
+        for (let i = 0; i < len; i++) {
+            const code = md.charCodeAt(i);
+            if (code === 10) { // '\n'
+                lines++;
+            }
+            if (code <= 32) { // whitespace
+                if (inWord) {
+                    words++;
+                    inWord = false;
+                }
+            }
+            else {
+                inWord = true;
+            }
+        }
+        if (inWord)
+            words++;
         const readMin = Math.max(1, Math.ceil(words / 200));
-        return { lines, words, chars, readMin };
+        return { lines, words, chars: len, readMin };
     }
 }

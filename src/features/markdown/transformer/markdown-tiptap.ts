@@ -9,6 +9,7 @@ function areMarksEqual(a?: TipTapMark[], b?: TipTapMark[]): boolean {
   for (let i = 0; i < a.length; i++) {
     const ma = a[i];
     const mb = b[i];
+    if (!ma || !mb) return false;
     if (ma.type !== mb.type) return false;
     if (ma.attrs || mb.attrs) {
       if (!ma.attrs || !mb.attrs) return false;

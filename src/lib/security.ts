@@ -54,17 +54,21 @@ const DEFAULT_SANITIZE_CONFIG = {
     'strike', 'code', 'pre', 'hr', 'br', 'div', 'span', 'img', 'del',
     'svg', 'path', 'rect', 'circle', 'line', 'polyline', 'polygon', 'g',
     'text', 'tspan', 'marker', 'defs', 'use', 'clipPath', 'foreignObject', 'foreignobject',
+    'style', 'linearGradient', 'radialGradient', 'stop', 'mask', 'pattern',
     'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'caption', 'sub', 'sup', 'details', 'summary'
   ],
   ALLOWED_ATTR: [
     'href', 'src', 'alt', 'title', 'class', 'className', 'target', 'rel',
     'width', 'height', 'viewBox', 'fill', 'stroke', 'stroke-width',
-    'stroke-linecap', 'stroke-linejoin', 'points', 'd', 'rx', 'ry', 'cx', 'cy', 'r',
-    'x', 'y', 'dx', 'dy', 'text-anchor', 'dominant-baseline', 'font-size', 'font-family', 'font-weight',
-    'transform', 'marker-end', 'marker-start', 'xmlns', 'style',
-    'id', 'colspan', 'rowspan', 'scope', 'open', 'name'
+    'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray', 'points', 'd', 'rx', 'ry', 'cx', 'cy', 'r',
+    'x', 'y', 'dx', 'dy', 'x1', 'y1', 'x2', 'y2', 'text-anchor', 'dominant-baseline', 'font-size', 'font-family', 'font-weight',
+    'transform', 'marker-end', 'marker-start', 'xmlns', 'style', 'opacity', 'fill-opacity', 'stroke-opacity',
+    'id', 'colspan', 'rowspan', 'scope', 'open', 'name', 'preserveAspectRatio',
+    'aria-hidden', 'aria-label', 'aria-roledescription', 'clip-path',
+    'data-src', 'data-lang', 'data-theme', 'data-id'
   ],
-  ADD_ATTR: ['target', 'rel'],
+  ALLOW_DATA_ATTR: true,
+  ADD_ATTR: ['target', 'rel', 'data-src', 'data-lang', 'data-theme', 'data-id'],
   FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'base'],
   FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onmouseenter', 'onmouseleave'],
 };

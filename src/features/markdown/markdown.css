@@ -2,6 +2,11 @@
   font-size: 0.875rem;
   line-height: 1.6;
   color: var(--text-2);
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  -webkit-user-select: text;
+  user-select: text;
 }
 .markdown-body h1, .markdown-body h2, .markdown-body h3 {
   font-weight: 900;
@@ -64,7 +69,9 @@
   margin: 1rem 0;
   border: 1px solid var(--border);
   border-radius: 0.75rem;
-  overflow: hidden;
+  overflow-x: auto;
+  display: block;
+  max-width: 100%;
 }
 .markdown-body th, .markdown-body td {
   border: 1px solid var(--border);

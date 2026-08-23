@@ -9,7 +9,7 @@ import "./markdown.css";
 
 export default function MarkdownEditorWrapper() {
   const checkInit = () => {
-    return typeof window !== 'undefined' && typeof (window as any).mermaid !== 'undefined' && typeof (window as any).hljs !== 'undefined';
+    return typeof window !== 'undefined' && typeof (window as any).hljs !== 'undefined';
   };
 
   const isGithubPages = typeof window !== 'undefined' && (window.location.hostname.includes('github.io') || window.location.pathname.startsWith('/karuvilab'));
@@ -22,24 +22,6 @@ export default function MarkdownEditorWrapper() {
       <Script 
         src={`${basePath}/lib/markdown/highlight.min.js`} 
         strategy="afterInteractive"
-      />
-      
-      <Script 
-        src={`${basePath}/lib/markdown/mermaid.min.js`} 
-        strategy="afterInteractive"
-        onLoad={() => {
-          if (typeof window !== 'undefined' && (window as any).mermaid) {
-            try {
-              (window as any).mermaid.initialize({
-                startOnLoad: false,
-                theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default',
-                securityLevel: 'loose',
-              });
-            } catch (e) {
-              logger.error("Mermaid init error", { error: e });
-            }
-          }
-        }}
       />
       
       <EngineLoader 

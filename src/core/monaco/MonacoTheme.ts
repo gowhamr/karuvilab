@@ -17,6 +17,10 @@ export function defineMonacoThemes(monacoInstance: Monaco) {
       { token: 'class', foreground: '38BDF8' },
       { token: 'function', foreground: 'A78BFA' }, // Violet-400
       { token: 'variable', foreground: 'F8FAFC' }, // Slate-50
+      { token: 'header', foreground: '818CF8', fontStyle: 'bold' },
+      { token: 'strong', foreground: 'F8FAFC', fontStyle: 'bold' },
+      { token: 'emphasis', foreground: 'CBD5E1', fontStyle: 'italic' },
+      { token: 'tag', foreground: '60A5FA' },
     ],
     colors: {
       'editor.background': '#0F172A', // --kv-mat-surface / slate-900
@@ -33,16 +37,45 @@ export function defineMonacoThemes(monacoInstance: Monaco) {
       'editorSuggestWidget.highlightForeground': '#818CF8',
       'editor.selectionBackground': '#3B82F640',
       'editor.inactiveSelectionBackground': '#3B82F620',
+      'editorGutter.background': '#0F172A',
     }
   });
 
-  // Future-proofing for light theme
   monacoInstance.editor.defineTheme('karuvi-light', {
     base: 'vs',
     inherit: true,
-    rules: [],
+    rules: [
+      { token: 'comment', foreground: '64748B', fontStyle: 'italic' },
+      { token: 'keyword', foreground: '4F46E5' }, // Indigo-600
+      { token: 'string', foreground: '059669' },  // Emerald-600
+      { token: 'number', foreground: 'DB2777' },  // Pink-600
+      { token: 'type', foreground: '0284C7' },    // Sky-600
+      { token: 'class', foreground: '0284C7' },
+      { token: 'function', foreground: '7C3AED' }, // Violet-600
+      { token: 'variable', foreground: '0F172A' }, // Slate-900
+      { token: 'header', foreground: '4F46E5', fontStyle: 'bold' },
+      { token: 'strong', foreground: '0F172A', fontStyle: 'bold' },
+      { token: 'emphasis', foreground: '334155', fontStyle: 'italic' },
+      { token: 'tag', foreground: '2563EB' },
+    ],
     colors: {
       'editor.background': '#FFFFFF',
+      'editor.foreground': '#0F172A',
+      'editor.lineHighlightBackground': '#F8FAFC',
+      'editorLineNumber.foreground': '#94A3B8',
+      'editorLineNumber.activeForeground': '#334155',
+      'editorIndentGuide.background': '#E2E8F0',
+      'editorIndentGuide.activeBackground': '#CBD5E1',
+      'editorSuggestWidget.background': '#FFFFFF',
+      'editorSuggestWidget.border': '#E2E8F0',
+      'editorSuggestWidget.foreground': '#0F172A',
+      'editorSuggestWidget.selectedBackground': '#3B82F620',
+      'editorSuggestWidget.highlightForeground': '#4F46E5',
+      'editor.selectionBackground': '#3B82F625',
+      'editor.inactiveSelectionBackground': '#3B82F615',
+      'editorGutter.background': '#FFFFFF',
+      'editorWidget.background': '#FFFFFF',
+      'editorWidget.border': '#E2E8F0',
     }
   });
 }

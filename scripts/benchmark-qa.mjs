@@ -245,11 +245,11 @@ $$
         height,
         pixels,
         memEstMB: Number(memEstMB.toFixed(1)),
-        selectedEngine: selection.recommendedEngine,
+        selectedEngine: selection.engine,
         selectTimeMs: Number(selectTimeMs.toFixed(3))
       };
 
-      console.log(`  • ${label} (${width}x${height}, ~${memEstMB.toFixed(1)}MB frame): Engine Selected: ${selection.recommendedEngine} (confidence: ${selection.confidence}) in ${selectTimeMs.toFixed(3)}ms`);
+      console.log(`  • ${label} (${width}x${height}, ~${memEstMB.toFixed(1)}MB frame): Engine Selected: ${selection.engine} (confidence: ${selection.confidence}) in ${selectTimeMs.toFixed(3)}ms`);
     }
   } catch (err) {
     console.error('❌ Background remover benchmark error:', err);

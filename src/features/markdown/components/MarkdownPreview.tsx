@@ -122,7 +122,7 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
         </div>
       )}
       <div 
-        className="flex-1 overflow-y-auto p-3.5 sm:p-6 md:p-8 scroll-smooth markdown-body custom-scrollbar min-w-0 max-w-full" 
+        className="flex-1 overflow-y-auto p-3.5 sm:p-6 md:p-8 scroll-smooth markdown-body custom-scrollbar min-w-0 max-w-full select-text" 
         ref={ref}
         onScroll={onScroll}
       >

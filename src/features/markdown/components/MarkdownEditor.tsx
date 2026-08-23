@@ -6,7 +6,7 @@ import {
   RefreshCw, CheckCircle2, X, ChevronRight,
   FileCode, FileEdit, Type, Eye, Columns,
   Settings2, Copy, AlignLeft, Hash, Sliders,
-  Sparkles, Trash2, Check
+  Sparkles, Trash2, Check, Sun, Moon, Monitor, SpellCheck
 } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { cn } from "@/src/lib/utils";
@@ -19,7 +19,12 @@ import { blobManager } from "@/src/lib/blob-manager";
 
 import { MarkdownService } from "../MarkdownService";
 import { documentRevision } from "../DocumentRevision";
+import { workerManager } from "@/src/workers/manager";
+import { useGrammarStore } from "@/src/features/grammar-checker/store";
+import { tokenizeMarkdownForSpellCheck } from "../utils/markdown-spell-tokenizer";
+import { applySpellMarkers, clearSpellMarkers, SpellMarker } from "../utils/markdown-spell-markers";
 import Editor from "@monaco-editor/react";
+import { defineMonacoThemes } from "@/src/core/monaco/MonacoTheme";
 import { StatBar } from "./StatBar";
 import { Toolbar } from "./Toolbar";
 import { FindBar } from "./FindBar";
@@ -44,8 +49,40 @@ export function MarkdownEditor() {
   const [scrollSync, setScrollSync] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
   const [showFind, setShowFind] = useState(false);
-  const [findState, setFindState] = useState({ matches: [] as number[], index: 0 });
+  const [findState, setFindState] = useState({ matches: [] as number[], index: 0, query: "" });
   const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const [editorThemeMode, setEditorThemeMode] = useState<"auto" | "dark" | "light">("auto");
+  const [systemIsDark, setSystemIsDark] = useState(true);
+
+  // Spell Check State
+  const [spellCheckEnabled, setSpellCheckEnabled] = useState(false);
+  const [spellMarkers, setSpellMarkers] = useState<SpellMarker[]>([]);
+  const [hoveredSpellMarker, setHoveredSpellMarker] = useState<SpellMarker | null>(null);
+  const [hoverPos, setHoverPos] = useState({ top: 0, left: 0 });
+  const spellAbortRef = useRef<AbortController | null>(null);
+  const { ignoredWords, addIgnoredWord } = useGrammarStore();
+
+  // Monitor DOM/system dark theme changes
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const checkTheme = () => {
+      const isDark =
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.documentElement.classList.contains('dark') ||
+        (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches);
+      setSystemIsDark(!!isDark);
+    };
+    checkTheme();
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });
+    return () => observer.disconnect();
+  }, []);
+
+  const activeEditorTheme = useMemo(() => {
+    if (editorThemeMode === "light") return "karuvi-light";
+    if (editorThemeMode === "dark") return "karuvi-dark";
+    return systemIsDark ? "karuvi-dark" : "karuvi-light";
+  }, [editorThemeMode, systemIsDark]);
 
   const { isFullscreen, activeToolId } = useFullscreenContext();
   const isThisToolFullscreen = isFullscreen && activeToolId === "markdown";
@@ -60,22 +97,94 @@ export function MarkdownEditor() {
   useEffect(() => {
     documentRevision.bump();
     let active = true;
-    MarkdownService.parse(activeMd).then(res => {
-      if (active) setHtml(res);
-    });
+    const debounceMs = activeMd.length > 50000 ? 150 : 0;
+    
+    const timer = setTimeout(() => {
+      MarkdownService.parse(activeMd).then(res => {
+        if (active) setHtml(res);
+      });
+    }, debounceMs);
+
     return () => { 
       active = false;
+      clearTimeout(timer);
       if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
     };
   }, [activeMd]);
 
+  // Spell check logic
+  useEffect(() => {
+    if (!spellCheckEnabled || !editorRef.current || mode !== "editor") {
+      clearSpellMarkers((window as any).monaco, editorRef.current);
+      setSpellMarkers([]);
+      setHoveredSpellMarker(null);
+      return;
+    }
+
+    if (activeMd.length > 500000) { // Limit to 500KB
+      clearSpellMarkers((window as any).monaco, editorRef.current);
+      return;
+    }
+
+    if (spellAbortRef.current) {
+      spellAbortRef.current.abort();
+    }
+    const abortController = new AbortController();
+    spellAbortRef.current = abortController;
+
+    const rev = documentRevision.capture();
+    
+    const timer = setTimeout(async () => {
+      try {
+        const tokenized = tokenizeMarkdownForSpellCheck(activeMd);
+        const res = await workerManager.checkGrammar(tokenized.plainText, ignoredWords, 'standard', undefined, abortController.signal);
+        
+        if (!documentRevision.isCurrent(rev)) return;
+        if (abortController.signal.aborted) return;
+        
+        const spellingErrors = res.errors.filter((e: any) => e.type === 'spelling');
+        const markers = applySpellMarkers((window as any).monaco, editorRef.current, spellingErrors, tokenized);
+        setSpellMarkers(markers);
+      } catch (err: any) {
+        if (err.name !== 'AbortError') {
+          console.error("Spell check error:", err);
+        }
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [activeMd, spellCheckEnabled, ignoredWords, mode]);
+
+  const spellMarkersRef = useRef<SpellMarker[]>([]);
+  useEffect(() => { spellMarkersRef.current = spellMarkers; }, [spellMarkers]);
+
+  const handleApplySpellFix = useCallback((marker: SpellMarker, replacement: string) => {
+    if (!editorRef.current) return;
+    const model = editorRef.current.getModel();
+    if (!model) return;
+    const monaco = (window as any).monaco;
+
+    editorRef.current.executeEdits("spell-check", [{
+      range: new monaco.Range(marker.startLineNumber, marker.startColumn, marker.endLineNumber, marker.endColumn),
+      text: replacement,
+      forceMoveMarkers: true,
+    }]);
+    setHoveredSpellMarker(null);
+  }, []);
+
+  const handleIgnoreWord = useCallback((marker: SpellMarker) => {
+    const word = activeMd.substring(marker.rawOffset, marker.rawOffset + marker.rawLength);
+    addIgnoredWord(word.toLowerCase());
+    setHoveredSpellMarker(null);
+    setSpellMarkers(prev => prev.filter(m => m.errorId !== marker.errorId));
+  }, [activeMd, addIgnoredWord]);
+
   const stats = useMemo(() => MarkdownService.getStats(activeMd), [activeMd]);
-  const lines = useMemo(() => md.split("\n"), [md]);
 
   useFocusModeIntegration({
     wordCount: stats.words,
     charCount: stats.chars,
-    lineCount: lines.length,
+    lineCount: stats.lines,
     language: "markdown",
     onFontSizeChange: setFontSize,
     onWrapToggle: () => setWordWrap(v => !v)
@@ -182,12 +291,29 @@ export function MarkdownEditor() {
         }
       }
     });
+
+    editor.onDidChangeCursorPosition((e: any) => {
+      const pos = e.position;
+      const marker = spellMarkersRef.current.find(m => 
+        pos.lineNumber >= m.startLineNumber && pos.lineNumber <= m.endLineNumber &&
+        pos.column >= m.startColumn && pos.column <= m.endColumn
+      );
+      if (marker) {
+        const coords = editor.getScrolledVisiblePosition(pos);
+        if (coords) {
+          setHoverPos({ top: coords.top + 25, left: coords.left });
+          setHoveredSpellMarker(marker);
+        }
+      } else {
+        setHoveredSpellMarker(null);
+      }
+    });
   }, [insertAtCursor, handleDownloadMd, scrollSync, activeTab]);
 
   // Find & Replace logic — uses Monaco model API
-  const handleFind = useCallback((query: string) => {
+  const handleFind = useCallback((query: string, focusEditor = false) => {
     if (!query || !editorRef.current) {
-      setFindState({ matches: [], index: 0 });
+      setFindState({ matches: [], index: 0, query: "" });
       return;
     }
     const model = editorRef.current.getModel();
@@ -197,17 +323,42 @@ export function MarkdownEditor() {
     const matches: number[] = [];
     let matchResult;
     while ((matchResult = re.exec(text)) !== null) matches.push(matchResult.index);
-    setFindState({ matches, index: 0 });
+    setFindState({ matches, index: 0, query });
 
     if (matches.length > 0 && matches[0] !== undefined) {
       const firstMatch = matches[0];
       const pos = model.getPositionAt(firstMatch);
       const endPos = model.getPositionAt(firstMatch + query.length);
-      editorRef.current.setSelection(new (window as any).monaco.Range(pos.lineNumber, pos.column, endPos.lineNumber, endPos.column));
+      const monaco = (window as any).monaco;
+      if (monaco?.Range) {
+        editorRef.current.setSelection(new monaco.Range(pos.lineNumber, pos.column, endPos.lineNumber, endPos.column));
+      }
       editorRef.current.revealPositionInCenter(pos);
-      editorRef.current.focus();
+      if (focusEditor) {
+        editorRef.current.focus();
+      }
     }
   }, []);
+
+  const navigateFindMatch = useCallback((nextIndex: number) => {
+    const { matches, query } = findState;
+    if (matches.length === 0 || !editorRef.current) return;
+    const count = matches.length;
+    const boundedIndex = ((nextIndex % count) + count) % count;
+    setFindState(s => ({ ...s, index: boundedIndex }));
+    const matchPos = matches[boundedIndex];
+    if (matchPos === undefined) return;
+    const model = editorRef.current.getModel();
+    if (!model) return;
+    const qLen = query ? query.length : 1;
+    const pos = model.getPositionAt(matchPos);
+    const endPos = model.getPositionAt(matchPos + qLen);
+    const monaco = (window as any).monaco;
+    if (monaco?.Range) {
+      editorRef.current.setSelection(new monaco.Range(pos.lineNumber, pos.column, endPos.lineNumber, endPos.column));
+    }
+    editorRef.current.revealPositionInCenter(pos);
+  }, [findState]);
 
   const handleReplace = useCallback((query: string, replacement: string, all: boolean) => {
     if (!query || !editorRef.current) return;
@@ -227,7 +378,7 @@ export function MarkdownEditor() {
       toast(`Replaced 1 occurrence of "${query}"`);
     }
     setMd(nextText);
-    handleFind(query);
+    handleFind(query, false);
   }, [findState, handleFind, toast]);
 
   // Synchronized scrolling
@@ -495,15 +646,32 @@ export function MarkdownEditor() {
       blobManager.revoke(url);
       toast("HTML exported!");
     } else if (format === "pdf") {
-      const element = mode === "editor" ? previewRef.current : uploadPreviewRef.current;
-      if (!element) {
-        toast("Preview not ready", "error");
-        return;
-      }
+      let element: HTMLElement | null = mode === "editor" ? previewRef.current : uploadPreviewRef.current;
+      let tempContainer: HTMLDivElement | null = null;
 
       toast("Preparing PDF export...", "info");
 
       try {
+        if (!element) {
+          // If the user is on the Write or Visual tab, previewRef.current is not mounted in the DOM.
+          // Render the current parsed HTML into an off-screen container.
+          tempContainer = document.createElement("div");
+          tempContainer.className = "markdown-body";
+          tempContainer.style.position = "fixed";
+          tempContainer.style.left = "-9999px";
+          tempContainer.style.top = "0";
+          tempContainer.style.width = "800px";
+          tempContainer.style.visibility = "hidden";
+          tempContainer.innerHTML = html;
+          document.body.appendChild(tempContainer);
+          element = tempContainer;
+        }
+
+        if (!element) {
+          toast("Preview not ready", "error");
+          return;
+        }
+
         // 1. Wait for document readiness: Mermaid rendering queue, web fonts, and images
         const readiness = await waitForDocumentReady(element, 8000);
         if (readiness.revisionChanged) {
@@ -511,29 +679,41 @@ export function MarkdownEditor() {
           return;
         }
 
-        const html2pdf = (await import("html2pdf.js")).default;
-        
-        const opt = {
-          margin: [15, 15] as [number, number],
-          filename: `${name}.pdf`,
-          image: { type: "jpeg" as const, quality: 0.98 },
-          html2canvas: { 
-            scale: 2, 
-            useCORS: true, 
-            letterRendering: true,
-            logging: false,
-            scrollY: 0,
-            windowY: 0
-          },
-          jsPDF: { unit: "mm" as const, format: "a4" as const, orientation: "portrait" as const },
-          pagebreak: { mode: ["avoid-all", "css", "legacy"] }
-        };
-
         const rawContent = element.querySelector(".markdown-body") || element;
         const clone = rawContent.cloneNode(true) as HTMLElement;
         
         // Remove interactive UI buttons
         clone.querySelectorAll(".copy-code-btn, .mmd-copy, button, .flex.items-center.justify-between").forEach(el => el.remove());
+
+        // Resolve any unrendered .mermaid-placeholder elements inside the clone
+        const unrenderedPlaceholders = Array.from(clone.querySelectorAll<HTMLElement>('.mermaid-placeholder'));
+        if (unrenderedPlaceholders.length > 0) {
+          const { mermaidManager } = await import('../mermaid/MermaidRenderManager');
+          const { MermaidPreflightAnalyzer } = await import('../mermaid/MermaidPreflight');
+          const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+          const theme = isDark ? 'dark' : 'light';
+
+          await Promise.all(
+            unrenderedPlaceholders.map(async (ph, idx) => {
+              const src = decodeURIComponent(ph.getAttribute('data-src') || '');
+              const hash = MermaidPreflightAnalyzer.computeHash(src, theme);
+              const block = {
+                id: `mmd-pdf-${hash.substring(0, 8)}-${idx}`,
+                source: src,
+                hash,
+                index: idx,
+                lang: ph.getAttribute('data-lang') || 'mermaid',
+              };
+              const res = await mermaidManager.renderDiagram(block, { priority: 'immediate', theme });
+              if (res.svg) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'mermaid-container';
+                wrapper.innerHTML = res.svg;
+                ph.replaceWith(wrapper);
+              }
+            })
+          );
+        }
 
         // 2. Utilize specialized MermaidExporter to convert all complex SVG diagrams to high-DPI raster PNGs
         await MermaidExportBarrier.adaptForPdf(clone, 2);
@@ -577,10 +757,32 @@ export function MarkdownEditor() {
         container.appendChild(style);
         container.appendChild(clone);
 
+        const html2pdf = (await import("html2pdf.js")).default;
+        
+        const opt = {
+          margin: [15, 15] as [number, number],
+          filename: `${name}.pdf`,
+          image: { type: "jpeg" as const, quality: 0.98 },
+          html2canvas: { 
+            scale: 2, 
+            useCORS: true, 
+            letterRendering: true,
+            logging: false,
+            scrollY: 0,
+            windowY: 0
+          },
+          jsPDF: { unit: "mm" as const, format: "a4" as const, orientation: "portrait" as const },
+          pagebreak: { mode: ["avoid-all", "css", "legacy"] }
+        };
+
         await html2pdf().set(opt).from(container).save();
         toast("PDF exported successfully!");
       } catch (err) {
         toast("PDF export failed", "error");
+      } finally {
+        if (tempContainer && tempContainer.parentNode) {
+          tempContainer.parentNode.removeChild(tempContainer);
+        }
       }
     } else if (format === "word") {
       try {
@@ -639,12 +841,31 @@ export function MarkdownEditor() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-between w-full sm:w-auto gap-2 flex-wrap">
+        <div className="flex items-center justify-between w-full sm:w-auto gap-1.5 sm:gap-2 flex-wrap">
+          {/* Quick Theme Toggle */}
+          <button
+            onClick={() => setEditorThemeMode(m => m === "dark" ? "light" : m === "light" ? "auto" : "dark")}
+            className={cn(
+              "p-2 rounded-xl border transition-all cursor-pointer",
+              editorThemeMode !== "auto" 
+                ? "bg-blue/10 border-blue text-blue" 
+                : "bg-surface border-border text-text-3 hover:border-blue hover:text-blue"
+            )}
+            title={`Editor Theme: ${editorThemeMode.toUpperCase()} (Click to toggle Dark/Light/Auto)`}
+            aria-label="Toggle Editor Theme"
+          >
+            {activeEditorTheme === "karuvi-light" ? (
+              <Sun className="w-4 h-4 text-amber-500" />
+            ) : (
+              <Moon className="w-4 h-4" />
+            )}
+          </button>
+
           {/* Find & Replace Toggle */}
           <button
             onClick={() => setShowFind(!showFind)}
             className={cn(
-              "p-2 rounded-xl border transition-all",
+              "p-2 rounded-xl border transition-all cursor-pointer",
               showFind 
                 ? "bg-blue text-white border-blue shadow-xs" 
                 : "bg-surface border-border text-text-3 hover:border-blue hover:text-blue"
@@ -659,7 +880,7 @@ export function MarkdownEditor() {
           <button
             onClick={() => setShowSettings(!showSettings)}
             className={cn(
-              "p-2 rounded-xl border transition-all",
+              "p-2 rounded-xl border transition-all cursor-pointer",
               showSettings 
                 ? "bg-blue text-white border-blue shadow-xs" 
                 : "bg-surface border-border text-text-3 hover:border-blue hover:text-blue"
@@ -670,12 +891,12 @@ export function MarkdownEditor() {
             <Settings2 className="w-4 h-4" />
           </button>
           
-          <div className="w-px h-6 bg-border mx-1 hidden sm:block" />
+          <div className="w-px h-6 bg-border mx-0.5 hidden sm:block" />
 
           {/* Quick Copy & Download Actions */}
           <button
             onClick={handleCopyMd}
-            className="flex items-center gap-1.5 px-3 py-2 bg-surface border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:border-blue hover:text-blue hover:bg-blue/5 transition-all"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 bg-surface border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:border-blue hover:text-blue hover:bg-blue/5 transition-all cursor-pointer"
             title="Copy Markdown Source"
             aria-label="Copy Markdown"
           >
@@ -685,7 +906,7 @@ export function MarkdownEditor() {
 
           <button
             onClick={handleDownloadMd}
-            className="flex items-center gap-1.5 px-3 py-2 bg-surface border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:border-blue hover:text-blue hover:bg-blue/5 transition-all"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 bg-surface border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:border-blue hover:text-blue hover:bg-blue/5 transition-all cursor-pointer"
             title="Download .md file (Ctrl+S)"
             aria-label="Download Markdown File"
           >
@@ -694,24 +915,24 @@ export function MarkdownEditor() {
           </button>
 
           {/* Export Menu */}
-          <div className="flex bg-surface border border-border rounded-xl overflow-hidden shadow-xs">
+          <div className="flex bg-surface border border-border rounded-xl overflow-hidden shadow-xs shrink-0">
             <button
               onClick={() => handleExport("html")}
-              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:bg-blue/10 hover:text-blue transition-all border-r border-border"
+              className="flex items-center gap-1 px-2 sm:px-2.5 py-2 text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:bg-blue/10 hover:text-blue transition-all border-r border-border cursor-pointer"
               title="Export HTML"
             >
               <Code2 className="w-3.5 h-3.5" /> HTML
             </button>
             <button
               onClick={() => handleExport("pdf")}
-              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:bg-blue/10 hover:text-blue transition-all border-r border-border"
+              className="flex items-center gap-1 px-2 sm:px-2.5 py-2 text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:bg-blue/10 hover:text-blue transition-all border-r border-border cursor-pointer"
               title="Export PDF"
             >
               <FileText className="w-3.5 h-3.5" /> PDF
             </button>
             <button
               onClick={() => handleExport("word")}
-              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:bg-blue/10 hover:text-blue transition-all"
+              className="flex items-center gap-1 px-2 sm:px-2.5 py-2 text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:bg-blue/10 hover:text-blue transition-all cursor-pointer"
               title="Export Word Document (.docx)"
             >
               <FileCode className="w-3.5 h-3.5" /> Word
@@ -730,7 +951,47 @@ export function MarkdownEditor() {
             transition={{ duration: 0.15 }}
             className="overflow-hidden shrink-0"
           >
-            <div className="flex flex-wrap items-center gap-4 p-3 bg-surface border border-border rounded-2xl text-xs font-bold">
+            <div className="flex flex-wrap items-center gap-3 p-3 bg-surface border border-border rounded-2xl text-xs font-bold">
+              {/* Editor Theme Option */}
+              <div className="flex items-center gap-2">
+                <span className="text-text-4 uppercase tracking-widest-sm text-tiny">Theme</span>
+                <div className="flex items-center bg-bg rounded-xl border border-border overflow-hidden p-0.5">
+                  <button
+                    onClick={() => setEditorThemeMode("dark")}
+                    className={cn(
+                      "flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer",
+                      editorThemeMode === "dark" ? "bg-surface text-blue shadow-xs" : "text-text-3 hover:text-text"
+                    )}
+                    title="Dark Theme"
+                  >
+                    <Moon className="w-3.5 h-3.5" />
+                    <span>Dark</span>
+                  </button>
+                  <button
+                    onClick={() => setEditorThemeMode("light")}
+                    className={cn(
+                      "flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer",
+                      editorThemeMode === "light" ? "bg-surface text-blue shadow-xs" : "text-text-3 hover:text-text"
+                    )}
+                    title="Light Theme"
+                  >
+                    <Sun className="w-3.5 h-3.5" />
+                    <span>Light</span>
+                  </button>
+                  <button
+                    onClick={() => setEditorThemeMode("auto")}
+                    className={cn(
+                      "flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer",
+                      editorThemeMode === "auto" ? "bg-surface text-blue shadow-xs" : "text-text-3 hover:text-text"
+                    )}
+                    title="Auto (System Theme)"
+                  >
+                    <Monitor className="w-3.5 h-3.5" />
+                    <span>Auto</span>
+                  </button>
+                </div>
+              </div>
+
               {/* Font Size Stepper */}
               <div className="flex items-center gap-2">
                 <span className="text-text-4 uppercase tracking-widest-sm text-tiny">Font Size</span>
@@ -738,7 +999,7 @@ export function MarkdownEditor() {
                   <button
                     onClick={() => setFontSize(v => Math.max(10, v - 2))}
                     disabled={fontSize <= 10}
-                    className="px-2.5 py-1 text-text-3 hover:text-blue hover:bg-surface disabled:opacity-30 transition-all font-mono"
+                    className="px-2.5 py-1 text-text-3 hover:text-blue hover:bg-surface disabled:opacity-30 transition-all font-mono cursor-pointer"
                     aria-label="Decrease Font Size"
                   >
                     A-
@@ -749,7 +1010,7 @@ export function MarkdownEditor() {
                   <button
                     onClick={() => setFontSize(v => Math.min(24, v + 2))}
                     disabled={fontSize >= 24}
-                    className="px-2.5 py-1 text-text-3 hover:text-blue hover:bg-surface disabled:opacity-30 transition-all font-mono"
+                    className="px-2.5 py-1 text-text-3 hover:text-blue hover:bg-surface disabled:opacity-30 transition-all font-mono cursor-pointer"
                     aria-label="Increase Font Size"
                   >
                     A+
@@ -761,7 +1022,7 @@ export function MarkdownEditor() {
               <button
                 onClick={() => setWordWrap(!wordWrap)}
                 className={cn(
-                  "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all text-xs font-bold",
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all text-xs font-bold cursor-pointer",
                   wordWrap 
                     ? "bg-blue/10 border-blue text-blue" 
                     : "bg-bg border-border text-text-3 hover:border-blue/40"
@@ -776,7 +1037,7 @@ export function MarkdownEditor() {
               <button
                 onClick={() => setShowLineNumbers(!showLineNumbers)}
                 className={cn(
-                  "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all text-xs font-bold",
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all text-xs font-bold cursor-pointer",
                   showLineNumbers 
                     ? "bg-blue/10 border-blue text-blue" 
                     : "bg-bg border-border text-text-3 hover:border-blue/40"
@@ -787,11 +1048,26 @@ export function MarkdownEditor() {
                 <span>Line Numbers: {showLineNumbers ? "ON" : "OFF"}</span>
               </button>
 
+              {/* Spell Check Toggle */}
+              <button
+                onClick={() => setSpellCheckEnabled(!spellCheckEnabled)}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all text-xs font-bold cursor-pointer",
+                  spellCheckEnabled 
+                    ? "bg-blue/10 border-blue text-blue" 
+                    : "bg-bg border-border text-text-3 hover:border-blue/40"
+                )}
+                aria-pressed={spellCheckEnabled}
+              >
+                <SpellCheck className="w-3.5 h-3.5" />
+                <span>Spell Check: {spellCheckEnabled ? "ON" : "OFF"}</span>
+              </button>
+
               {/* Scroll Sync Toggle (Split Mode) */}
               <button
                 onClick={() => setScrollSync(!scrollSync)}
                 className={cn(
-                  "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all text-xs font-bold",
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all text-xs font-bold cursor-pointer",
                   scrollSync 
                     ? "bg-blue/10 border-blue text-blue" 
                     : "bg-bg border-border text-text-3 hover:border-blue/40"
@@ -805,7 +1081,7 @@ export function MarkdownEditor() {
               {/* Copy Rendered HTML */}
               <button
                 onClick={handleCopyHtml}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-bg text-text-3 hover:border-blue hover:text-blue transition-all ml-auto"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-bg text-text-3 hover:border-blue hover:text-blue transition-all ml-auto cursor-pointer"
                 title="Copy rendered HTML code"
               >
                 <Code2 className="w-3.5 h-3.5" />
@@ -827,11 +1103,11 @@ export function MarkdownEditor() {
             onDragLeave={() => setIsDraggingOver(false)}
             onDrop={handleEditorDrop}
             className={cn(
-              "flex flex-col bg-surface border rounded-3xl overflow-hidden shadow-sm w-full transition-colors",
+              "flex flex-col bg-surface border rounded-2xl sm:rounded-3xl overflow-hidden shadow-xs w-full transition-colors",
               isDraggingOver ? "border-blue ring-2 ring-blue/30 bg-blue/5" : "border-border",
               isThisToolFullscreen 
                 ? "h-full flex-1 min-h-0" 
-                : "min-h-[580px] h-[calc(100vh-280px)] md:min-h-[640px]"
+                : "min-h-[380px] sm:min-h-[520px] md:min-h-[640px] h-[calc(100dvh-220px)] sm:h-[calc(100dvh-260px)]"
             )}
           >
             {/* Toolbar (Active in Write & Split tabs) */}
@@ -851,13 +1127,16 @@ export function MarkdownEditor() {
             {showFind && (activeTab === "write" || activeTab === "split") && (
               <div className="shrink-0">
                 <FindBar
-                  onFind={handleFind}
+                  onFind={(q) => handleFind(q, false)}
                   onReplace={handleReplace}
-                  onClose={() => setShowFind(false)}
+                  onClose={() => {
+                    setShowFind(false);
+                    editorRef.current?.focus();
+                  }}
                   matchCount={findState.matches.length}
                   currentIndex={findState.index}
-                  onNext={() => setFindState(s => ({ ...s, index: (s.index + 1) % (s.matches.length || 1) }))}
-                  onPrev={() => setFindState(s => ({ ...s, index: (s.index - 1 + s.matches.length) % (s.matches.length || 1) }))}
+                  onNext={() => navigateFindMatch(findState.index + 1)}
+                  onPrev={() => navigateFindMatch(findState.index - 1)}
                 />
               </div>
             )}
@@ -873,11 +1152,48 @@ export function MarkdownEditor() {
                   <div className="flex flex-1 min-h-0 overflow-hidden relative font-mono bg-bg">
                     {/* Monaco Editor */}
                     <div className="flex-1 h-full relative min-w-0">
+                      {/* Spell Check Hover Tooltip */}
+                      {hoveredSpellMarker && (
+                        <div 
+                          className="absolute z-50 p-3 bg-surface-2 border border-border shadow-lg rounded-xl flex flex-col gap-2 min-w-[200px]"
+                          style={{ top: hoverPos.top, left: hoverPos.left }}
+                        >
+                          <div className="flex justify-between items-center mb-1">
+                            <span className="text-sm font-medium text-text">Spelling</span>
+                            <button onClick={() => setHoveredSpellMarker(null)} className="text-text-muted hover:text-text cursor-pointer">
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                          <div className="text-sm text-text-muted">
+                            {hoveredSpellMarker.message}
+                          </div>
+                          {hoveredSpellMarker.replacements && hoveredSpellMarker.replacements.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {hoveredSpellMarker.replacements.map(rep => (
+                                <button 
+                                  key={rep}
+                                  className="px-2 py-1 text-xs bg-primary/10 text-primary hover:bg-primary/20 rounded-md transition-colors cursor-pointer"
+                                  onClick={() => handleApplySpellFix(hoveredSpellMarker, rep)}
+                                >
+                                  {rep}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                          <button 
+                            className="mt-2 text-xs text-text-muted hover:text-text text-left cursor-pointer"
+                            onClick={() => handleIgnoreWord(hoveredSpellMarker)}
+                          >
+                            Ignore word
+                          </button>
+                        </div>
+                      )}
                       <Editor
                         language="markdown"
-                        theme="karuvi-dark"
+                        theme={activeEditorTheme}
                         path="kv://markdown/doc.md"
                         value={md}
+                        beforeMount={(monaco) => defineMonacoThemes(monaco)}
                         onChange={(val) => {
                           if (val && val.length > 5000000) {
                             toast("Text exceeds 5MB limit", "error");
@@ -889,17 +1205,25 @@ export function MarkdownEditor() {
                         onMount={handleEditorMount}
                         options={{
                           ariaLabel: "Markdown Source Editor",
+                          automaticLayout: true,
                           wordWrap: wordWrap ? "on" : "off",
                           minimap: { enabled: false },
                           fontSize: fontSize,
                           fontFamily: "'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, monospace",
                           lineNumbers: showLineNumbers ? "on" : "off",
-                          padding: { top: 24, bottom: 24 },
+                          lineNumbersMinChars: 3,
+                          padding: { top: 12, bottom: 12 },
                           scrollBeyondLastLine: false,
-                          renderLineHighlight: "none",
+                          renderLineHighlight: "all",
+                          overviewRulerBorder: false,
+                          overviewRulerLanes: 0,
+                          hideCursorInOverviewRuler: true,
+                          tabSize: 2,
                           scrollbar: {
                             vertical: "visible",
-                            horizontal: wordWrap ? "hidden" : "visible"
+                            horizontal: wordWrap ? "hidden" : "visible",
+                            verticalScrollbarSize: 10,
+                            horizontalScrollbarSize: 10,
                           }
                         }}
                       />

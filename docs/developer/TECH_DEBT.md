@@ -7,142 +7,55 @@ Format: `[Date] [Severity] Description — context and resolution path`
 
 ## Open Items
 
-### TD-016 · `Markdown Editor` — `window.prompt` used for link insertion (UX Debt)
-- **Date logged:** 2026-08-21
-- **Severity:** Low (UX Debt)
-- **Source:** Markdown Editor Code Audit (BUG-15)
-- **Description:** `MarkdownVisualEditor.tsx` uses `window.prompt` for URL insertion in the Tiptap toolbar. This blocks the main thread (waiting on I/O) and does not match the KaruviLab design system.
-- **Resolution path:** Replace `window.prompt` with a custom inline popover input component that conforms to the KV design system.
-- **Blocked by:** Nothing. Readily implementable with existing UI components.
-
 ### TD-001 · `compress-pdf` — No real image downsampling
 - **Date logged:** 2026-07-26
 - **Severity:** Medium
 - **Source:** TOOL_AUDIT.md Batch 5
-- **Description:** `pdf-lib` save with object streams only repacks PDF objects; it does NOT downsample images or strip unused fonts. Image-heavy PDFs see minimal compression reduction.
-- **Resolution path:** Integrate a WASM-based Ghostscript build (e.g., `ghostscript.js`) for true image downsampling. Until then, update the UI to set clear user expectations about compression limitations.
-- **Blocked by:** Requires user approval for new dependency (AGENTS Rule 6). `ghostscript.js` gzipped size TBD.
+- **Description:** `pdf-lib` save with object streams and metadata removal optimizes PDF structure and strips unused objects; it does NOT downsample high-resolution raster images or convert colorspaces. Image-heavy PDFs see modest compression.
+- **Resolution path:** Integrate a lightweight client-side downsampling pipeline or WASM-based Ghostscript build (e.g. `ghostscript.js`). Ensure strict bundle budget approval per AGENTS.md Rule 6.
+- **Blocked by:** Requires user approval for new dependency (AGENTS Rule 6).
 
-### TD-002 · `bg-remover` — Canvas thresholding only, no AI removal
-- **Date logged:** 2026-07-26
-- **Severity:** Medium
-- **Source:** TOOL_AUDIT.md Batch 6
-- **Description:** Background removal uses basic canvas color thresholding ("Magic Wand" style), which fails on complex or gradient backgrounds. The AI WASM model is not integrated.
-- **Resolution path:** Integrate `@imgly/background-removal` WASM module for true local AI background removal. Requires BUNDLE_DECISIONS.md entry and user approval (large WASM bundle, ~20MB).
-- **Blocked by:** Bundle size approval required (AGENTS Rule 6).
-
-### TD-003 · `card-masker` — PAN regex fails on space/dash-delimited formats
-- **Date logged:** 2026-07-26
-- **Severity:** Low
-- **Source:** TOOL_AUDIT.md Batch 2
-- **Description:** The regex `\b\d{13,19}\b` only matches contiguous digit sequences. Cards formatted as `4111 1111 1111 1111` or `4111-1111-1111-1111` are not detected.
-- **Resolution path:** Pre-process input by stripping common delimiters (spaces, hyphens) before PAN regex matching. Small fix, no new dependencies.
-- **Blocked by:** Nothing. Ready for implementation.
-
-### TD-004 · `split-pdf` — Multi-download blocked by browser when output > 3 parts
-- **Date logged:** 2026-07-26
-- **Severity:** Low
-- **Source:** TOOL_AUDIT.md Batch 5
-- **Description:** When splitting a PDF into more than 3 parts, sequential `a.click()` downloads are often blocked by browser pop-up blockers.
-- **Resolution path:** Bundle output into a `.zip` file using `fflate` (already in dependencies) when output parts > 3.
-- **Blocked by:** Nothing. `fflate` is already available.
-
-### TD-005 · Web Notifications not implemented for productivity timers
-- **Date logged:** 2026-07-26
-- **Severity:** Low
-- **Source:** TOOL_AUDIT.md Batch 8
-- **Description:** `pomodoro-timer`, `countdown-timer`, and `task-reminder` use AudioContext for alerts only. When the tab is in the background, users miss the alert.
-- **Resolution path:** Add Web Notifications API integration with permission prompt on first use. Degrade gracefully if permission denied (show AudioContext fallback message).
-- **Blocked by:** Nothing. Browser API only, no new dependencies.
-
-### TD-006 · Unbounded service worker static cache
-- **Date logged:** 2026-07-26
-- **Severity:** High (GEMINI.md §15)
-- **Status:** ✅ RESOLVED 2026-07-26 — Added `ExpirationPlugin(maxEntries: 200, maxAgeSeconds: 30d)` to `CacheFirst` static route in `public/sw.js`.
-
-### TD-007 · `@onlyrex/pulse` — Undocumented dependency with no source usage
-- **Date logged:** 2026-07-26
-- **Severity:** High (P-08 violation)
-- **Description:** `@onlyrex/pulse@^1.0.5` is in `package.json` dependencies but has zero import usage in `src/`, `components/`, or `app/`. Source confirmed by `grep -r "@onlyrex/pulse" --include="*.ts" --include="*.tsx"` returning no results.
-- **Resolution path:** Investigate if this is a transitive peer dependency requirement. If no direct usage, remove from `package.json` and add a BUNDLE_DECISIONS.md removal record.
-- **Blocked by:** Needs user decision on removal.
-
-### TD-008 · Missing `@next/bundle-analyzer` — no bundle size visibility
-- **Date logged:** 2026-07-26
-- **Severity:** High (PERF-04)
-- **Description:** No bundle analyzer is configured. With monaco-editor (~3–5MB), mermaid (~1.2MB), pdfjs worker (~1.3MB), and nspell+dictionary (~1.2MB) in the dependency tree, PERF-04 compliance cannot be enforced without automated bundle reporting.
-- **Resolution path:** Add `@next/bundle-analyzer` to devDependencies, configure in `next.config.mjs` behind `ANALYZE=true` env var, add entry to `BUNDLE_DECISIONS.md`.
-- **Blocked by:** User approval for dev dependency (minimal bundle impact).
-
-### TD-009 · CHANGELOG.md under-maintained — 1 entry for 208-tool platform
-- **Date logged:** 2026-07-26
-- **Severity:** Low
-- **Description:** CHANGELOG.md reflects only 6 items from 2026-07-23. Per ROADMAP Phase 9, per-tool version history and "Last Verified" timestamps are planned but not implemented.
-- **Resolution path:** Backfill with major milestones from git log. Establish a policy of updating CHANGELOG.md with every meaningful PR.
-- **Blocked by:** Nothing.
-
-### TD-010 · `pdf-to-word` — drops images/tables (text-only extraction)
-- **Date logged:** 2026-07-26
-- **Severity:** Low (UX clarity gap, not a bug)
-- **Source:** TOOL_AUDIT.md Batch 5
-- **Description:** The tool's UI does not communicate that it performs raw text extraction only (no formatting, images, or tables preserved). Users may expect a full Word document.
-- **Resolution path:** Update tool description, ToolShell header, and output area to clarify this is "text extraction" not "format-preserved conversion."
-- **Blocked by:** Nothing. Documentation-only change.
-
-### TD-011 · `public/sw.js` — `console.log` in production code (P-14)
-- **Date logged:** 2026-07-26
-- **Severity:** Low
-- **Description:** `public/sw.js` uses `console.log` throughout (lines 8, 11, 124, etc.) in violation of P-14. In a Service Worker context the structured logger is unavailable, but the violation should be acknowledged.
-- **Resolution path:** Consider prefixing with an `[SW]` tag and wrapping in a `DEBUG` flag that strips in production, or formally log this as an EXCEPTIONS.md entry.
-- **Blocked by:** Formal EXCEPTIONS.md entry needed.
+### TD-012 · Secondary AI ONNX model files are placeholder binaries
+- **Date logged:** 2026-08-12
+- **Severity:** P0 (Feature Availability)
+- **Source:** v1.3 QA Audit — AI/ONNX Phase
+- **Description:** `modnet.onnx`, `paddle-ocr.onnx`, `realesrgan-4x.onnx`, and `yolov8-face.onnx` in `public/models/` are placeholder binaries and guarded as `available: false` in `src/ai/registry.ts`. Note: Primary RMBG 2.0 (`rmbg-2.0.onnx`) is fully active and functional.
+- **Tools affected:** `face-blur`, `super-resolution`, `ocr-scanner`.
+- **Resolution path:** Source real quantized ONNX weight files (<25MB each), place in `public/models/`, verify SHA-256 hashes, and set `available: true` in `src/ai/registry.ts`.
+- **Blocked by:** Real quantized model weight files must be sourced from trusted model hubs.
 
 ---
 
 ## Resolved Items
 
-| ID | Description | Resolved |
-|----|-------------|---------|
-| TD-006 | Unbounded SW static cache | 2026-07-26 |
+| ID | Description | Resolution Date | Resolution Details |
+|----|-------------|-----------------|-------------------|
+| **TD-002** | `bg-remover` — Canvas thresholding only | 2026-08-10 | Implemented multi-tier architecture in `src/features/background-remover/` (`instant-canvas.engine.ts`, `u2netp.engine.ts`, `rmbg.engine.ts`, `engine-selector.ts`). |
+| **TD-003** | `card-masker` — PAN regex delimiter failures | 2026-08-10 | Updated candidate regex to `/(?<!\d)\d(?:[\s-]*\d){12,18}(?!\d)/g` + Luhn checksum validation in `CardMaskerClient.tsx`. |
+| **TD-004** | `split-pdf` — Multi-download blocked by browser | 2026-08-10 | Integrated `fflate` ZIP auto-bundling via Web Worker in `SplitPdfClient.tsx` for multi-page/multi-range outputs. |
+| **TD-005** | Productivity timers missing Web Notifications | 2026-08-10 | Implemented Web Notifications API with permission prompt and audio fallback in `PomodoroTimerClient.tsx` and `src/lib/notifications.ts`. |
+| **TD-006** | Unbounded SW static cache | 2026-07-26 | Added `ExpirationPlugin(maxEntries: 200, maxAgeSeconds: 30d)` to `CacheFirst` static route in `public/sw.js`. |
+| **TD-007** | `@onlyrex/pulse` — Undocumented dependency | 2026-08-15 | Removed `@onlyrex/pulse` from `package.json` and cleaned `node_modules`. |
+| **TD-008** | Missing `@next/bundle-analyzer` | 2026-08-15 | Added `@next/bundle-analyzer` to `devDependencies`, wired `next.config.mjs` with `withAnalyzer()`, and logged in `BUNDLE_DECISIONS.md`. |
+| **TD-009** | `CHANGELOG.md` under-maintained | 2026-08-22 | Synchronized `docs/roadmap/CHANGELOG.md` with v2.1.1 releases and milestones. |
+| **TD-010** | `pdf-to-word` — Format preservation UX clarity | 2026-08-15 | Updated UI copy, button labels ("Extract PDF Content"), and `LearningHub` to clearly explain text extraction vs OCR. |
+| **TD-011** | `public/sw.js` — `console.log` in production | 2026-08-15 | Formally logged as architectural exception `E-012` in `EXCEPTIONS.md`. |
+| **TD-013** | User signature stored in `localStorage` | 2026-08-18 | Migrated signature storage to IndexedDB in `src/features/pdf-editor/utils/signature-db.ts` with automatic `localStorage` migration shim. |
+| **TD-014** | Monaco & PDF.js imported synchronously | 2026-08-18 | Wrapped with `dynamic(() => import(...), { ssr: false })` and `<ToolSkeleton>` in `HtmlViewerClientWrapper.tsx` and `PdfEditorClientWrapper.tsx`. |
+| **TD-015** | HEIC Converter injected CDN script at runtime | 2026-08-18 | Bundled `heic2any` and `utif` locally in `package.json` and imported lazily via dynamic `import()`. |
+| **TD-016** | `Markdown Editor` — `window.prompt` in TipTap toolbar | 2026-08-22 | Replaced synchronous `window.prompt` with an accessible Link Dialog modal conforming to KV design tokens in `MarkdownVisualEditor.tsx`. |
 
 ---
 
 *This file is maintained per AGENTS.md Rule 12. All deferred items — fixes, decisions, scope cuts — must be logged here immediately.*
 
----
 
-## Items Added in v1.3 Critical Fix Pass (2026-08-12)
+### TD-045 · Spell Check V2 Scope Limitations
+- **Issue:** Markdown Editor spell checking currently only operates in the raw Monaco view (write/split mode). It does not support the TipTap visual editor.
+- **Resolution:** Implement TipTap-compatible spell check decorations using `@tiptap/pm` plugins (similar to Grammar Checker's custom `GrammarDecorations` node).
+- **Status:** Deferred to V2.
 
-### TD-012 · 5 AI model files are placeholder binaries — tools non-functional
-- **Date logged:** 2026-08-12
-- **Severity:** P0 (AI tools advertised but non-functional)
-- **Source:** v1.3 QA Audit — AI/ONNX Phase
-- **Description:** `u2netp.onnx`, `modnet.onnx`, `paddle-ocr.onnx`, `realesrgan-4x.onnx`, `yolov8-face.onnx` in `public/models/` are identical 4.4MB dummy files (same MD5). All are marked `available: false` in the registry and guarded in `model-manager.ts` to throw a user-visible error rather than silently fail.
-- **Tools affected:** `face-blur`, `super-resolution`, `ocr-scanner`, secondary background removal models (`u2netp-mobile`, `modnet-portrait`).
-- **Resolution path:** Source real pretrained ONNX weight files, place in `public/models/`, set `available: true` and update `sha256` with the real SHA-256 hash in `src/ai/registry.ts`.
-- **Blocked by:** Real model files must be sourced (training or public model hub). No code change needed beyond registry update once files are in place.
-
-### TD-013 · User signature stored in `localStorage` (should be IndexedDB)
-- **Date logged:** 2026-08-12
-- **Severity:** P1 (localStorage cleared on privacy browser settings; data loss risk)
-- **Source:** v1.3 QA Audit — Security Phase
-- **Description:** Signature Pad tool persists the user's drawn signature in `localStorage`. `localStorage` is cleared by "Clear Site Data" and is synchronous/blocking. Binary data (base64 PNG) in localStorage is inefficient and inconsistent with the platform's IndexedDB-first offline storage policy.
-- **Resolution path:** Migrate to IndexedDB using the existing `idb` dependency. Key: `kv-signature-v1`. Provide migration shim to read existing localStorage value on first load and delete it after migration.
-- **Blocked by:** Product decision needed: should signature be per-session or persistent across sessions?
-
-### TD-014 · Monaco Editor and PDF.js imported synchronously — P-04 violation
-- **Date logged:** 2026-08-12
-- **Severity:** P1 (PERF-04, PERF-06: main-thread long task)
-- **Source:** v1.3 QA Audit — Performance Phase
-- **Files:** `app/(tools)/developer/html-viewer/HtmlViewerClient.tsx` (Monaco), `app/(tools)/pdf/*/EditorCanvas.tsx` (PDF.js)
-- **Description:** Both heavy libraries are imported at module level, causing synchronous main-thread blocking during route load. Monaco is ~3–5MB; pdfjs-dist ~1.3MB worker + ~800KB main. Combined initial parse blocks main thread >50ms (PERF-06).
-- **Resolution path:** Wrap both with `dynamic(() => import(...), { ssr: false })` behind a loading skeleton. Monaco has a known `@monaco-editor/react` dynamic import pattern.
-- **Blocked by:** Nothing. Architecture pattern already used elsewhere in the codebase.
-
-### TD-015 · HEIC Converter injects CDN `<script>` tag at runtime — P-09 violation
-- **Date logged:** 2026-08-12
-- **Severity:** P1 (P-09: server-side/CDN processing for local tool; P-16: dynamic script injection)
-- **Source:** v1.3 QA Audit — Security/Privacy Phase
-- **Description:** The HEIC-to-JPEG converter dynamically appends `<script src="https://cdn.jsdelivr.net/...">` to document head at runtime to load `heic2any` and `UTIF.js`. This violates the platform's offline-first guarantee and introduces a CDN dependency into an ostensibly local tool. If CDN is unreachable, tool silently fails.
-- **Resolution path:** Bundle `heic2any` locally as a devDependency (requires BUNDLE_DECISIONS.md entry, ~120KB gzipped). Add `navigator.onLine` guard and user notification if CDN fallback is ever needed as a transition measure.
-- **Blocked by:** User approval required for bundle size addition (AGENTS Rule 6). `heic2any` gzipped size: ~120KB.
-
+### TD-046 · CheckGrammar API Type Incompleteness
+- **Issue:** `src/workers/types.ts` defines `checkGrammar` stats with 5 fields, but `engine.ts` returns 9 fields.
+- **Resolution:** Update `types.ts` to include `paragraphs`, `readabilityGrade`, `avgSentenceLength`, and `uniqueWords`.
+- **Status:** Needs fixing.

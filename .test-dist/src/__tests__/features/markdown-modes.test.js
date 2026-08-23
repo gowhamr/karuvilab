@@ -105,4 +105,20 @@ describe('Phase 5: Document Fidelity & Synchronization Hardening', () => {
         const buffer = await Packer.toBuffer(doc);
         expect(buffer.length).toBeGreaterThan(1000);
     });
+    it('Sanitizer preserves data-src, data-lang, and data-theme attributes on Mermaid placeholders', async () => {
+        const { sanitizeHtml } = await import('../../lib/security');
+        const rawPlaceholder = '<div class="mermaid-placeholder" data-src="flowchart%20TD%0A%20%20A%20--%3E%20B" data-lang="mermaid"></div>';
+        const sanitized = sanitizeHtml(rawPlaceholder);
+        expect(sanitized).toContain('data-src=');
+        expect(sanitized).toContain('data-lang="mermaid"');
+        expect(sanitized).toContain('class="mermaid-placeholder"');
+    });
+    it('Sanitizer preserves style tag and SVG gradient/stroke attributes in Mermaid SVGs', async () => {
+        const { sanitizeHtml } = await import('../../lib/security');
+        const rawSvg = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><style>.node { fill: #fff; }</style><g class="node"><rect x="10" y="10" width="80" height="80" stroke="#3b82f6" stroke-dasharray="4" /></g></svg>';
+        const sanitized = sanitizeHtml(rawSvg);
+        expect(sanitized).toContain('<style>');
+        expect(sanitized).toContain('.node');
+        expect(sanitized).toContain('stroke-dasharray="4"');
+    });
 });
