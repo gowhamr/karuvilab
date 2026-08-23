@@ -811,21 +811,23 @@ export function MarkdownEditor() {
         : "space-y-4 md:space-y-6"
     )}>
       {/* Header Controls */}
-      <div className="flex flex-col lg:flex-row gap-3 items-center justify-between shrink-0">
-        <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
+      <div className="flex flex-col lg:flex-row gap-3 items-stretch sm:items-center justify-between shrink-0 max-w-full min-w-0">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full lg:w-auto max-w-full min-w-0">
           {/* Main Mode Toggle */}
-          <SegmentedControl
-            options={[
-              { id: "editor", label: "Editor", icon: <FileEdit className="w-4 h-4" /> },
-              { id: "upload", label: "Upload", icon: <Upload className="w-4 h-4" /> },
-            ]}
-            activeId={mode}
-            onChange={(id) => setMode(id as any)}
-          />
+          <div className="flex items-center justify-center sm:justify-start max-w-full min-w-0">
+            <SegmentedControl
+              options={[
+                { id: "editor", label: "Editor", icon: <FileEdit className="w-4 h-4" /> },
+                { id: "upload", label: "Upload", icon: <Upload className="w-4 h-4" /> },
+              ]}
+              activeId={mode}
+              onChange={(id) => setMode(id as any)}
+            />
+          </div>
 
           {/* Quad Mode Segmented Control */}
           {mode === "editor" && (
-            <div className="w-full sm:w-auto">
+            <div className="flex items-center justify-center sm:justify-start w-full sm:w-auto max-w-full min-w-0 overflow-x-auto no-scrollbar">
               <SegmentedControl
                 options={[
                   { id: "split", label: "Split", icon: <Columns className="w-4 h-4" />, className: "hidden md:flex" },
@@ -841,7 +843,7 @@ export function MarkdownEditor() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-between w-full sm:w-auto gap-1.5 sm:gap-2 flex-wrap">
+        <div className="flex items-center justify-center sm:justify-end w-full sm:w-auto gap-1.5 sm:gap-2 flex-wrap">
           {/* Quick Theme Toggle */}
           <button
             onClick={() => setEditorThemeMode(m => m === "dark" ? "light" : m === "light" ? "auto" : "dark")}
