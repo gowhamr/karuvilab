@@ -2,60 +2,139 @@
   "markdown": {
     "10 KB": {
       "bytes": 10464,
-      "mdToAstMs": 41.54,
-      "astToMdMs": 2.8,
-      "totalRoundtripMs": 44.34,
+      "mdToAstMs": 21.26,
+      "astToMdMs": 6.27,
+      "totalRoundtripMs": 27.54,
       "astNodes": 120
     },
     "50 KB": {
       "bytes": 51448,
-      "mdToAstMs": 238.13,
-      "astToMdMs": 5.52,
-      "totalRoundtripMs": 243.66,
+      "mdToAstMs": 182.37,
+      "astToMdMs": 11.15,
+      "totalRoundtripMs": 193.51,
       "astNodes": 590
     },
     "100 KB": {
       "bytes": 102896,
-      "mdToAstMs": 274.82,
-      "astToMdMs": 2.45,
-      "totalRoundtripMs": 277.27,
+      "mdToAstMs": 256.5,
+      "astToMdMs": 18.7,
+      "totalRoundtripMs": 275.2,
       "astNodes": 1180
     },
     "250 KB": {
       "bytes": 256368,
-      "mdToAstMs": 351.36,
-      "astToMdMs": 10.44,
-      "totalRoundtripMs": 361.8,
+      "mdToAstMs": 514.27,
+      "astToMdMs": 11.98,
+      "totalRoundtripMs": 526.25,
       "astNodes": 2940
     },
     "500 KB": {
       "bytes": 512736,
-      "mdToAstMs": 456.5,
-      "astToMdMs": 42.33,
-      "totalRoundtripMs": 498.83,
+      "mdToAstMs": 517.12,
+      "astToMdMs": 68.7,
+      "totalRoundtripMs": 585.82,
       "astNodes": 5880
     },
     "1 MB": {
       "bytes": 1049016,
-      "mdToAstMs": 435.33,
-      "astToMdMs": 82.46,
-      "totalRoundtripMs": 517.79,
+      "mdToAstMs": 738.61,
+      "astToMdMs": 53.83,
+      "totalRoundtripMs": 792.44,
       "astNodes": 12030
     },
     "2 MB": {
       "bytes": 2097160,
-      "mdToAstMs": 653.25,
-      "astToMdMs": 49.86,
-      "totalRoundtripMs": 703.1,
+      "mdToAstMs": 1348.38,
+      "astToMdMs": 156.45,
+      "totalRoundtripMs": 1504.83,
       "astNodes": 24050
     }
   },
-  "mermaid": {},
+  "mermaid": {
+    "batch_1": {
+      "count": 1,
+      "preflightTotalMs": 14.137,
+      "preflightAvgMs": 14.137,
+      "securityTotalMs": 7.662,
+      "cacheSetMs": 2.791,
+      "cacheGetMs": 0.449,
+      "cacheHits": 1
+    },
+    "batch_5": {
+      "count": 5,
+      "preflightTotalMs": 7.386,
+      "preflightAvgMs": 1.477,
+      "securityTotalMs": 0.109,
+      "cacheSetMs": 0.659,
+      "cacheGetMs": 0.3,
+      "cacheHits": 5
+    },
+    "batch_10": {
+      "count": 10,
+      "preflightTotalMs": 3.15,
+      "preflightAvgMs": 0.315,
+      "securityTotalMs": 0.03,
+      "cacheSetMs": 0.389,
+      "cacheGetMs": 0.148,
+      "cacheHits": 10
+    },
+    "batch_25": {
+      "count": 25,
+      "preflightTotalMs": 0.712,
+      "preflightAvgMs": 0.028,
+      "securityTotalMs": 0.064,
+      "cacheSetMs": 0.317,
+      "cacheGetMs": 0.233,
+      "cacheHits": 25
+    },
+    "batch_50": {
+      "count": 50,
+      "preflightTotalMs": 0.497,
+      "preflightAvgMs": 0.01,
+      "securityTotalMs": 0.125,
+      "cacheSetMs": 1.901,
+      "cacheGetMs": 2.711,
+      "cacheHits": 50
+    }
+  },
   "monaco": {
     "headerPropertiesCount": 3,
     "requestPropertiesCount": 0,
-    "jsonValidationMs": 0.212
+    "jsonValidationMs": 0.583
   },
-  "bgRemover": {},
+  "bgRemover": {
+    "720p": {
+      "width": 1280,
+      "height": 720,
+      "pixels": 921600,
+      "memEstMB": 3.5,
+      "selectedEngine": "u2netp",
+      "selectTimeMs": 2.23
+    },
+    "1080p": {
+      "width": 1920,
+      "height": 1080,
+      "pixels": 2073600,
+      "memEstMB": 7.9,
+      "selectedEngine": "u2netp",
+      "selectTimeMs": 0.511
+    },
+    "2K": {
+      "width": 2560,
+      "height": 1440,
+      "pixels": 3686400,
+      "memEstMB": 14.1,
+      "selectedEngine": "u2netp",
+      "selectTimeMs": 0.072
+    },
+    "4K": {
+      "width": 3840,
+      "height": 2160,
+      "pixels": 8294400,
+      "memEstMB": 31.6,
+      "selectedEngine": "u2netp",
+      "selectTimeMs": 0.091
+    }
+  },
   "exportPipeline": {}
 }

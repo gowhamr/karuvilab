@@ -17,7 +17,7 @@ const FORBIDDEN_CONFIG_PATTERNS = [
     /['"]?startOnLoad['"]?\s*[:=][^,}\n]*/gi,
     /['"]?maxTextSize['"]?\s*[:=][^,}\n]*/gi,
     /['"]?maxEdges['"]?\s*[:=][^,}\n]*/gi,
-    /['"]?htmlLabels['"]?\s*[:=]\s*false/gi,
+    /['"]?htmlLabels['"]?\s*[:=]\s*true/gi,
 ];
 // Dangerous script and event execution patterns in Mermaid source
 const DANGEROUS_DIRECTIVE_PATTERNS = [
@@ -87,7 +87,11 @@ export class MermaidSecurity {
             maxTextSize: MERMAID_SECURITY_LIMITS.HARD_CAP_CHARS,
             maxEdges: MERMAID_SECURITY_LIMITS.HARD_CAP_EDGES,
             deterministicIds: true,
-            htmlLabels: true, // Use true so complex flowcharts and nodes render properly using foreignObject
+            htmlLabels: false, // Generates clean native SVG text elements preserving labels in DOMPurify & Canvas
+            flowchart: {
+                htmlLabels: false,
+                useMaxWidth: true,
+            },
             theme: isDark ? 'dark' : 'default',
         };
     }

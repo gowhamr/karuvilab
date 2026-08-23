@@ -1151,7 +1151,10 @@ export function MarkdownEditor() {
                 )}>
                   <div className="flex flex-1 min-h-0 overflow-hidden relative font-mono bg-bg">
                     {/* Monaco Editor */}
-                    <div className="flex-1 h-full relative min-w-0">
+                    <div 
+                      className="flex-1 h-full relative min-w-0 touch-pan-y select-text"
+                      style={{ WebkitUserSelect: "text", userSelect: "text" }}
+                    >
                       {/* Spell Check Hover Tooltip */}
                       {hoveredSpellMarker && (
                         <div 
@@ -1219,6 +1222,13 @@ export function MarkdownEditor() {
                           overviewRulerLanes: 0,
                           hideCursorInOverviewRuler: true,
                           tabSize: 2,
+                          contextmenu: true,
+                          selectOnLineNumbers: true,
+                          selectionHighlight: true,
+                          roundedSelection: true,
+                          dragAndDrop: true,
+                          links: true,
+                          multiCursorModifier: "alt",
                           scrollbar: {
                             vertical: "visible",
                             horizontal: wordWrap ? "hidden" : "visible",

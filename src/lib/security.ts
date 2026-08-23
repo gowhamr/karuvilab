@@ -48,6 +48,13 @@ export function getDOMPurify() {
 }
 
 const DEFAULT_SANITIZE_CONFIG = {
+  USE_PROFILES: { svg: true, svgFilters: true, html: true },
+  ADD_TAGS: [
+    'foreignObject', 'foreignobject', 'style', 'text', 'tspan',
+    'defs', 'marker', 'use', 'clipPath', 'g', 'path', 'rect',
+    'circle', 'line', 'polyline', 'polygon', 'div', 'span', 'p',
+    'br', 'b', 'i', 'strong', 'em'
+  ],
   ALLOWED_TAGS: [
     'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 
     'blockquote', 'p', 'a', 'ul', 'ol', 'li', 'b', 'i', 'strong', 'em', 
@@ -65,10 +72,10 @@ const DEFAULT_SANITIZE_CONFIG = {
     'transform', 'marker-end', 'marker-start', 'xmlns', 'style', 'opacity', 'fill-opacity', 'stroke-opacity',
     'id', 'colspan', 'rowspan', 'scope', 'open', 'name', 'preserveAspectRatio',
     'aria-hidden', 'aria-label', 'aria-roledescription', 'clip-path',
-    'data-src', 'data-lang', 'data-theme', 'data-id'
+    'data-src', 'data-lang', 'data-theme', 'data-id', 'color'
   ],
   ALLOW_DATA_ATTR: true,
-  ADD_ATTR: ['target', 'rel', 'data-src', 'data-lang', 'data-theme', 'data-id'],
+  ADD_ATTR: ['target', 'rel', 'data-src', 'data-lang', 'data-theme', 'data-id', 'color'],
   FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'base'],
   FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onmouseenter', 'onmouseleave'],
 };
