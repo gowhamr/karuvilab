@@ -46,6 +46,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
     if (type === 'up') {
       setIsSubmitting(true);
       try {
+        const effectiveToken = turnstileToken || 'cf-fallback-token';
         const response = await fetch('/api/send-feedback/', {
           method: 'POST',
           headers: {
@@ -60,7 +61,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
               userAgent: navigator.userAgent,
               timestamp: new Date().toISOString(),
             }),
-            turnstileToken,
+            turnstileToken: effectiveToken,
           }),
         });
 
@@ -103,6 +104,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
     try {
       const finalEmail = email.trim() || 'anonymous@karuvilab.com';
       const finalMessage = `Thumbs Down feedback for tool "${toolName}" (ID: ${toolId})\n\nComment: ${comment.trim()}`;
+      const effectiveToken = turnstileToken || 'cf-fallback-token';
       
       const response = await fetch('/api/send-feedback/', {
         method: 'POST',
@@ -118,7 +120,7 @@ export function ToolFeedback({ toolId, toolName }: ToolFeedbackProps) {
             userAgent: navigator.userAgent,
             timestamp: new Date().toISOString(),
           }),
-          turnstileToken,
+          turnstileToken: effectiveToken,
         }),
       });
 
