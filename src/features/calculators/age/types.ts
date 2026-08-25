@@ -1,3 +1,36 @@
+export type AgeCalculatorErrorCode =
+  | 'MISSING_DOB'
+  | 'INVALID_DOB'
+  | 'INVALID_AS_OF_DATE'
+  | 'DOB_AFTER_AS_OF_DATE';
+
+export interface AgeCalculatorInput {
+  dateOfBirth: string; // ISO format: YYYY-MM-DD
+  asOfDate?: string;   // ISO format: YYYY-MM-DD (defaults to today in UI)
+}
+
+export interface AgeCalculatorCoreResult {
+  dateOfBirth: string;
+  asOfDate: string;
+  years: number;
+  months: number;
+  days: number;
+  totalMonths: number;
+  totalDays: number;
+  totalWeeks: number;
+  totalHours: number;
+  totalMinutes: number;
+  totalSeconds: number;
+  nextBirthday: string;
+  daysUntilNextBirthday: number;
+  isLeapYearBirth: boolean;
+  birthDayOfWeek: string;
+}
+
+export type AgeCalculatorEngineResponse =
+  | { success: true; data: AgeCalculatorCoreResult }
+  | { success: false; error: { code: AgeCalculatorErrorCode; message: string } };
+
 export interface DateDiffResult {
   years: number;
   months: number;
@@ -56,20 +89,7 @@ export interface TimezonePreset {
   id: string;
 }
 
-export interface AgeCalculationResult {
-  years: number;
-  months: number;
-  days: number;
-  totalMonths: number;
-  totalDays: number;
-  totalWeeks: number;
-  totalHours: number;
-  totalMinutes: number;
-  totalSeconds: number;
-  birthDayOfWeek: string;
-  nextBirthday: string;
-  daysUntilBirthday: number;
-  isLeapYearBirth: boolean;
+export interface AgeCalculationResult extends AgeCalculatorCoreResult {
   sunSign: string;
   sunElement: string;
   sunDates: string;

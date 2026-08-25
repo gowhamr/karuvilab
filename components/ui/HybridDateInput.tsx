@@ -11,6 +11,8 @@ interface HybridDateInputProps {
   description?: string;
   error?: string;
   id?: string;
+  name?: string;
+  dataInputField?: string;
   className?: string;
   max?: string;
   min?: string;
@@ -77,6 +79,8 @@ export function HybridDateInput({
   description,
   error,
   id: providedId,
+  name,
+  dataInputField,
   className,
   max,
   min,
@@ -184,6 +188,8 @@ export function HybridDateInput({
         {/* Manual text input */}
         <input
           id={id}
+          name={name}
+          data-input-field={dataInputField}
           type="text"
           inputMode="numeric"
           className={cn(
@@ -228,6 +234,8 @@ export function HybridDateInput({
         <input
           ref={hiddenDateRef}
           type="date"
+          name={name ? `${name}_native` : undefined}
+          data-input-field={dataInputField ? `${dataInputField}-picker` : undefined}
           value={value}
           onChange={handleCalendarChange}
           max={max}

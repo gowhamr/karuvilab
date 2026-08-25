@@ -13,6 +13,7 @@ interface MetricCardProps {
   className?: string | undefined;
   valueClassName?: string | undefined;
   loading?: boolean;
+  dataResultField?: string | undefined;
   trend?: {
     value: string;
     isPositive: boolean;
@@ -20,7 +21,7 @@ interface MetricCardProps {
   } | undefined;
 }
 
-export function MetricCard({ label, value, accent = false, sub, icon: Icon, className, valueClassName, trend, loading }: MetricCardProps) {
+export function MetricCard({ label, value, accent = false, sub, icon: Icon, className, valueClassName, trend, loading, dataResultField }: MetricCardProps) {
   return (
     <m.div 
       layout
@@ -62,18 +63,19 @@ export function MetricCard({ label, value, accent = false, sub, icon: Icon, clas
           </div>
         )}
       </div>
-      <div 
+      <output 
+        data-result-field={dataResultField}
         aria-live="polite"
         aria-atomic="true"
         className={cn(
-          "text-base xs:text-lg sm:text-2xl font-black tabular-nums break-words leading-tight sm:leading-snug transition-colors min-w-0", 
+          "block text-base xs:text-lg sm:text-2xl font-black tabular-nums break-words leading-tight sm:leading-snug transition-colors min-w-0", 
           accent ? "text-brand-primary text-lg xs:text-xl sm:text-3xl" : "text-text",
           valueClassName,
           loading && "opacity-20"
         )}
       >
         {loading ? "---" : value}
-      </div>
+      </output>
       {(sub || trend?.label) && (
         <p className={cn(
           "text-[10px] xs:text-[11px] sm:text-xs text-text-3 font-medium leading-normal break-words transition-all min-w-0",

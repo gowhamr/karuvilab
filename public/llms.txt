@@ -11,7 +11,7 @@
 
 - [Advanced Rotate](https://karuvilab.com//image-tools/advanced-rotate/): Rotate images to any angle with precise degree control
 - [Aes Encrypt Decrypt](https://karuvilab.com//security-tools/aes-encrypt-decrypt/): Encrypt and decrypt text or files using AES, entirely in your browser.
-- [Age Calculator](https://karuvilab.com//calculators/age-calculator/): Calculate age in years, months, and days
+- [Age Calculator](https://karuvilab.com//calculators/age-calculator/): Calculate exact age in years, months, and days with offline precision date math
 - [AI Document Intelligence & PDF Cleanup](https://karuvilab.com//pdf-tools/ai-pdf-cleanup/): Clean up scanned PDFs, auto-deskew pages, denoise, and generate searchable PDFs using local AI
 - [Aspect Ratio Converter](https://karuvilab.com//image-tools/aspect-ratio-converter/): Convert images to standard aspect ratios like 1:1, 16:9, 4:3
 - [Audio Converter](https://karuvilab.com//media-tools/audio-converter/): Convert audio files between formats like MP3 and WAV locally for compatibility.
@@ -52,7 +52,7 @@
 - [Csv To Json](https://karuvilab.com//developer-tools/csv-to-json/): Convert tabular CSV file content into structured JSON objects.
 - [Currency Converter](https://karuvilab.com//calculators/currency-converter/): Convert between world currencies
 - [Data Calculator](https://karuvilab.com//calculators/data-calculator/): Units, transfer time, cost, & hashes
-- [Date Calculator](https://karuvilab.com//calculators/date-calculator/): Add, subtract, or diff dates
+- [Date Calculator](https://karuvilab.com/calculators/date-calculator/): Add, subtract, or diff dates with offline precision date math. Supports canonical query parameters ?mode=diff&start=YYYY-MM-DD&end=YYYY-MM-DD or ?mode=add&base=YYYY-MM-DD&op=add&amount=30&unit=days.
 - [Delete Blank Pages](https://karuvilab.com//pdf-tools/delete-blank-pages/): Automatically detect and remove blank pages from your PDF document.
 - [Diff Checker](https://karuvilab.com//developer-tools/diff-checker/): Compare two text snippets
 - [Directory Manifest](https://karuvilab.com//security-tools/directory-manifest/): Generate recursive folder maps of local directories to document structure.

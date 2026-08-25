@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { HybridDateInput } from "@/components/ui/HybridDateInput";
 import { useUrlState } from "@/src/hooks/useUrlState";
@@ -17,23 +18,31 @@ import {
   HeartPulse, 
   SlidersHorizontal, 
   ChevronDown, 
-  ChevronUp 
+  ChevronUp,
+  AlertCircle
 } from "lucide-react";
 import {
   TIMEZONE_PRESETS,
   todayISO,
+  calculateAge,
   calculateFullAgeProfile,
   calculateAgeComparison,
 } from "@/src/features/calculators/age";
 
 export default function AgeCalculatorClient() {
-  const { state, setState, shareUrl, hasParams } = useUrlState({
-    defaults: { dob: '1995-01-01', ref: todayISO() },
+  const searchParams = useSearchParams();
+  const legacyRef = searchParams.get('ref');
+
+  const { state, setState, hasParams } = useUrlState({
+    defaults: { 
+      dob: '1995-01-01', 
+      as_of: legacyRef || todayISO() 
+    },
     debounceMs: 400,
   });
 
-  const dob = state.dob as string;
-  const asOf = (state.ref as string) || todayISO();
+  const dob = (state.dob as string) || '1995-01-01';
+  const asOf = (state.as_of as string) || legacyRef || todayISO();
   const [isQrOpen, setIsQrOpen] = useState(false);
   
   // Options panel collapse state
@@ -49,10 +58,14 @@ export default function AgeCalculatorClient() {
   const [astrologySystem, setAstrologySystem] = useState<"tropical" | "vedic">("tropical");
 
   const setDob = useCallback((v: string) => setState({ dob: v }), [setState]);
-  const setAsOf = useCallback((v: string) => setState({ ref: v }), [setState]);
+  const setAsOf = useCallback((v: string) => setState({ as_of: v }), [setState]);
+
+  const shareUrl = typeof window !== 'undefined'
+    ? `${window.location.origin}${window.location.pathname}?dob=${encodeURIComponent(dob)}&as_of=${encodeURIComponent(asOf)}`
+    : `?dob=${encodeURIComponent(dob)}&as_of=${encodeURIComponent(asOf)}`;
 
   const resetAll = () => {
-    setState({ dob: '1995-01-01', ref: todayISO() });
+    setState({ dob: '1995-01-01', as_of: todayISO() });
     setDob2('');
     setShowComparison(false);
     setShowPrecisionTime(false);
@@ -61,9 +74,14 @@ export default function AgeCalculatorClient() {
     setAstrologySystem("tropical");
   };
 
+  const calculationResponse = useMemo(() => {
+    return calculateAge({ dateOfBirth: dob, asOfDate: asOf });
+  }, [dob, asOf]);
+
   const result = useMemo(() => {
+    if (!calculationResponse.success) return null;
     return calculateFullAgeProfile(dob, asOf, showPrecisionTime, birthTime, tzOffset);
-  }, [dob, asOf, showPrecisionTime, birthTime, tzOffset]);
+  }, [calculationResponse.success, dob, asOf, showPrecisionTime, birthTime, tzOffset]);
 
   const comparisonResult = useMemo(() => {
     if (!showComparison || !dob || !dob2) return null;
@@ -80,7 +98,11 @@ export default function AgeCalculatorClient() {
       <ToolWorkspace
         layout="split"
         input={
-          <div className="grid grid-cols-1 gap-4 sm:gap-6 min-w-0 w-full">
+          <form 
+            data-tool="age-calculator"
+            onSubmit={(e) => e.preventDefault()}
+            className="grid grid-cols-1 gap-4 sm:gap-6 min-w-0 w-full"
+          >
             <HybridDateInput
               label="Date of Birth"
               value={dob}
@@ -88,6 +110,8 @@ export default function AgeCalculatorClient() {
               max={asOf}
               description="DD / MM / YYYY"
               id="age-calc-dob"
+              name="dob"
+              dataInputField="date-of-birth"
             />
             {showComparison && (
               <HybridDateInput
@@ -96,6 +120,8 @@ export default function AgeCalculatorClient() {
                 onChange={setDob2}
                 description="DD / MM / YYYY"
                 id="age-calc-dob2"
+                name="dob2"
+                dataInputField="date-of-birth-2"
               />
             )}
             <HybridDateInput
@@ -104,8 +130,10 @@ export default function AgeCalculatorClient() {
               onChange={setAsOf}
               description="DD / MM / YYYY"
               id="age-calc-asof"
+              name="as_of"
+              dataInputField="as-of-date"
             />
-          </div>
+          </form>
         }
         optionsPanel={
           <div className="bg-surface border border-border rounded-2xl overflow-hidden shadow-sm min-w-0 w-full">
@@ -190,6 +218,7 @@ export default function AgeCalculatorClient() {
                           </label>
                           <input
                             id="birth-time-input"
+                            name="birth_time"
                             type="time"
                             value={birthTime}
                             onChange={(e) => setBirthTime(e.target.value)}
@@ -204,6 +233,7 @@ export default function AgeCalculatorClient() {
                           </label>
                           <select
                             id="birth-tz-select"
+                            name="birth_tz"
                             value={tzOffset}
                             onChange={(e) => setTzOffset(Number(e.target.value))}
                             className="w-full min-w-0 max-w-full bg-surface border border-border rounded-xl px-3 py-2 text-text focus:outline-none focus:border-blue text-xs sm:text-sm truncate"
@@ -226,6 +256,13 @@ export default function AgeCalculatorClient() {
         output={
           result ? (
             <div className="space-y-5 sm:space-y-6 min-w-0 w-full">
+              {/* Machine-readable outputs for automation / agents */}
+              <div className="sr-only" aria-hidden="true">
+                <output data-result-field="years">{result.years}</output>
+                <output data-result-field="months">{result.months}</output>
+                <output data-result-field="days">{result.days}</output>
+              </div>
+
               {/* Header Actions Row */}
               <div className="flex items-center justify-between gap-3 min-w-0 w-full">
                 <h3 className="text-base sm:text-lg font-semibold text-text truncate">Calculated Age</h3>
@@ -256,26 +293,56 @@ export default function AgeCalculatorClient() {
                   className="bg-primary/5 border-primary/20 shadow-sm w-full min-w-0"
                   valueClassName="text-lg xs:text-xl sm:text-2xl md:text-3xl text-blue leading-tight"
                   sub="Calculated to the exact day from date of birth"
+                  dataResultField="exact-age"
                 />
               </div>
 
               {/* Section 2: Birthday Countdown */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4 w-full min-w-0">
-                <MetricCard label="Next Birthday" value={result.nextBirthday || ''} />
-                <MetricCard label="Days Until Birthday" value={`${result.daysUntilBirthday.toLocaleString()} 🎂`} />
+                <MetricCard 
+                  label="Next Birthday" 
+                  value={result.nextBirthday || ''} 
+                  dataResultField="next-birthday"
+                />
+                <MetricCard 
+                  label="Days Until Birthday" 
+                  value={`${result.daysUntilNextBirthday.toLocaleString()} 🎂`} 
+                  dataResultField="days-until-next-birthday"
+                />
               </div>
 
               {/* Section 3: Time Breakdown */}
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 w-full min-w-0">
-                <MetricCard label="Total Months" value={result.totalMonths.toLocaleString()} />
+                <MetricCard 
+                  label="Total Months" 
+                  value={result.totalMonths.toLocaleString()} 
+                  dataResultField="total-months"
+                />
                 <MetricCard 
                   label="Total Weeks" 
                   value={result.totalWeeks.toLocaleString(undefined, { maximumFractionDigits: 1 })} 
+                  dataResultField="total-weeks"
                 />
-                <MetricCard label="Total Days" value={result.totalDays.toLocaleString()} />
-                <MetricCard label="Total Hours" value={result.totalHours.toLocaleString()} />
-                <MetricCard label="Total Minutes" value={result.totalMinutes.toLocaleString()} />
-                <MetricCard label="Total Seconds" value={result.totalSeconds.toLocaleString()} />
+                <MetricCard 
+                  label="Total Days" 
+                  value={result.totalDays.toLocaleString()} 
+                  dataResultField="total-days"
+                />
+                <MetricCard 
+                  label="Total Hours" 
+                  value={result.totalHours.toLocaleString()} 
+                  dataResultField="total-hours"
+                />
+                <MetricCard 
+                  label="Total Minutes" 
+                  value={result.totalMinutes.toLocaleString()} 
+                  dataResultField="total-minutes"
+                />
+                <MetricCard 
+                  label="Total Seconds" 
+                  value={result.totalSeconds.toLocaleString()} 
+                  dataResultField="total-seconds"
+                />
               </div>
 
               {/* Age Difference (Comparison Mode) */}
@@ -288,6 +355,7 @@ export default function AgeCalculatorClient() {
                     className="bg-blue/5 border-blue/20 w-full min-w-0"
                     valueClassName="text-base xs:text-lg sm:text-xl"
                     sub={`Between Person 1 (${dob}) and Person 2 (${dob2})`}
+                    dataResultField="age-difference"
                   />
                 </div>
               )}
@@ -332,6 +400,7 @@ export default function AgeCalculatorClient() {
                     label="Sun Sign" 
                     value={result.sunSign}
                     sub={`${result.sunElement} • ${result.sunDates}`} 
+                    dataResultField="sun-sign"
                   />
                   <MetricCard 
                     label="Moon Sign" 
@@ -341,26 +410,31 @@ export default function AgeCalculatorClient() {
                         ? `${result.tropicalElement} • ${result.tropicalDeg}`
                         : `${result.vedicElement} • ${result.vedicDeg} (Lahiri)`
                     } 
+                    dataResultField="moon-sign"
                   />
                   <MetricCard 
                     label="Nakshatra (Mansion)" 
                     value={result.nakshatra} 
                     sub={result.nakshatraPada} 
+                    dataResultField="nakshatra"
                   />
                   <MetricCard 
                     label="Birth Moon Phase" 
                     value={result.moonPhase} 
                     sub={`${result.moonIllumination} Illumination`} 
+                    dataResultField="moon-phase"
                   />
                   <MetricCard 
                     label="Chinese Zodiac" 
                     value={result.chineseZodiac} 
                     sub="Lunar Year Stem" 
+                    dataResultField="chinese-zodiac"
                   />
                   <MetricCard 
                     label="Ayanamsa (Precession)" 
                     value={result.ephemeris.ayanamsa} 
                     sub="Chitra Paksha / Lahiri" 
+                    dataResultField="ayanamsa"
                   />
                 </div>
 
@@ -376,7 +450,7 @@ export default function AgeCalculatorClient() {
                   </div>
 
                   <div className="overflow-x-auto w-full max-w-full min-w-0">
-                    <table className="w-full text-left text-xs border-collapse min-w-[280px]">
+                    <table className="w-full text-left text-xs border-collapse min-w-[280px]" data-result-field="ephemeris-table">
                       <thead>
                         <tr className="border-b border-border text-text-muted bg-surface-2/50">
                           <th className="py-2 px-2.5 sm:px-4 font-semibold">Planet</th>
@@ -417,51 +491,102 @@ export default function AgeCalculatorClient() {
                     label="Days Lived" 
                     value={result.totalDays.toLocaleString()} 
                     sub={`${result.totalWeeks.toLocaleString(undefined, { maximumFractionDigits: 1 })} wks`} 
+                    dataResultField="days-lived"
                   />
                   <MetricCard 
                     label="Months Lived" 
                     value={result.totalMonths.toLocaleString()} 
                     sub={`${result.totalHours.toLocaleString()} hrs`} 
+                    dataResultField="months-lived"
                   />
                   <MetricCard 
                     label="Estimated Heartbeats" 
                     value={result.approxHeartbeats.toLocaleString()} 
                     sub="~75 bpm (est)" 
+                    dataResultField="estimated-heartbeats"
                   />
                   <MetricCard 
                     label="Estimated Sleep" 
                     value={`${result.approxSleepHours.toLocaleString()} hrs`} 
                     sub="~8 hrs/day (1/3 life)" 
+                    dataResultField="estimated-sleep-hours"
                   />
                   <MetricCard 
                     label="Estimated Breaths" 
                     value={result.approxBreaths.toLocaleString()} 
                     sub="~16 bpm (est)" 
+                    dataResultField="estimated-breaths"
                   />
                   <MetricCard 
                     label="Year Progress" 
                     value={`${result.yearProgressPct.toFixed(1)}%`} 
-                    sub={`Year ${new Date(asOf).getFullYear()} elapsed`} 
+                    sub={`Year ${asOf.split('-')[0]} elapsed`} 
+                    dataResultField="year-progress-pct"
                   />
                   <MetricCard 
                     label="Statistical Lifespan" 
                     value={`${result.lifespanProgressPct.toFixed(1)}%`} 
                     sub="80-yr baseline" 
+                    dataResultField="lifespan-progress-pct"
                   />
                   <MetricCard 
                     label="Total Seconds" 
                     value={result.totalSeconds.toLocaleString()} 
                     sub="Total seconds" 
+                    dataResultField="total-seconds"
                   />
                 </div>
               </div>
 
               {/* Section 6: Birth Info & Traditional Gems */}
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 w-full min-w-0">
-                <MetricCard label="Birth Day" value={result.birthDayOfWeek} />
-                <MetricCard label="Leap Year Birth" value={result.isLeapYearBirth ? "Yes" : "No"} />
-                <MetricCard label="Birthstone" value={result.birthstone} />
-                <MetricCard label="Birth Flower" value={result.birthFlower} />
+                <MetricCard label="Birth Day" value={result.birthDayOfWeek} dataResultField="birth-day-of-week" />
+                <MetricCard label="Leap Year Birth" value={result.isLeapYearBirth ? "Yes" : "No"} dataResultField="is-leap-year-birth" />
+                <MetricCard label="Birthstone" value={result.birthstone} dataResultField="birthstone" />
+                <MetricCard label="Birth Flower" value={result.birthFlower} dataResultField="birth-flower" />
+              </div>
+            </div>
+          ) : !calculationResponse.success ? (
+            <div 
+              role="alert" 
+              aria-live="assertive" 
+              data-error-code={calculationResponse.error.code}
+              data-error-message={calculationResponse.error.message}
+              className="p-5 sm:p-6 rounded-2xl sm:rounded-3xl bg-error/5 border border-error/20 space-y-4 text-text min-w-0 w-full animate-in fade-in duration-200"
+            >
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                <div className="space-y-1 min-w-0 flex-1">
+                  <h3 className="font-bold text-sm sm:text-base text-red-600 dark:text-red-400">
+                    {calculationResponse.error.code === 'DOB_AFTER_AS_OF_DATE' 
+                      ? 'Date of Birth In Future' 
+                      : calculationResponse.error.code === 'MISSING_DOB'
+                      ? 'Date of Birth Required'
+                      : 'Invalid Date Format'}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-text-muted leading-relaxed">
+                    {calculationResponse.error.message}
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-error/10 flex flex-wrap items-center gap-2">
+                {calculationResponse.error.code === 'DOB_AFTER_AS_OF_DATE' && (
+                  <button
+                    type="button"
+                    onClick={() => setAsOf(todayISO())}
+                    className="px-3.5 py-2 rounded-xl text-xs font-bold bg-blue text-white hover:bg-blue/90 transition-colors cursor-pointer"
+                  >
+                    Set Calculation Date to Today
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={resetAll}
+                  className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-surface-2 border border-border text-text hover:text-blue transition-colors cursor-pointer"
+                >
+                  Reset to Default Dates
+                </button>
               </div>
             </div>
           ) : null
@@ -470,3 +595,4 @@ export default function AgeCalculatorClient() {
     </div>
   );
 }
+

@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const dateCalculator: ToolEntry = {
   "id": "date-calculator",
   "name": "Date Calculator",
-  "desc": "Add, subtract, or diff dates",
+  "desc": "Calculate date differences or add/subtract time from any date with offline precision math",
   "href": "/calculators/date-calculator/",
   "category": "calculators",
   "subCategory": "Date & Time",
@@ -11,8 +11,22 @@ export const dateCalculator: ToolEntry = {
     "date",
     "days",
     "difference",
-    "add"
+    "add days",
+    "subtract days",
+    "business days",
+    "calendar diff",
+    "date offset"
   ],
+  "difficulty": "beginner",
   "searchIntent": "transactional",
-  "schemaType": "WebApplication"
+  "priority": 0.8,
+  "schemaType": "WebApplication",
+  "related": [
+    "age-calculator",
+    "time-calculator",
+    "countdown-timer",
+    "calendar"
+  ],
+  "status": "stable",
+  "lastUpdated": "2026-08-25"
 };

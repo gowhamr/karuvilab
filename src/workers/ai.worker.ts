@@ -234,7 +234,7 @@ class AiWorkerEngine {
     try {
       if (abortController.signal.aborted) throw new Error('Task cancelled');
 
-      const pre = await preprocessOcrImage(imageBitmap, 640, 640);
+      const pre = await preprocessOcrImage(imageBitmap, 320, 48);
       const feeds: Record<string, unknown> = { input: pre.tensorData };
       const out = await session.run(feeds);
       
@@ -244,7 +244,10 @@ class AiWorkerEngine {
         ? (outputVal as any).data as Float32Array
         : (outputVal as Float32Array || new Float32Array(0));
 
-      const result = decodeCtcOutput(outputTensor, []);
+      const dictResponse = await fetch('/lib/dictionary/ppocr_keys_v1.txt');
+      const dict = await dictResponse.text();
+      const dictArr = dict.split('\n').map(l => l.trim()).filter(Boolean);
+      const result = decodeCtcOutput(outputTensor, dictArr);
       return result;
     } catch (err) {
       throw new InferenceFailedError(modelId, err);

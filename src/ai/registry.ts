@@ -110,10 +110,10 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     // IMPORTANT: Model file is a placeholder. Replace with real paddle-ocr.onnx (~8.2MB).
     file: '/models/paddle-ocr.onnx',
     sha256: '',
-    sizeMB: 8.2,
+    sizeMB: 11.0,
     backend: ['webgpu', 'wasm'],
-    input: { width: 640, height: 640, channels: 3, dataType: 'float32', shape: [1, 3, 640, 640] },
-    output: { channels: 1, dataType: 'float32', shape: [1, 1, 640, 640] },
+    input: { width: 320, height: 48, channels: 3, dataType: 'float32', shape: [1, 3, 48, 320] },
+    output: { channels: 1, dataType: 'float32', shape: [1, 6624, 6624] },
     category: 'ocr',
     tags: ['ocr'],
     inputFormats: ['png', 'jpg', 'webp', 'pdf'],
@@ -123,7 +123,7 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     supportsOffline: true,
     estimatedMemoryMB: 90,
     estimatedInferenceMs: 650,
-    available: false,
+    available: true,
     description: 'In-browser optical character recognition engine.',
     license: 'Apache-2.0'
   },

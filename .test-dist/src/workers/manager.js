@@ -13,13 +13,15 @@ class WorkerManager {
         return workerOrchestrator.dispatch("generateHashes", [text, algos, encoding], undefined, onProgress, abortSignal);
     }
     async generateFileHash(file, algo, encoding, onProgress, abortSignal) {
-        return workerOrchestrator.dispatch("generateFileHash", [file, algo, encoding], undefined, onProgress, abortSignal);
+        const transferables = file instanceof ArrayBuffer ? [file] : undefined;
+        return workerOrchestrator.dispatch("generateFileHash", [file, algo, encoding], transferables, onProgress, abortSignal);
     }
     async directoryHashManifest(files, algo, encoding, onProgress, abortSignal) {
         return workerOrchestrator.dispatch("directoryHashManifest", [files, algo, encoding], undefined, onProgress, abortSignal);
     }
     async generateFileHmac(file, key, algo, encoding, onProgress, abortSignal) {
-        return workerOrchestrator.dispatch("generateFileHmac", [file, key, algo, encoding], [file], onProgress, abortSignal);
+        const transferables = file instanceof ArrayBuffer ? [file] : undefined;
+        return workerOrchestrator.dispatch("generateFileHmac", [file, key, algo, encoding], transferables, onProgress, abortSignal);
     }
     async generateHmac(text, key, algo, encoding, onProgress, abortSignal) {
         return workerOrchestrator.dispatch("generateHmac", [text, key, algo, encoding], undefined, onProgress, abortSignal);
