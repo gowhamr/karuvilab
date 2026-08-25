@@ -346,8 +346,7 @@ export default function HashGeneratorClient() {
           <div className="grid gap-4">
             {selectedAlgos.map(algo => {
               const res = results[algo];
-              return (
-                const isMatch = expectedHash ? (res?.value || '').toLowerCase() === expectedHash.toLowerCase() : null;
+              const isMatch = expectedHash ? (res?.value || '').toLowerCase() === expectedHash.toLowerCase() : null;
               return (
                 <div key={algo} className="relative">
                   {expectedHash && res?.value && (
@@ -356,13 +355,14 @@ export default function HashGeneratorClient() {
                     </div>
                   )}
                   <ToolResultArea
-                  key={algo}
-                  label={useHmac ? `HMAC-${algo}` : algo}
-                  value={res?.value || ''}
-                  error={res?.error}
-                  downloadFilename={`hash-${algo.toLowerCase()}.txt`}
-                  contentClassName="min-h-16 h-auto" // overrides the min-h-30 to be compact
-                />
+                    key={algo}
+                    label={useHmac ? `HMAC-${algo}` : algo}
+                    value={res?.value || ''}
+                    error={res?.error}
+                    downloadFilename={`hash-${algo.toLowerCase()}.txt`}
+                    contentClassName="min-h-16 h-auto"
+                  />
+                </div>
               );
             })}
             
