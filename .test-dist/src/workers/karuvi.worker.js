@@ -131,7 +131,8 @@ const api = {
         const manifest = [];
         for (let i = 0; i < files.length; i++) {
             const item = files[i];
-            const bytes = new Uint8Array(item.buffer);
+            const itemBuf = item.buffer ?? (item.file ? await item.file.arrayBuffer() : new ArrayBuffer(0));
+            const bytes = new Uint8Array(itemBuf);
             let hash = "";
             if (algo === "MD5") {
                 const hexStr = md5(bytes);
@@ -141,7 +142,7 @@ const api = {
                 const buf = await sha(algo, bytes);
                 hash = encoding === "base64" ? bufToBase64(buf) : bufToHex(buf);
             }
-            manifest.push({ path: item.path, size: item.buffer.byteLength, hash });
+            manifest.push({ path: item.path, size: itemBuf.byteLength, hash });
             if (onProgress)
                 onProgress({ percent: Math.round(((i + 1) / files.length) * 100), message: `Hashed ${item.path}` });
         }
@@ -225,13 +226,14 @@ const api = {
         if (onProgress)
             onProgress({ percent: 10, message: "Starting hash computation..." });
         let result = "";
-        const bytes = new Uint8Array(file);
+        const buf = file instanceof ArrayBuffer ? file : await file.arrayBuffer();
+        const bytes = new Uint8Array(buf);
         if (algo === "MD5") {
             result = md5(bytes);
         }
         else {
-            const buf = await sha(algo, bytes);
-            result = encoding === 'base64' ? bufToBase64(buf) : bufToHex(buf);
+            const shaBuf = await sha(algo, bytes);
+            result = encoding === 'base64' ? bufToBase64(shaBuf) : bufToHex(shaBuf);
         }
         if (onProgress)
             onProgress({ percent: 100, message: "Done!" });
@@ -249,7 +251,8 @@ const api = {
     async generateFileHmac(file, key, algo, encoding = 'hex', onProgress) {
         if (onProgress)
             onProgress({ percent: 10, message: "Importing key..." });
-        const buf = await hmac(algo, key, new Uint8Array(file));
+        const fileBuf = file instanceof ArrayBuffer ? file : await file.arrayBuffer();
+        const buf = await hmac(algo, key, new Uint8Array(fileBuf));
         const result = encoding === 'base64' ? bufToBase64(buf) : bufToHex(buf);
         if (onProgress)
             onProgress({ percent: 100, message: "Done!" });

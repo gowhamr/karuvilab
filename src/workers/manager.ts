@@ -35,13 +35,36 @@ class WorkerManager {
   }
 
   async generateFileHash(
-    file: ArrayBuffer,
+    file: File | ArrayBuffer,
     algo: string,
     encoding?: 'hex' | 'base64',
     onProgress?: ProgressCallback,
     abortSignal?: AbortSignal
   ): Promise<string> {
-    return workerOrchestrator.dispatch("generateFileHash", [file, algo, encoding], [file], onProgress, abortSignal);
+    const transferables = file instanceof ArrayBuffer ? [file] : undefined;
+    return workerOrchestrator.dispatch("generateFileHash", [file, algo, encoding], transferables, onProgress, abortSignal);
+  }
+
+  async directoryHashManifest(
+    files: Array<{ path: string; file?: File; buffer?: ArrayBuffer }>,
+    algo: string,
+    encoding?: 'hex' | 'base64',
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<Array<{ path: string; size: number; hash: string }>> {
+    return workerOrchestrator.dispatch("directoryHashManifest", [files, algo, encoding], undefined, onProgress, abortSignal);
+  }
+
+  async generateFileHmac(
+    file: File | ArrayBuffer,
+    key: string,
+    algo: string,
+    encoding?: 'hex' | 'base64',
+    onProgress?: ProgressCallback,
+    abortSignal?: AbortSignal
+  ): Promise<string> {
+    const transferables = file instanceof ArrayBuffer ? [file] : undefined;
+    return workerOrchestrator.dispatch("generateFileHmac", [file, key, algo, encoding], transferables, onProgress, abortSignal);
   }
 
   async generateHmac(
@@ -53,17 +76,6 @@ class WorkerManager {
     abortSignal?: AbortSignal
   ): Promise<string> {
     return workerOrchestrator.dispatch("generateHmac", [text, key, algo, encoding], undefined, onProgress, abortSignal);
-  }
-
-  async generateFileHmac(
-    file: ArrayBuffer,
-    key: string,
-    algo: string,
-    encoding?: 'hex' | 'base64',
-    onProgress?: ProgressCallback,
-    abortSignal?: AbortSignal
-  ): Promise<string> {
-    return workerOrchestrator.dispatch("generateFileHmac", [file, key, algo, encoding], [file], onProgress, abortSignal);
   }
 
   async getPdfPageCount(file: ArrayBuffer): Promise<number> {

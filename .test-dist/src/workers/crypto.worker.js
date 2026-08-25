@@ -246,6 +246,55 @@ async function hmac(algo, key, input) {
     const cryptoKey = await cryptoProvider.subtle.importKey("raw", keyData, { name: "HMAC", hash: { name: webCryptoAlgo } }, false, ["sign"]);
     return await cryptoProvider.subtle.sign("HMAC", cryptoKey, data);
 }
+async function getHashWasm(algo) {
+    switch (algo.toUpperCase()) {
+        case "MD5": {
+            const { createMD5 } = await import("hash-wasm");
+            return createMD5();
+        }
+        case "SHA-1": {
+            const { createSHA1 } = await import("hash-wasm");
+            return createSHA1();
+        }
+        case "SHA-224": {
+            const { createSHA224 } = await import("hash-wasm");
+            return createSHA224();
+        }
+        case "SHA-256": {
+            const { createSHA256 } = await import("hash-wasm");
+            return createSHA256();
+        }
+        case "SHA-384": {
+            const { createSHA384 } = await import("hash-wasm");
+            return createSHA384();
+        }
+        case "SHA-512": {
+            const { createSHA512 } = await import("hash-wasm");
+            return createSHA512();
+        }
+        case "SHA3-224": {
+            const { createSHA3 } = await import("hash-wasm");
+            return createSHA3(224);
+        }
+        case "SHA3-256": {
+            const { createSHA3 } = await import("hash-wasm");
+            return createSHA3(256);
+        }
+        case "SHA3-384": {
+            const { createSHA3 } = await import("hash-wasm");
+            return createSHA3(384);
+        }
+        case "SHA3-512": {
+            const { createSHA3 } = await import("hash-wasm");
+            return createSHA3(512);
+        }
+        case "BLAKE3": {
+            const { createBLAKE3 } = await import("hash-wasm");
+            return createBLAKE3();
+        }
+        default: throw new Error(`Algorithm ${algo} not supported by hash-wasm`);
+    }
+}
 const api = {
     // ─── HASHING & HMAC ────────────────────────────────────────────────────────
     async generateHashes(text, algos, encoding = 'hex', onProgress) {
@@ -256,7 +305,14 @@ const api = {
         const total = algos.length;
         let current = 0;
         for (const algo of algos) {
-            if (algo === "MD5") {
+            if (algo.startsWith("SHA3") || algo === "BLAKE3") {
+                const hasher = await getHashWasm(algo);
+                hasher.init();
+                hasher.update(text);
+                const hexStr = hasher.digest('hex');
+                results[algo] = encoding === "base64" ? btoa(hexStr.match(/\w{2}/g).map(a => String.fromCharCode(parseInt(a, 16))).join("")) : hexStr;
+            }
+            else if (algo === "MD5") {
                 const hexStr = md5(text);
                 results["MD5"] = encoding === "base64" ? btoa(hexStr.match(/\w{2}/g).map(a => String.fromCharCode(parseInt(a, 16))).join("")) : hexStr;
             }
@@ -272,36 +328,45 @@ const api = {
     },
     async generateFileHash(file, algo, encoding = 'hex', onProgress) {
         if (onProgress)
-            onProgress({ percent: 10, message: "Starting hash computation..." });
-        let result = "";
-        const bytes = new Uint8Array(file);
-        if (algo === "MD5") {
-            const hexStr = md5(bytes);
-            result = encoding === "base64" ? btoa(hexStr.match(/\w{2}/g).map(a => String.fromCharCode(parseInt(a, 16))).join("")) : hexStr;
+            onProgress({ percent: 0, message: "Initializing hasher..." });
+        const hasher = await getHashWasm(algo);
+        hasher.init();
+        const chunkSize = 5 * 1024 * 1024; // 5 MB chunks
+        const totalSize = file.size;
+        let offset = 0;
+        while (offset < totalSize) {
+            const slice = file.slice(offset, offset + chunkSize);
+            const chunkBuffer = await slice.arrayBuffer();
+            hasher.update(new Uint8Array(chunkBuffer));
+            offset += chunkSize;
+            if (onProgress) {
+                onProgress({ percent: Math.round((offset / totalSize) * 100), message: `Hashing: ${(offset / 1024 / 1024).toFixed(1)} MB / ${(totalSize / 1024 / 1024).toFixed(1)} MB` });
+            }
         }
-        else {
-            const buf = await sha(algo, bytes);
-            result = encoding === 'base64' ? bufToBase64(buf) : bufToHex(buf);
-        }
+        const hexStr = hasher.digest('hex');
+        const result = encoding === "base64" ? btoa(hexStr.match(/\w{2}/g).map(a => String.fromCharCode(parseInt(a, 16))).join("")) : hexStr;
         if (onProgress)
             onProgress({ percent: 100, message: "Done!" });
         return result;
     },
     async directoryHashManifest(files, algo, encoding = 'hex', onProgress) {
         const manifest = [];
+        const hasher = await getHashWasm(algo);
         for (let i = 0; i < files.length; i++) {
             const item = files[i];
-            const bytes = new Uint8Array(item.buffer);
-            let hash = "";
-            if (algo === "MD5") {
-                const hexStr = md5(bytes);
-                hash = encoding === "base64" ? btoa(hexStr.match(/\w{2}/g).map(a => String.fromCharCode(parseInt(a, 16))).join("")) : hexStr;
+            hasher.init();
+            const chunkSize = 5 * 1024 * 1024;
+            const totalSize = item.file.size;
+            let offset = 0;
+            while (offset < totalSize) {
+                const slice = item.file.slice(offset, offset + chunkSize);
+                const chunkBuffer = await slice.arrayBuffer();
+                hasher.update(new Uint8Array(chunkBuffer));
+                offset += chunkSize;
             }
-            else {
-                const buf = await sha(algo, bytes);
-                hash = encoding === "base64" ? bufToBase64(buf) : bufToHex(buf);
-            }
-            manifest.push({ path: item.path, size: item.buffer.byteLength, hash });
+            const hexStr = hasher.digest('hex');
+            const hash = encoding === "base64" ? btoa(hexStr.match(/\w{2}/g).map(a => String.fromCharCode(parseInt(a, 16))).join("")) : hexStr;
+            manifest.push({ path: item.path, size: totalSize, hash });
             if (onProgress)
                 onProgress({ percent: Math.round(((i + 1) / files.length) * 100), message: `Hashed ${item.path}` });
         }
@@ -310,8 +375,48 @@ const api = {
     async generateHmac(text, key, algo, encoding = 'hex', onProgress) {
         if (onProgress)
             onProgress({ percent: 10, message: "Importing key..." });
-        const buf = await hmac(algo, key, text);
-        const result = encoding === 'base64' ? bufToBase64(buf) : bufToHex(buf);
+        let result = "";
+        if (algo.startsWith("SHA3") || algo === "BLAKE3") {
+            const { createHMAC } = await import("hash-wasm");
+            const hmacObj = await createHMAC(getHashWasm(algo), key);
+            hmacObj.init();
+            hmacObj.update(text);
+            const hexStr = hmacObj.digest('hex');
+            result = encoding === "base64" ? btoa(hexStr.match(/\w{2}/g).map(a => String.fromCharCode(parseInt(a, 16))).join("")) : hexStr;
+        }
+        else {
+            const buf = await hmac(algo, key, text);
+            result = encoding === 'base64' ? bufToBase64(buf) : bufToHex(buf);
+        }
+        if (onProgress)
+            onProgress({ percent: 100, message: "Done!" });
+        return result;
+    },
+    async generateFileHmac(file, key, algo, encoding = 'hex', onProgress) {
+        if (onProgress)
+            onProgress({ percent: 0, message: "Initializing HMAC..." });
+        let result = "";
+        const { createHMAC } = await import("hash-wasm");
+        const hmacObj = await createHMAC(getHashWasm(algo), key);
+        hmacObj.init();
+        if (file instanceof ArrayBuffer) {
+            hmacObj.update(new Uint8Array(file));
+        }
+        else {
+            const chunkSize = 5 * 1024 * 1024;
+            const totalSize = file.size;
+            let offset = 0;
+            while (offset < totalSize) {
+                const slice = file.slice(offset, offset + chunkSize);
+                const chunkBuffer = await slice.arrayBuffer();
+                hmacObj.update(new Uint8Array(chunkBuffer));
+                offset += chunkSize;
+                if (onProgress)
+                    onProgress({ percent: Math.round((offset / totalSize) * 100), message: `Hashing: ${(offset / 1024 / 1024).toFixed(1)} MB / ${(totalSize / 1024 / 1024).toFixed(1)} MB` });
+            }
+        }
+        const hexStr = hmacObj.digest('hex');
+        result = encoding === "base64" ? btoa(hexStr.match(/\w{2}/g).map(a => String.fromCharCode(parseInt(a, 16))).join("")) : hexStr;
         if (onProgress)
             onProgress({ percent: 100, message: "Done!" });
         return result;

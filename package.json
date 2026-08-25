@@ -4,7 +4,6 @@
   "version": "2.1.0",
   "description": "KaruviLab – fast, private browser tools",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "next dev",
     "predev": "node scripts/generate-registries.mjs",
@@ -80,6 +79,7 @@
     "fflate": "^0.8.2",
     "framer-motion": "^12.38.0",
     "gifenc": "^1.0.3",
+    "hash-wasm": "4.12.0",
     "heic2any": "0.0.4",
     "highlight.js": "^11.11.1",
     "html2pdf.js": "^0.14.0",

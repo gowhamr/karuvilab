@@ -19,6 +19,7 @@ export default function Page() {
       description="Write, preview and export Markdown with support for Mermaid diagrams and syntax highlighting."
       category={cat}
       toolId={toolId}
+      workspaceSize="wide"
     >
       <MarkdownEditorWrapper />
 

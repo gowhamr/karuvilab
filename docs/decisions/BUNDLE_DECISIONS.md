@@ -265,3 +265,14 @@ This file tracks every new dependency added to the project, its impact on bundle
 - **Purpose:** Visual bundle size analysis to enforce PERF-04 (<20KB gzipped per feature). Generates interactive treemap of all JS chunks.
 - **Alternatives:** `webpack-bundle-analyzer` standalone (less integrated with Next.js chunk naming), manual size checks (insufficient)
 - **Justification:** Required for PERF-04 compliance on a codebase with several heavy dynamic dependencies (monaco-editor, mermaid, pdfjs, nspell+dictionary). Without a visualizer, bundle growth cannot be caught before it ships.
+
+### hash-wasm (v4.12.0)
+- **Status**: Approved
+- **Actual Installed Size**: 
+  - `sha3.umd.min.js`: 12 KB (approx 6 KB gzipped)
+  - `blake3.umd.min.js`: 22 KB (approx 10 KB gzipped)
+- **Features Consuming**: Hash Generator tool (Streaming SHA-3, BLAKE3, and large-file hashing). Future PBKDF2/V2 support.
+- **Why Web Crypto isn't sufficient**: Native Web Crypto API lacks support for the SHA-3 family and BLAKE3. Furthermore, it completely lacks streaming/chunked digest capability (meaning hashing a 1GB file requires loading 1GB into a single `ArrayBuffer`, which crashes browsers with an OOM error).
+- **Why streaming is required**: Processing large files (Multi-GB) requires a bounded memory footprint, iterating via `File.stream()` or chunking without storing the entire file in RAM.
+- **Why dynamic loading is used**: Avoids loading WASM overhead on the main bundle or for algorithms natively supported by Web Crypto (like SHA-256).
+- **Alternatives considered**: `js-sha3`, `blake3` (NPM packages). `hash-wasm` was chosen because it unifies all algorithms under a single streaming WASM interface, simplifying the Web Worker integration.

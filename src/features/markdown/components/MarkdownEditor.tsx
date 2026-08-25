@@ -808,13 +808,13 @@ export function MarkdownEditor() {
       "w-full",
       isThisToolFullscreen 
         ? "h-full flex flex-col flex-1 min-h-0 space-y-3" 
-        : "space-y-4 md:space-y-6"
+        : "space-y-3 sm:space-y-4"
     )}>
       {/* Header Controls */}
-      <div className="flex flex-col lg:flex-row gap-3 items-stretch sm:items-center justify-between shrink-0 max-w-full min-w-0">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full lg:w-auto max-w-full min-w-0">
+      <div className="flex flex-col xl:flex-row gap-3 items-stretch xl:items-center justify-between shrink-0 max-w-full min-w-0">
+        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 w-full xl:w-auto max-w-full min-w-0">
           {/* Main Mode Toggle */}
-          <div className="flex items-center justify-center sm:justify-start max-w-full min-w-0">
+          <div className="flex items-center shrink-0 max-w-full min-w-0">
             <SegmentedControl
               options={[
                 { id: "editor", label: "Editor", icon: <FileEdit className="w-4 h-4" /> },
@@ -827,7 +827,7 @@ export function MarkdownEditor() {
 
           {/* Quad Mode Segmented Control */}
           {mode === "editor" && (
-            <div className="flex items-center justify-center sm:justify-start w-full sm:w-auto max-w-full min-w-0 overflow-x-auto no-scrollbar">
+            <div className="flex items-center shrink-0 max-w-full min-w-0 overflow-x-auto no-scrollbar">
               <SegmentedControl
                 options={[
                   { id: "split", label: "Split", icon: <Columns className="w-4 h-4" />, className: "hidden md:flex" },
@@ -843,7 +843,7 @@ export function MarkdownEditor() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-center sm:justify-end w-full sm:w-auto gap-1.5 sm:gap-2 flex-wrap">
+        <div className="flex items-center justify-start xl:justify-end w-full xl:w-auto gap-1.5 sm:gap-2 flex-wrap shrink-0">
           {/* Quick Theme Toggle */}
           <button
             onClick={() => setEditorThemeMode(m => m === "dark" ? "light" : m === "light" ? "auto" : "dark")}

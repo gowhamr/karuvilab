@@ -64,11 +64,6 @@ function getPayloadSize(arg: unknown): number {
 
 const METHOD_TO_POOL: Partial<Record<keyof WorkerAPI, PoolType>> = {
   // Compute Pool (fast, low-memory mathematical/text parsing tasks)
-  generateHashes: 'compute',
-  generateFileHash: 'compute',
-  directoryHashManifest: 'compute',
-  generateHmac: 'compute',
-  generateFileHmac: 'compute',
   processYaml: 'compute',
   processJson: 'compute',
   evaluateMath: 'compute',
@@ -80,6 +75,11 @@ const METHOD_TO_POOL: Partial<Record<keyof WorkerAPI, PoolType>> = {
   parseMarkdown: 'compute',
 
   // Crypto Pool → crypto.worker.ts (P0-3: real implementations instead of stubs)
+  generateHashes: 'crypto',
+  generateFileHash: 'crypto',
+  directoryHashManifest: 'crypto',
+  generateHmac: 'crypto',
+  generateFileHmac: 'crypto',
   aesEncrypt: 'crypto',
   aesDecrypt: 'crypto',
   generateRsaKeyPair: 'crypto',

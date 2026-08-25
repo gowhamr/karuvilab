@@ -93,11 +93,12 @@ async function hmac(algo: string, key: string, input: string | Uint8Array): Prom
 
 const api: Partial<WorkerAPI> = {
   // Security Worker Methods Stubs (handled by crypto.worker.ts)
-  directoryHashManifest: async (files: Array<{ path: string; buffer: ArrayBuffer }>, algo: string, encoding: 'hex' | 'base64' = 'hex', onProgress?: any) => {
+  directoryHashManifest: async (files: Array<{ path: string; file?: File; buffer?: ArrayBuffer }>, algo: string, encoding: 'hex' | 'base64' = 'hex', onProgress?: any) => {
     const manifest: Array<{ path: string; size: number; hash: string }> = [];
     for (let i = 0; i < files.length; i++) {
       const item = files[i]!;
-      const bytes = new Uint8Array(item.buffer);
+      const itemBuf = item.buffer ?? (item.file ? await item.file.arrayBuffer() : new ArrayBuffer(0));
+      const bytes = new Uint8Array(itemBuf);
       let hash = "";
       if (algo === "MD5") {
         const hexStr = md5(bytes);
@@ -106,7 +107,7 @@ const api: Partial<WorkerAPI> = {
         const buf = await sha(algo, bytes);
         hash = encoding === "base64" ? bufToBase64(buf) : bufToHex(buf);
       }
-      manifest.push({ path: item.path, size: item.buffer.byteLength, hash });
+      manifest.push({ path: item.path, size: itemBuf.byteLength, hash });
       if (onProgress) onProgress({ percent: Math.round(((i + 1) / files.length) * 100), message: `Hashed ${item.path}` });
     }
     return manifest;
@@ -191,21 +192,22 @@ const api: Partial<WorkerAPI> = {
     return results;
   },
 
-  async generateFileHash(file: ArrayBuffer, algo: string, encoding: 'hex' | 'base64' = 'hex', onProgress) {
+  async generateFileHash(file: File | ArrayBuffer, algo: string, encoding: 'hex' | 'base64' = 'hex', onProgress?: any) {
     if (onProgress) onProgress({ percent: 10, message: "Starting hash computation..." });
     let result = "";
-    const bytes = new Uint8Array(file);
+    const buf = file instanceof ArrayBuffer ? file : await (file as any).arrayBuffer();
+    const bytes = new Uint8Array(buf);
     if (algo === "MD5") {
       result = md5(bytes);
     } else {
-      const buf = await sha(algo, bytes);
-      result = encoding === 'base64' ? bufToBase64(buf) : bufToHex(buf);
+      const shaBuf = await sha(algo, bytes);
+      result = encoding === 'base64' ? bufToBase64(shaBuf) : bufToHex(shaBuf);
     }
     if (onProgress) onProgress({ percent: 100, message: "Done!" });
     return result;
   },
 
-  async generateHmac(text: string, key: string, algo: string, encoding: 'hex' | 'base64' = 'hex', onProgress) {
+  async generateHmac(text: string, key: string, algo: string, encoding: 'hex' | 'base64' = 'hex', onProgress?: any) {
     if (onProgress) onProgress({ percent: 10, message: "Importing key..." });
     const buf = await hmac(algo, key, text);
     const result = encoding === 'base64' ? bufToBase64(buf) : bufToHex(buf);
@@ -213,9 +215,10 @@ const api: Partial<WorkerAPI> = {
     return result;
   },
 
-  async generateFileHmac(file: ArrayBuffer, key: string, algo: string, encoding: 'hex' | 'base64' = 'hex', onProgress) {
+  async generateFileHmac(file: File | ArrayBuffer, key: string, algo: string, encoding: 'hex' | 'base64' = 'hex', onProgress?: any) {
     if (onProgress) onProgress({ percent: 10, message: "Importing key..." });
-    const buf = await hmac(algo, key, new Uint8Array(file));
+    const fileBuf = file instanceof ArrayBuffer ? file : await (file as any).arrayBuffer();
+    const buf = await hmac(algo, key, new Uint8Array(fileBuf));
     const result = encoding === 'base64' ? bufToBase64(buf) : bufToHex(buf);
     if (onProgress) onProgress({ percent: 100, message: "Done!" });
     return result;

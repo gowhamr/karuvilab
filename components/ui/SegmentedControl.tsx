@@ -58,9 +58,10 @@ export const SegmentedControl = React.memo(function SegmentedControl<T extends s
             aria-checked={isActive}
             tabIndex={isActive ? 0 : -1}
             disabled={disabled}
+            title={option.label}
             onClick={() => !disabled && onChange(option.id)}
             className={cn(
-              "relative flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider sm:tracking-widest transition-all outline-none focus-visible:ring-2 focus-visible:ring-blue/20 shrink-0 select-none",
+              "relative flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 md:py-2.5 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider sm:tracking-widest transition-all outline-none focus-visible:ring-2 focus-visible:ring-blue/20 shrink-0 select-none cursor-pointer",
               isActive ? "text-white" : "text-text-4 hover:text-text hover:bg-surface/50",
               disabled && "cursor-not-allowed",
               option.className
@@ -74,11 +75,11 @@ export const SegmentedControl = React.memo(function SegmentedControl<T extends s
               />
             )}
             {option.icon && (
-              <span className={cn("relative z-content transition-transform", isActive && "scale-110")}>
+              <span className={cn("relative z-content transition-transform shrink-0", isActive && "scale-110")}>
                 {option.icon}
               </span>
             )}
-            <span className="relative z-content">{option.label}</span>
+            <span className="relative z-content whitespace-nowrap">{option.label}</span>
           </button>
         );
       })}

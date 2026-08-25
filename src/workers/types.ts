@@ -45,14 +45,14 @@ export interface WorkerAPI {
   ): Promise<Record<string, string>>;
 
   generateFileHash(
-    file: ArrayBuffer,
+    file: File | ArrayBuffer,
     algo: string,
     encoding?: 'hex' | 'base64',
     onProgress?: ProgressCallback
   ): Promise<string>;
 
   directoryHashManifest(
-    files: Array<{ path: string; buffer: ArrayBuffer }>,
+    files: Array<{ path: string; file?: File; buffer?: ArrayBuffer }>,
     algo: string,
     encoding?: 'hex' | 'base64',
     onProgress?: ProgressCallback
@@ -67,7 +67,7 @@ export interface WorkerAPI {
   ): Promise<string>;
 
   generateFileHmac(
-    file: ArrayBuffer,
+    file: File | ArrayBuffer,
     key: string,
     algo: string,
     encoding?: 'hex' | 'base64',

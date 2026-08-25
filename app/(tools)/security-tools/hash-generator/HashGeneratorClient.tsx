@@ -23,7 +23,7 @@ import {
 import { m, AnimatePresence } from "framer-motion";
 import { cn } from "@/src/lib/utils";
 
-const ALGOS = ["MD5", "SHA-1", "SHA-224", "SHA-256", "SHA-384", "SHA-512"];
+const ALGOS = ["MD5", "SHA-1", "SHA-256", "SHA-384", "SHA-512", "SHA3-256", "SHA3-512", "BLAKE3"];
 
 interface HashResult {
   algo: string;
@@ -37,6 +37,7 @@ export default function HashGeneratorClient() {
   const [text, setText] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [hmacKey, setHmacKey] = useState("");
+  const [expectedHash, setExpectedHash] = useState("");
   const [useHmac, setHmac] = useState(false);
   const [selectedAlgos, setSelectedAlgos] = useState<string[]>(["SHA-256"]);
   const [encoding, setEncoding] = useState<'hex' | 'base64'>('hex');
@@ -96,7 +97,6 @@ export default function HashGeneratorClient() {
           setHashes(final);
         }
       } else if (mode === "file" && file) {
-        const buffer = await file.arrayBuffer();
         for (const algo of selectedAlgos) {
           let value = "";
           try {
@@ -105,9 +105,9 @@ export default function HashGeneratorClient() {
                 setHashes(prev => ({ ...prev, [algo]: { algo, value: "", error: "MD5 HMAC not supported" } }));
                 continue;
               }
-              value = await workerManager.generateFileHmac(buffer.slice(0), hmacKey, algo, encoding, undefined, controller.signal);
+              value = await workerManager.generateFileHmac(file, hmacKey, algo, encoding, (p) => setProgress(p), controller.signal);
             } else {
-              value = await workerManager.generateFileHash(buffer.slice(0), algo, encoding, undefined, controller.signal);
+              value = await workerManager.generateFileHash(file, algo, encoding, (p) => setProgress(p), controller.signal);
             }
             setHashes(prev => ({ ...prev, [algo]: { algo, value } }));
           } catch (e: any) {
@@ -255,6 +255,16 @@ export default function HashGeneratorClient() {
           </div>
 
           <div className="space-y-4 pt-4 border-t border-border">
+            <label className="text-sm font-bold text-text-2">Expected Hash (Verify)</label>
+            <ToolInput
+              value={expectedHash}
+              onChange={setExpectedHash}
+              placeholder="Paste hash to compare..."
+              mono
+            />
+          </div>
+
+          <div className="space-y-4 pt-4 border-t border-border">
             <label className="text-sm font-bold text-text-2">Output Encoding</label>
             <div className="flex p-1 bg-bg border border-border rounded-xl">
               {(['hex', 'base64'] as const).map(enc => (
@@ -316,7 +326,7 @@ export default function HashGeneratorClient() {
               <span className="text-tiny font-bold uppercase tracking-widest-sm">Runtime Note</span>
             </div>
             <p className="text-tiny text-text-muted font-medium leading-relaxed">
-              All operations are performed on-device via Web Crypto API.
+              All operations are performed on-device using Web Crypto API and hash-wasm for streaming algorithms.
             </p>
           </div>
         </div>
@@ -337,7 +347,15 @@ export default function HashGeneratorClient() {
             {selectedAlgos.map(algo => {
               const res = results[algo];
               return (
-                <ToolResultArea
+                const isMatch = expectedHash ? (res?.value || '').toLowerCase() === expectedHash.toLowerCase() : null;
+              return (
+                <div key={algo} className="relative">
+                  {expectedHash && res?.value && (
+                    <div className={`absolute top-2 right-2 z-10 px-2 py-1 rounded text-xs font-bold ${isMatch ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500'}`}>
+                      {isMatch ? 'MATCH' : 'MISMATCH'}
+                    </div>
+                  )}
+                  <ToolResultArea
                   key={algo}
                   label={useHmac ? `HMAC-${algo}` : algo}
                   value={res?.value || ''}
