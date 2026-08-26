@@ -3,32 +3,26 @@ import { ToolEntry } from '../types';
 export const financialFreedomCalculator: ToolEntry = {
   "id": "financial-freedom-calculator",
   "name": "Financial Freedom Calculator",
-  "desc": "Calculate your path to FIRE and plan your retirement.",
+  "desc": "Calculate your FIRE number, required SIP, and projected wealth accumulation",
   "href": "/calculators/financial-freedom-calculator/",
   "category": "calculators",
-  "subCategory": "Financial",
+  "subCategory": "Finance & Investment",
   "keywords": [
-    "fire",
     "financial freedom",
-    "retirement",
-    "savings",
-    "net worth",
-    "corpus"
+    "fire calculator",
+    "retirement corpus",
+    "sip calculator",
+    "wealth accumulation"
   ],
-    "featured": false,
   "difficulty": "intermediate",
-  "searchIntent": "informational",
+  "searchIntent": "transactional",
   "priority": 0.8,
-  "icon": "",
-  "color": "#4F46E5",
+  "schemaType": "WebApplication",
   "related": [
-    "emi-calculator",
-    "sip-calculator",
-    "retirement-calculator",
-    "cagr-calculator",
-    "safe-to-spend"
+    "compound-interest",
+    "percentage-calculator",
+    "age-calculator"
   ],
   "status": "stable",
-  "schemaType": "WebApplication",
-  "lastUpdated": "2024-05-31"
+  "lastUpdated": "2026-08-26"
 };
