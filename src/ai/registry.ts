@@ -123,7 +123,7 @@ export const AI_MODEL_REGISTRY: Record<string, ExtendedModelManifest> = {
     supportsOffline: true,
     estimatedMemoryMB: 90,
     estimatedInferenceMs: 650,
-    available: true,
+    available: false,
     description: 'In-browser optical character recognition engine.',
     license: 'Apache-2.0'
   },
