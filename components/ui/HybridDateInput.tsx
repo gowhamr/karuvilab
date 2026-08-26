@@ -58,6 +58,36 @@ function parseUserDate(raw: string): string | null {
     return null;
   }
 
+  // 8-digit format: DDMMYYYY
+  const dmy8 = trimmed.match(/^(\d{2})(\d{2})(\d{4})$/);
+  if (dmy8) {
+    const [, d, m, y] = dmy8;
+    const year = parseInt(y!, 10);
+    const month = parseInt(m!, 10);
+    const day = parseInt(d!, 10);
+    if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+      const date = new Date(year, month - 1, day);
+      if (date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day) {
+        return `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      }
+    }
+  }
+
+  // 8-digit format: YYYYMMDD
+  const ymd8 = trimmed.match(/^(\d{4})(\d{2})(\d{2})$/);
+  if (ymd8) {
+    const [, y, m, d] = ymd8;
+    const year = parseInt(y!, 10);
+    const month = parseInt(m!, 10);
+    const day = parseInt(d!, 10);
+    if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+      const date = new Date(year, month - 1, day);
+      if (date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day) {
+        return `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      }
+    }
+  }
+
   return null;
 }
 
