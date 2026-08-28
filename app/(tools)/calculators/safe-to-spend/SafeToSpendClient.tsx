@@ -74,7 +74,7 @@ export default function SafeToSpendClient() {
           <div className="bg-surface border border-border p-5 rounded-2xl shadow-sm space-y-3">
             <div className="flex justify-between text-sm font-bold text-text-2">
               <span>Budget Utilization</span>
-              <span className={utilizationPct > 100 ? "text-red-400" : "text-green-500"}>
+              <span className={utilizationPct > 100 ? "text-red-600 dark:text-red-400" : "text-green-500"}>
                 {utilizationPct.toFixed(1)}%
               </span>
             </div>
@@ -100,11 +100,11 @@ export default function SafeToSpendClient() {
                 : "bg-green-500/10 border-green-500/30"
             }`}
           >
-            <div className={`text-2xl ${result.isOver ? "text-red-400" : "text-green-500"}`}>
+            <div className={`text-2xl ${result.isOver ? "text-red-600 dark:text-red-400" : "text-green-500"}`}>
               {result.isOver ? "⚠" : "✓"}
             </div>
             <div>
-              <div className={`font-bold ${result.isOver ? "text-red-400" : "text-green-500"}`}>
+              <div className={`font-bold ${result.isOver ? "text-red-600 dark:text-red-400" : "text-green-500"}`}>
                 {result.isOver ? "Over Budget!" : "You're on track!"}
               </div>
               <div className="text-sm text-text-3">
@@ -129,9 +129,9 @@ export default function SafeToSpendClient() {
               {[
                 { label: "Monthly Income", value: parseFloat(income) || 0, color: "text-green-500" },
                 { label: `Savings (${savingsGoal}%)`, value: -result.savingsAmt, color: "text-blue" },
-                { label: "Fixed Expenses", value: -(parseFloat(fixed) || 0), color: "text-red-400" },
+                { label: "Fixed Expenses", value: -(parseFloat(fixed) || 0), color: "text-red-600 dark:text-red-400" },
                 { label: "Variable Expenses", value: -(parseFloat(variable) || 0), color: "text-yellow-500" },
-                { label: "Safe to Spend", value: result.remaining, color: result.isOver ? "text-red-400" : "text-green-500" },
+                { label: "Safe to Spend", value: result.remaining, color: result.isOver ? "text-red-600 dark:text-red-400" : "text-green-500" },
               ].map((row) => (
                 <div key={row.label} className="flex justify-between px-4 py-3">
                   <span className="text-sm text-text-3">{row.label}</span>

@@ -291,7 +291,7 @@ export default function WebPConverterClient() {
                   <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
                   <div className="text-sm">
                     <p className="font-semibold">Conversion Error</p>
-                    <p className="mt-0.5 text-red-400">{error}</p>
+                    <p className="mt-0.5 text-red-600 dark:text-red-400">{error}</p>
                   </div>
                 </div>
               )}

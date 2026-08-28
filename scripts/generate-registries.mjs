@@ -73,7 +73,7 @@ export const CORE_TOOLS: ToolEntry[] = ${JSON.stringify(coreTools, null, 2)};
 
 ## Available Tools
 
-${coreTools.map(t => `- [${t.name}](https://karuvilab.com/${t.href}): ${t.desc}`).join('\n')}
+${coreTools.map(t => `- [${t.name}](https://karuvilab.com/${(t.href || '').replace(/^\/+/, '')}): ${t.desc}`).join('\n')}
 `;
 
   fs.writeFileSync('public/llms.txt', llmsContent, 'utf8');

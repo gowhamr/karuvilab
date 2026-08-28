@@ -46,6 +46,7 @@ const METHOD_TO_POOL = {
     processJson: 'compute',
     evaluateMath: 'compute',
     calculateEmiSchedule: 'compute',
+    calculateMonteCarloSimulation: 'compute',
     convertNumeral: 'compute',
     detectNumeralFormat: 'compute',
     checkGrammar: 'compute',

@@ -9,217 +9,217 @@
 
 ## Available Tools
 
-- [Advanced Rotate](https://karuvilab.com//image-tools/advanced-rotate/): Rotate images to any angle with precise degree control
-- [Aes Encrypt Decrypt](https://karuvilab.com//security-tools/aes-encrypt-decrypt/): Encrypt and decrypt text or files using AES, entirely in your browser.
-- [Age Calculator](https://karuvilab.com//calculators/age-calculator/): Calculate exact age in years, months, and days with offline precision date math
-- [AI Document Intelligence & PDF Cleanup](https://karuvilab.com//pdf-tools/ai-pdf-cleanup/): Clean up scanned PDFs, auto-deskew pages, denoise, and generate searchable PDFs using local AI
-- [Aspect Ratio Converter](https://karuvilab.com//image-tools/aspect-ratio-converter/): Convert images to standard aspect ratios like 1:1, 16:9, 4:3
-- [Audio Converter](https://karuvilab.com//media-tools/audio-converter/): Convert audio files between formats like MP3 and WAV locally for compatibility.
-- [AVIF Converter](https://karuvilab.com//image-tools/avif-converter/): Convert images to the next-gen AVIF format for maximum compression
-- [Banking Tools](https://karuvilab.com//developer-tools/banking-tools/): Advanced financial data parsers for EMV, SWIFT, and core banking logs
-- [Barcode & QR Scanner](https://karuvilab.com//utilities/barcode-scanner/): Scan barcodes and QR codes using camera
-- [Base64 Encode/Decode](https://karuvilab.com//developer-tools/base64/): Encode or decode Base64 strings
-- [Base64url Converter](https://karuvilab.com//security-tools/base64url-converter/): Encode or decode text to URL-safe Base64 format to safely transmit data.
-- [Batch Image Converter](https://karuvilab.com//image-tools/batch-image-converter/): Convert multiple images between formats in one batch operation
-- [Background Remover](https://karuvilab.com//image-tools/bg-remover/): Remove image backgrounds locally
-- [Bmi Calculator](https://karuvilab.com//calculators/bmi-calculator/): Calculate your Body Mass Index (BMI) and health category to track fitness goals.
-- [BMP Converter](https://karuvilab.com//image-tools/bmp-converter/): Convert images to the uncompressed BMP format
-- [Border Generator](https://karuvilab.com//image-tools/border-generator/): Add decorative borders to your images with custom styles
-- [Box Shadow Generator](https://karuvilab.com//developer-tools/box-shadow-generator/): Design CSS box shadows visually and copy clean CSS snippets for layouts.
-- [Bulk Image Resize](https://karuvilab.com//image-tools/bulk-resizer/): Resize many images at once
-- [CAGR Calculator](https://karuvilab.com//calculators/cagr-calculator/): Compound Annual Growth Rate
-- [Calculator](https://karuvilab.com//calculators/calculator/): Unified calculator with seamless standard and scientific modes
-- [Calendar](https://karuvilab.com//productivity/calendar/): Professional, local-first calendar with Tamil mode support.
-- [Canvas Resize](https://karuvilab.com//image-tools/canvas-resize/): Resize the canvas workspace around your image without scaling
-- [Card Masker](https://karuvilab.com//security-tools/card-masker/): Mask card numbers automatically to securely display and store sensitive financial info.
-- [Chart & Graph Generator](https://karuvilab.com//productivity/chart-generator/): Create beautiful charts from your data
-- [Cipher Tools](https://karuvilab.com//security-tools/cipher-tools/): Encrypt and decrypt text using classical ciphers like Caesar or Vigenère.
-- [Code Minifier](https://karuvilab.com//developer-tools/code-minifier/): Minify CSS, JS, and HTML
-- [Color Converter](https://karuvilab.com//developer-tools/color-converter/): Convert color formats (HEX, RGB, HSL) to style web applications.
-- [Color Match](https://karuvilab.com//break-time-tools/color-match/): Pick the exact color swatch under time pressure to test your visual accuracy.
-- [Color Palette Extractor](https://karuvilab.com//image-tools/color-palette-extractor/): Extract dominant color palettes from any image to design themes.
-- [Command Cheat Sheet](https://karuvilab.com//developer-tools/command-cheat-sheet/): Look up development and system commands instantly to speed up your workflow.
-- [Compound Interest Calculator](https://karuvilab.com//calculators/compound-interest/): Calculate compounded growth on your investment.
-- [Compress PDF](https://karuvilab.com//pdf-tools/compress-pdf/): Reduce PDF file size
-- [Compress](https://karuvilab.com//image-tools/compress/): Bundle files and folders into optimized ZIP archives to save storage space.
-- [Contrast Checker](https://karuvilab.com//developer-tools/contrast-checker/): Verify background and foreground contrast to meet WCAG accessibility standards.
-- [Core Banking Parser](https://karuvilab.com//developer-tools/core-banking-parser/): Parse core banking trace logs into JSON
-- [Countdown Timer](https://karuvilab.com//productivity/countdown-timer/): Set timers for upcoming milestones or deadlines to keep track of tasks.
-- [Crontab Editor](https://karuvilab.com//developer-tools/crontab-editor/): Build crontab expressions visually and translate them to plain English.
-- [Crop PDF](https://karuvilab.com//pdf-tools/crop-pdf/): Crop PDF pages to a specific area
-- [Csp Builder](https://karuvilab.com//security-tools/csp-builder/): Construct secure Content Security Policy headers to protect sites from XSS.
-- [Csr Generator](https://karuvilab.com//security-tools/csr-generator/): Generate CSR requests and private keys locally to secure web servers.
-- [Csv To Json](https://karuvilab.com//developer-tools/csv-to-json/): Convert tabular CSV file content into structured JSON objects.
-- [Currency Converter](https://karuvilab.com//calculators/currency-converter/): Convert between world currencies
-- [Data Calculator](https://karuvilab.com//calculators/data-calculator/): Units, transfer time, cost, & hashes
-- [Date Calculator](https://karuvilab.com/calculators/date-calculator/): Add, subtract, or diff dates with offline precision date math. Supports canonical query parameters ?mode=diff&start=YYYY-MM-DD&end=YYYY-MM-DD or ?mode=add&base=YYYY-MM-DD&op=add&amount=30&unit=days.
-- [Delete Blank Pages](https://karuvilab.com//pdf-tools/delete-blank-pages/): Automatically detect and remove blank pages from your PDF document.
-- [Diff Checker](https://karuvilab.com//developer-tools/diff-checker/): Compare two text snippets
-- [Directory Manifest](https://karuvilab.com//security-tools/directory-manifest/): Generate recursive folder maps of local directories to document structure.
-- [Discount Calculator](https://karuvilab.com//calculators/discount-calculator/): Find sale price and savings
-- [Duplicate PDF Pages](https://karuvilab.com//pdf-tools/duplicate-pages/): Duplicate and copy specific pages in a PDF document offline.
-- [Ecdh Key Exchange](https://karuvilab.com//security-tools/ecdh-key-exchange/): Generate shared cryptographic keys using ECDH protocols.
-- [Ecdsa Sign](https://karuvilab.com//security-tools/ecdsa-sign/): Sign and verify payload strings using secure ECDSA certificates.
-- [Edit PDF Metadata](https://karuvilab.com//pdf-tools/edit-metadata/): View and edit PDF properties like Title, Author, and Subject
-- [EMI Calculator](https://karuvilab.com//calculators/emi-calculator/): Loan EMI, interest, and amortization
-- [Emv Tlv Tree](https://karuvilab.com//developer-tools/emv-tlv-tree/): Inspect and parse EMV TLV payment packets for bank transaction analysis.
-- [Even Pages Extractor](https://karuvilab.com//pdf-tools/even-pages-extractor/): Extract only the even-numbered pages from a PDF document.
-- [Extract Images](https://karuvilab.com//pdf-tools/extract-images/): Pull images out of a PDF
-- [Extract PDF Pages](https://karuvilab.com//pdf-tools/extract-pages/): Extract specific pages or page ranges from a PDF into a new document.
-- [AI Face Blur & Privacy Shield](https://karuvilab.com//image-tools/face-blur/): Automatically blur faces and PII objects in photos using local AI
-- [Fake Data Generator](https://karuvilab.com//developer-tools/fake-data-generator/): Generate realistic fake data for testing
-- [Fixed Deposit (FD)](https://karuvilab.com//calculators/fd-calculator/): FD maturity amount and interest earned
-- [File Viewer & Diff](https://karuvilab.com//file-tools/file-viewer-diff/): Local text editor and diff checker
-- [Financial Freedom Calculator](https://karuvilab.com//calculators/financial-freedom-calculator/): Calculate your path to FIRE and plan your retirement.
-- [Code Formatter](https://karuvilab.com//developer-tools/format/): Auto-format code in many languages
-- [2048](https://karuvilab.com//break-time-tools/game-2048/): Slide and merge tiles to reach 2048. Addictive puzzle game — fully offline.
-- [Gif Creator](https://karuvilab.com//media-tools/gif-creator/): Convert videos or image frames into optimized, loopable animated GIF files.
-- [GIF Frame Extractor](https://karuvilab.com//image-tools/gif-extractor/): Extract individual frames from animated GIFs
-- [Glassmorphism Generator](https://karuvilab.com//developer-tools/glassmorphism-generator/): Generate CSS code for modern frosted-glass card designs.
-- [Gradient Generator](https://karuvilab.com//developer-tools/gradient-generator/): Design linear and radial CSS gradients visually for backgrounds.
-- [Grammar & Spell Checker](https://karuvilab.com//utilities/grammar-checker/): 100% private, client-side grammar, spell, and readability checker for your text.
-- [Gratuity Calculator](https://karuvilab.com//calculators/gratuity-calculator/): Estimate standard gratuity benefits based on salary and tenure.
-- [GST Calculator](https://karuvilab.com//calculators/gst-calculator/): Calculate GST (Add/Remove) for Indian tax slabs (5%, 12%, 18%, 28%) with CGST, SGST, and IGST breakdown.
-- [Hash Generator](https://karuvilab.com//security-tools/hash-generator/): MD5, SHA-1/256/512 hashes
-- [Hash Map Visualizer](https://karuvilab.com//developer-tools/hash-map-visualizer/): Visualize collision resolution strategies in hash map indexes.
-- [HEIC to JPG](https://karuvilab.com//image-tools/heic-converter/): Convert Apple HEIC photos to standard JPEG locally in your browser
-- [Hkdf Generator](https://karuvilab.com//security-tools/hkdf-generator/): Derive cryptographically strong keys from raw input using HKDF.
-- [Hmac Generator](https://karuvilab.com//security-tools/hmac-generator/): Calculate keyed-hash message authentication codes (HMAC) to verify integrity.
-- [Hra Calculator](https://karuvilab.com//calculators/hra-calculator/): Calculate your House Rent Allowance tax exemptions.
-- [HTML Entities](https://karuvilab.com//security-tools/html-entities/): Convert characters to HTML entities
-- [HTML Online Viewer](https://karuvilab.com//developer-tools/html-viewer/): Professional live HTML/CSS/JS editor and sandboxed preview
-- [Iban Validator](https://karuvilab.com//security-tools/iban-validator/): Check the validity and checksums of IBAN bank account numbers.
-- [ICO Generator](https://karuvilab.com//image-tools/ico-generator/): Create Windows .ico icon files from standard images
-- [Image to Base64](https://karuvilab.com//image-tools/image-base64/): Encode images as Base64 data URIs
-- [Image Compressor](https://karuvilab.com//image-tools/image-compressor/): Reduce image file size
-- [Image Converter](https://karuvilab.com//image-tools/image-converter/): Convert between JPG, PNG, WebP, AVIF, and BMP
-- [Image Crop](https://karuvilab.com//image-tools/image-crop/): Crop images to ratio or freeform
-- [Image Flip](https://karuvilab.com//image-tools/image-flip/): Flip images horizontally, vertically, or both directions instantly
-- [Image Mirror](https://karuvilab.com//image-tools/image-mirror/): Mirror images with a horizontal reflection
-- [Image Padding](https://karuvilab.com//image-tools/image-padding/): Add uniform or per-side padding around your images
-- [Image Resizer](https://karuvilab.com//image-tools/image-resizer/): Resize images to exact dimensions
-- [Image Seo](https://karuvilab.com//developer-tools/image-seo/): Optimize image file names and alt attributes to rank higher on search engines.
-- [Image to PDF](https://karuvilab.com//pdf-tools/image-to-pdf/): Convert images into a single PDF
-- [Image Watermark](https://karuvilab.com//image-tools/image-watermark/): Add text or image watermarks to your pictures.
-- [Income Tax](https://karuvilab.com//calculators/income-tax/): Calculate annual income tax estimates and select the best tax regime.
-- [Inflation Calculator](https://karuvilab.com//calculators/inflation-calculator/): Purchasing power over time
-- [Interest Calculator](https://karuvilab.com//calculators/interest-calculator/): Calculate simple and compound interest.
-- [Speed Tester](https://karuvilab.com//utilities/internet-speed-test/): Measure your internet connection speed
-- [Invoice Generator](https://karuvilab.com//calculators/invoice-generator/): Build professional custom invoices and download them as PDFs.
-- [Iso8583 Bitmap Decoder](https://karuvilab.com//security-tools/iso8583-bitmap-decoder/): Parse and visualize ISO 8583 payment card transaction bitmaps.
-- [Iso8583 Message Parser](https://karuvilab.com//security-tools/iso8583-message-parser/): Decode raw financial transaction strings into human-readable messages.
-- [JSON ↔ CSV](https://karuvilab.com//developer-tools/json-csv/): Convert between JSON and CSV
-- [JSON Formatter](https://karuvilab.com//developer-tools/json-formatter/): Format and validate JSON
-- [JSON to TypeScript](https://karuvilab.com//developer-tools/json-to-ts/): Generate TypeScript interfaces from JSON
-- [Json To Xml](https://karuvilab.com//developer-tools/json-to-xml/): Convert JSON to XML and XML to JSON.
-- [JWT Decoder](https://karuvilab.com//security-tools/jwt-decoder/): Inspect JSON Web Tokens
-- [LLMs.txt Generator](https://karuvilab.com//developer-tools/llms-txt-generator/): Generate llms.txt files for AI agents and LLMs to index your site.
-- [Lock / Unlock PDF](https://karuvilab.com//pdf-tools/lock-unlock/): Add or remove PDF passwords
-- [Log Analyzer](https://karuvilab.com//developer-tools/log-analyzer/): Analyze and filter server and application access log files.
-- [Lorem Ipsum](https://karuvilab.com//developer-tools/lorem-ipsum/): Generate custom dummy placeholder text for layouts and copy.
-- [Luhn Validator](https://karuvilab.com//developer-tools/luhn-validator/): Check identification card numbers using the Luhn checksum algorithm.
-- [Lumpsum Calculator](https://karuvilab.com//calculators/lumpsum-calculator/): Future value of one-time investment
-- [Margin Adjustment](https://karuvilab.com//pdf-tools/margin-adjustment/): Adjust margins of PDF pages
-- [Markdown Editor](https://karuvilab.com//utilities/markdown/): Professional Markdown editor with live GitHub-style preview, Mermaid diagrams, and high-performance export options.
-- [Memory Match](https://karuvilab.com//break-time-tools/memory-match/): Flip cards and match pairs. A classic memory-training game with best-score tracking.
-- [Merge PDF](https://karuvilab.com//pdf-tools/merge-pdf/): Combine multiple PDFs into one
-- [Meta Tags](https://karuvilab.com//developer-tools/meta-tags/): Generate and preview HTML meta tags to optimize website social sharing.
-- [Mic & Camera Tester](https://karuvilab.com//utilities/mic-camera-tester/): Test your microphone and camera
-- [Minesweeper](https://karuvilab.com//break-time-tools/minesweeper/): Classic Minesweeper puzzle. Clear the board without clicking on hidden mines. Multiple difficulties and mobile friendly controls.
-- [Move PDF Pages](https://karuvilab.com//pdf-tools/move-pages/): Drag and drop to move pages around in your PDF document.
-- [Mutual Fund Returns](https://karuvilab.com//calculators/mutual-fund-returns/): Calculate absolute and annualized returns
-- [Nanoid Generator](https://karuvilab.com//developer-tools/nanoid-generator/): Generate secure, URL-friendly unique string IDs using NanoID.
-- [Notes](https://karuvilab.com//productivity/notes/): Write and save markdown notes locally in your browser.
-- [Nps Calculator](https://karuvilab.com//calculators/nps-calculator/): Calculate National Pension Scheme (NPS) maturity amounts.
-- [Numeral & Encoding Converter](https://karuvilab.com//calculators/numeral-converter/): Universal encoding converter. Paste hex, binary, Base64, URL-encoded, HTML entities, Unicode escapes, or plain text. Auto-detect format and convert to all others instantly. Supports UTF-8, UTF-16, UTF-32, Base64, URL encoding, HTML entities, JavaScript/Python/CSS escapes, Morse code, ROT13, JWT decode, and more. 100% local — nothing leaves your browser.
-- [Oauth Token Decoder](https://karuvilab.com//security-tools/oauth-token-decoder/): Inspect and decode OAuth 2.0 access and refresh token payloads.
-- [Odd Pages Extractor](https://karuvilab.com//pdf-tools/odd-pages-extractor/): Extract only the odd-numbered pages from a PDF document.
-- [Og Preview](https://karuvilab.com//developer-tools/og-preview/): Preview Open Graph card layouts for social media platforms.
-- [Organize PDF](https://karuvilab.com//pdf-tools/organize-pdf/): Sort, reorder, and organize pages in your PDF document visually.
-- [Page Numbering](https://karuvilab.com//pdf-tools/page-numbering/): Add page numbers to PDF
-- [Page Size Converter](https://karuvilab.com//pdf-tools/page-size-converter/): Convert PDF pages to a specific size
-- [Password Generator](https://karuvilab.com//security-tools/password-generator/): Strong, random passwords
-- [Pbkdf2 Generator](https://karuvilab.com//security-tools/pbkdf2-generator/): Derive cryptographic keys using PBKDF2 password hashing.
-- [PDF Attachments](https://karuvilab.com//pdf-tools/pdf-attachments/): Extract embedded files and attachments from PDFs
-- [PDF Bookmarks](https://karuvilab.com//pdf-tools/pdf-bookmarks/): View and export PDF bookmarks (outline)
-- [Compare PDFs](https://karuvilab.com//pdf-tools/pdf-compare/): Highlight textual and visual differences between two PDF files.
-- [PDF Editor](https://karuvilab.com//pdf-tools/pdf-editor/): View and annotate PDF documents
-- [Preview PDF](https://karuvilab.com//pdf-tools/pdf-preview/): A native, fast, offline PDF viewer with search and zoom capabilities.
-- [PDF to Image](https://karuvilab.com//pdf-tools/pdf-to-image/): Convert PDF pages to JPG or PNG images
-- [PDF to Word](https://karuvilab.com//pdf-tools/pdf-to-word/): Convert PDF text to editable Word
-- [Pem Viewer](https://karuvilab.com//security-tools/pem-viewer/): Inspect and parse PEM certificate and private key files.
-- [Percentage Calculator](https://karuvilab.com//calculators/percentage-calculator/): Find percentages and ratios
-- [Phone Mockup Generator](https://karuvilab.com//image-tools/phone-mockup-generator/): Wrap screenshots in realistic device frames
-- [Pomodoro Timer](https://karuvilab.com//productivity/pomodoro-timer/): Boost your focus and productivity using the Pomodoro technique.
-- [PPF Calculator](https://karuvilab.com//calculators/ppf-calculator/): Public Provident Fund maturity & interest
-- [Private Key Checker](https://karuvilab.com//security-tools/private-key-checker/): Validate private key structures and format compatibility.
-- [Public Key Inspector](https://karuvilab.com//security-tools/public-key-inspector/): Inspect and display properties of public keys.
-- [QA Workbench](https://karuvilab.com//developer-tools/qa-workbench/): Unified testing suite for developers: API requests, Regex, Text Diff, JSON formatting, and Mock Data.
-- [QR Code Generator](https://karuvilab.com//utilities/qrcode/): Make QR codes for URLs, text, Wi-Fi
-- [Recurring Deposit (RD)](https://karuvilab.com//calculators/rd-calculator/): RD maturity and interest calculation
-- [Reaction Time Test](https://karuvilab.com//break-time-tools/reaction-time/): Test your reflexes and measure your reaction speed in milliseconds.
-- [Regex Tester](https://karuvilab.com//developer-tools/regex/): Test regular expressions live
-- [Remove PDF Metadata](https://karuvilab.com//pdf-tools/remove-metadata/): Clear all metadata and properties from a PDF document
-- [Remove PDF Pages](https://karuvilab.com//pdf-tools/remove-pages/): Easily delete and remove unwanted pages from any PDF document offline.
-- [Reorder PDF Pages](https://karuvilab.com//pdf-tools/reorder-pages/): Easily reorder the pages of your PDF document.
-- [Retirement Planner](https://karuvilab.com//calculators/retirement-calculator/): Corpus needed for your retirement
-- [Reverse PDF Pages](https://karuvilab.com//pdf-tools/reverse-pages/): Reverse the order of pages in a PDF document instantly.
-- [Robots Txt](https://karuvilab.com//developer-tools/robots-txt/): Generate and validate robots.txt configurations for SEO crawlers.
-- [Rotate PDF](https://karuvilab.com//pdf-tools/rotate-pdf/): Rotate one or all pages
-- [Rotate Selected Pages](https://karuvilab.com//pdf-tools/rotate-selected-pages/): Rotate specific pages in your PDF without rotating the whole document.
-- [Rsa Encrypt Decrypt](https://karuvilab.com//security-tools/rsa-encrypt-decrypt/): Encrypt or decrypt payloads using secure RSA key pairs.
-- [Rsa Key Generator](https://karuvilab.com//security-tools/rsa-key-generator/): Generate public and private RSA key pairs locally for authentication.
-- [Rsa Sign Verify](https://karuvilab.com//security-tools/rsa-sign-verify/): Sign messages or verify signatures using RSA keys.
-- [Safe-to-Spend](https://karuvilab.com//calculators/safe-to-spend/): Daily budget planner
-- [Salary Calculator](https://karuvilab.com//calculators/salary-calculator/): Indian take-home salary breakdown
-- [Saml Decoder](https://karuvilab.com//security-tools/saml-decoder/): Decode and format SAML assertion payloads for identity analysis.
-- [Seo Title](https://karuvilab.com//developer-tools/seo-title/): Optimize SEO title tags to maximize search engine click-through rates.
-- [Seo Tools](https://karuvilab.com//developer-tools/seo-tools/): Inspect and optimize website SEO meta tags and preview search snippets.
-- [SIP Calculator](https://karuvilab.com//calculators/sip-calculator/): Project mutual-fund SIP returns
-- [Sitemap Generator](https://karuvilab.com//developer-tools/sitemap-generator/): Generate XML sitemaps to index website pages.
-- [Slug Generator](https://karuvilab.com//developer-tools/slug-generator/): Convert text into URL-friendly slug strings.
-- [Smart Unit Converter](https://karuvilab.com//calculators/smart-converter/): Natural-language unit conversion
-- [Snake Game](https://karuvilab.com//break-time-tools/snake-game/): Play the classic retro Snake game. Eat food, grow longer, and set new high scores entirely in your browser.
-- [Split & Copy](https://karuvilab.com//utilities/split-copy/): Break long text into chunks
-- [Split PDF](https://karuvilab.com//pdf-tools/split-pdf/): Extract pages from a PDF
-- [Sql Formatter](https://karuvilab.com//developer-tools/sql-formatter/): Beautify and format complex SQL queries to improve readability.
-- [Stock Average](https://karuvilab.com//calculators/stock-average-calculator/): Weighted average buy price for stocks
-- [Stopwatch](https://karuvilab.com//productivity/stopwatch/): Track elapsed time with lap support for productivity logging.
-- [Sudoku](https://karuvilab.com//break-time-tools/sudoku/): Classic 9x9 Sudoku logical number placement puzzle with multiple difficulty modes, hints, and local best times.
-- [AI Image Upscaler](https://karuvilab.com//image-tools/super-resolution/): Upscale and enhance images 2x or 4x locally using Real-ESRGAN AI
-- [SVG to PNG](https://karuvilab.com//image-tools/svg-converter/): Rasterize vector SVG files to transparent PNGs
-- [Swift Mt Mx](https://karuvilab.com//developer-tools/swift-mt-mx/): Parse and inspect SWIFT MT and MX banking message structures.
-- [SWP Calculator](https://karuvilab.com//calculators/swp-calculator/): Systematic Withdrawal Plan planning
-- [Task Reminder](https://karuvilab.com//utilities/task-reminder/): Lightweight private to-do list
-- [Tds Calculator](https://karuvilab.com//calculators/tds-calculator/): Calculate Tax Deducted at Source (TDS) percentages.
-- [Text Case Converter](https://karuvilab.com//productivity/text-case-converter/): Convert text between UPPERCASE, lowercase, and sentence case styles.
-- [Text Sorter & Deduplicator](https://karuvilab.com//productivity/text-sorter-deduper/): Sort and remove duplicates from text
-- [Text Utility](https://karuvilab.com//utilities/text-utility/): Clean, case convert, count words
-- [Tic-Tac-Toe](https://karuvilab.com//break-time-tools/tic-tac-toe/): Classic 2-player Tic-Tac-Toe right in your browser. No downloads, no sign-in.
-- [TIFF Converter](https://karuvilab.com//image-tools/tiff-converter/): Convert to and from the professional TIFF image format
-- [Time Calculator](https://karuvilab.com//calculators/time-calculator/): Add or subtract hours and minutes
-- [Time Zone Converter](https://karuvilab.com//productivity/timezone-converter/): Compare and convert time between multiple global time zones. Real-time offsets and DST support.
-- [Tlv Parser](https://karuvilab.com//security-tools/tlv-parser/): Parse and visualize EMV TLV hex streams into clear tree structures.
-- [Track 2 Parser](https://karuvilab.com//developer-tools/track-2-parser/): Decode magnetic stripe Track 2 data for payment card testing.
-- [Typing Speed Test](https://karuvilab.com//productivity/typing-speed-test/): Test and improve your typing WPM
-- [Unit Converter](https://karuvilab.com//calculators/unit-converter/): Length, weight, volume, and more
-- [Unix Timestamp](https://karuvilab.com//developer-tools/unix-timestamp/): Convert between epoch timestamps and human-readable dates.
-- [URL Cleaner](https://karuvilab.com//utilities/url-cleaner/): Strip tracking parameters
-- [URL Encoder](https://karuvilab.com//developer-tools/url-encoder/): Percent-encode and decode URLs
-- [UTC ↔ IST](https://karuvilab.com//calculators/utc-ist-converter/): Convert between UTC and IST
-- [Uuid Generator](https://karuvilab.com//developer-tools/uuid-generator/): Generate secure v4 UUIDs for database and entity keys.
-- [File Validator](https://karuvilab.com//utilities/validate/): Validate file size and type
-- [Video Metadata Viewer](https://karuvilab.com//media-tools/video-metadata-viewer/): Extract and inspect resolution, codec, and duration metadata from video files.
-- [Video Trim](https://karuvilab.com//media-tools/video-trim/): Trim and cut MP4 video clips directly in your browser.
-- [Watermark PDF](https://karuvilab.com//pdf-tools/watermark-pdf/): Add text or image watermark
-- [WebP Converter](https://karuvilab.com//image-tools/webp-converter/): Convert any image to the highly optimized WebP format
-- [WiFi QR Code Generator](https://karuvilab.com//productivity/wifi-qr-code/): Generate QR code to connect to WiFi
-- [Word Counter](https://karuvilab.com//productivity/word-counter/): Count characters, words, sentences, and reading times for any text.
-- [Word Guess](https://karuvilab.com//break-time-tools/word-guess/): A word guessing puzzle game. Find the secret 5-letter word in 6 tries using visual feedback.
-- [Word To Pdf](https://karuvilab.com//pdf-tools/word-to-pdf/): Convert Word documents (DOCX) into standard PDF files locally.
-- [Work Hours](https://karuvilab.com//calculators/work-hours/): Timesheet and overtime tracker
-- [World Clock](https://karuvilab.com//calculators/world-clock/): Track time across multiple cities with business hour indicators. Ideal for global teams.
-- [X509 Viewer](https://karuvilab.com//security-tools/x509-viewer/): Inspect and validate X.509 security certificates and expiry details.
-- [Xml Formatter](https://karuvilab.com//developer-tools/xml-formatter/): Format and prettify nested XML documents to inspect data tags.
-- [Yaml Json Converter](https://karuvilab.com//developer-tools/yaml-json-converter/): Convert between YAML formatting and JSON objects.
-- [Yaml Validator](https://karuvilab.com//developer-tools/yaml-validator/): Verify and validate YAML syntax correctness.
+- [Advanced Rotate](https://karuvilab.com/image-tools/advanced-rotate/): Rotate images to any angle with precise degree control
+- [Aes Encrypt Decrypt](https://karuvilab.com/security-tools/aes-encrypt-decrypt/): Encrypt and decrypt text or files using AES, entirely in your browser.
+- [Age Calculator](https://karuvilab.com/calculators/age-calculator/): Calculate exact age in years, months, and days with offline precision date math. Supports canonical query parameters ?dob=YYYY-MM-DD&as_of=YYYY-MM-DD.
+- [AI Document Intelligence & PDF Cleanup](https://karuvilab.com/pdf-tools/ai-pdf-cleanup/): Clean up scanned PDFs, auto-deskew pages, denoise, and generate searchable PDFs using local AI
+- [Aspect Ratio Converter](https://karuvilab.com/image-tools/aspect-ratio-converter/): Convert images to standard aspect ratios like 1:1, 16:9, 4:3
+- [Audio Converter](https://karuvilab.com/media-tools/audio-converter/): Convert audio files between formats like MP3 and WAV locally for compatibility.
+- [AVIF Converter](https://karuvilab.com/image-tools/avif-converter/): Convert images to the next-gen AVIF format for maximum compression
+- [Banking Tools](https://karuvilab.com/developer-tools/banking-tools/): Advanced financial data parsers for EMV, SWIFT, and core banking logs
+- [Barcode & QR Scanner](https://karuvilab.com/utilities/barcode-scanner/): Scan barcodes and QR codes using camera
+- [Base64 Encode/Decode](https://karuvilab.com/developer-tools/base64/): Encode or decode Base64 strings
+- [Base64url Converter](https://karuvilab.com/security-tools/base64url-converter/): Encode or decode text to URL-safe Base64 format to safely transmit data.
+- [Batch Image Converter](https://karuvilab.com/image-tools/batch-image-converter/): Convert multiple images between formats in one batch operation
+- [Background Remover](https://karuvilab.com/image-tools/bg-remover/): Remove image backgrounds locally
+- [Bmi Calculator](https://karuvilab.com/calculators/bmi-calculator/): Calculate your Body Mass Index (BMI), BMI Prime, Ponderal Index, and healthy weight category
+- [BMP Converter](https://karuvilab.com/image-tools/bmp-converter/): Convert images to the uncompressed BMP format
+- [Border Generator](https://karuvilab.com/image-tools/border-generator/): Add decorative borders to your images with custom styles
+- [Box Shadow Generator](https://karuvilab.com/developer-tools/box-shadow-generator/): Design CSS box shadows visually and copy clean CSS snippets for layouts.
+- [Bulk Image Resize](https://karuvilab.com/image-tools/bulk-resizer/): Resize many images at once
+- [CAGR Calculator](https://karuvilab.com/calculators/cagr-calculator/): Compound Annual Growth Rate
+- [Calculator](https://karuvilab.com/calculators/calculator/): Unified calculator with seamless standard and scientific modes
+- [Calendar](https://karuvilab.com/productivity/calendar/): Professional, local-first calendar with Tamil mode support.
+- [Canvas Resize](https://karuvilab.com/image-tools/canvas-resize/): Resize the canvas workspace around your image without scaling
+- [Card Masker](https://karuvilab.com/security-tools/card-masker/): Mask card numbers automatically to securely display and store sensitive financial info.
+- [Chart & Graph Generator](https://karuvilab.com/productivity/chart-generator/): Create beautiful charts from your data
+- [Cipher Tools](https://karuvilab.com/security-tools/cipher-tools/): Encrypt and decrypt text using classical ciphers like Caesar or Vigenère.
+- [Code Minifier](https://karuvilab.com/developer-tools/code-minifier/): Minify CSS, JS, and HTML
+- [Color Converter](https://karuvilab.com/developer-tools/color-converter/): Convert color formats (HEX, RGB, HSL) to style web applications.
+- [Color Match](https://karuvilab.com/break-time-tools/color-match/): Pick the exact color swatch under time pressure to test your visual accuracy.
+- [Color Palette Extractor](https://karuvilab.com/image-tools/color-palette-extractor/): Extract dominant color palettes from any image to design themes.
+- [Command Cheat Sheet](https://karuvilab.com/developer-tools/command-cheat-sheet/): Look up development and system commands instantly to speed up your workflow.
+- [Compound Interest Calculator](https://karuvilab.com/calculators/compound-interest/): Calculate exponential compound interest, recurring monthly contributions, APY yields, and inflation-adjusted future value
+- [Compress PDF](https://karuvilab.com/pdf-tools/compress-pdf/): Reduce PDF file size
+- [Compress](https://karuvilab.com/image-tools/compress/): Bundle files and folders into optimized ZIP archives to save storage space.
+- [Contrast Checker](https://karuvilab.com/developer-tools/contrast-checker/): Verify background and foreground contrast to meet WCAG accessibility standards.
+- [Core Banking Parser](https://karuvilab.com/developer-tools/core-banking-parser/): Parse core banking trace logs into JSON
+- [Countdown Timer](https://karuvilab.com/productivity/countdown-timer/): Set timers for upcoming milestones or deadlines to keep track of tasks.
+- [Crontab Editor](https://karuvilab.com/developer-tools/crontab-editor/): Build crontab expressions visually and translate them to plain English.
+- [Crop PDF](https://karuvilab.com/pdf-tools/crop-pdf/): Crop PDF pages to a specific area
+- [Csp Builder](https://karuvilab.com/security-tools/csp-builder/): Construct secure Content Security Policy headers to protect sites from XSS.
+- [Csr Generator](https://karuvilab.com/security-tools/csr-generator/): Generate CSR requests and private keys locally to secure web servers.
+- [Csv To Json](https://karuvilab.com/developer-tools/csv-to-json/): Convert tabular CSV file content into structured JSON objects.
+- [Currency Converter](https://karuvilab.com/calculators/currency-converter/): Convert between world currencies
+- [Data Calculator](https://karuvilab.com/calculators/data-calculator/): Units, transfer time, cost, & hashes
+- [Date Calculator](https://karuvilab.com/calculators/date-calculator/): Calculate date differences or add/subtract time from any date with offline precision math
+- [Delete Blank Pages](https://karuvilab.com/pdf-tools/delete-blank-pages/): Automatically detect and remove blank pages from your PDF document.
+- [Diff Checker](https://karuvilab.com/developer-tools/diff-checker/): Compare two text snippets
+- [Directory Manifest](https://karuvilab.com/security-tools/directory-manifest/): Generate recursive folder maps of local directories to document structure.
+- [Discount Calculator](https://karuvilab.com/calculators/discount-calculator/): Calculate sale price, double-stacked promo discounts, sales tax, and reverse original price
+- [Duplicate PDF Pages](https://karuvilab.com/pdf-tools/duplicate-pages/): Duplicate and copy specific pages in a PDF document offline.
+- [Ecdh Key Exchange](https://karuvilab.com/security-tools/ecdh-key-exchange/): Generate shared cryptographic keys using ECDH protocols.
+- [Ecdsa Sign](https://karuvilab.com/security-tools/ecdsa-sign/): Sign and verify payload strings using secure ECDSA certificates.
+- [Edit PDF Metadata](https://karuvilab.com/pdf-tools/edit-metadata/): View and edit PDF properties like Title, Author, and Subject
+- [EMI Calculator](https://karuvilab.com/calculators/emi-calculator/): Calculate home loan & car loan EMI, reducing balance interest, amortization schedule, and prepayment savings
+- [Emv Tlv Tree](https://karuvilab.com/developer-tools/emv-tlv-tree/): Inspect and parse EMV TLV payment packets for bank transaction analysis.
+- [Even Pages Extractor](https://karuvilab.com/pdf-tools/even-pages-extractor/): Extract only the even-numbered pages from a PDF document.
+- [Extract Images](https://karuvilab.com/pdf-tools/extract-images/): Pull images out of a PDF
+- [Extract PDF Pages](https://karuvilab.com/pdf-tools/extract-pages/): Extract specific pages or page ranges from a PDF into a new document.
+- [AI Face Blur & Privacy Shield](https://karuvilab.com/image-tools/face-blur/): Automatically blur faces and PII objects in photos using local AI
+- [Fake Data Generator](https://karuvilab.com/developer-tools/fake-data-generator/): Generate realistic fake data for testing
+- [Fixed Deposit (FD) Calculator](https://karuvilab.com/calculators/fd-calculator/): Calculate FD maturity value, interest payouts, senior citizen rates, APY, TDS deductions, and amortization schedule
+- [File Viewer & Diff](https://karuvilab.com/file-tools/file-viewer-diff/): Local text editor and diff checker
+- [Financial Freedom Calculator](https://karuvilab.com/calculators/financial-freedom-calculator/): Calculate your FIRE number, required SIP, and projected wealth accumulation
+- [Code Formatter](https://karuvilab.com/developer-tools/format/): Auto-format code in many languages
+- [2048](https://karuvilab.com/break-time-tools/game-2048/): Slide and merge tiles to reach 2048. Addictive puzzle game — fully offline.
+- [Gif Creator](https://karuvilab.com/media-tools/gif-creator/): Convert videos or image frames into optimized, loopable animated GIF files.
+- [GIF Frame Extractor](https://karuvilab.com/image-tools/gif-extractor/): Extract individual frames from animated GIFs
+- [Glassmorphism Generator](https://karuvilab.com/developer-tools/glassmorphism-generator/): Generate CSS code for modern frosted-glass card designs.
+- [Gradient Generator](https://karuvilab.com/developer-tools/gradient-generator/): Design linear and radial CSS gradients visually for backgrounds.
+- [Grammar & Spell Checker](https://karuvilab.com/utilities/grammar-checker/): 100% private, client-side grammar, spell, and readability checker for your text.
+- [Gratuity Calculator](https://karuvilab.com/calculators/gratuity-calculator/): Estimate standard gratuity benefits based on salary and tenure.
+- [GST Calculator](https://karuvilab.com/calculators/gst-calculator/): Calculate GST (Add/Remove) for Indian tax slabs (3%, 5%, 12%, 18%, 28%) with CGST, SGST, and IGST breakdown.
+- [Hash Generator](https://karuvilab.com/security-tools/hash-generator/): MD5, SHA-1/256/512 hashes
+- [Hash Map Visualizer](https://karuvilab.com/developer-tools/hash-map-visualizer/): Visualize collision resolution strategies in hash map indexes.
+- [HEIC to JPG](https://karuvilab.com/image-tools/heic-converter/): Convert Apple HEIC photos to standard JPEG locally in your browser
+- [Hkdf Generator](https://karuvilab.com/security-tools/hkdf-generator/): Derive cryptographically strong keys from raw input using HKDF.
+- [Hmac Generator](https://karuvilab.com/security-tools/hmac-generator/): Calculate keyed-hash message authentication codes (HMAC) to verify integrity.
+- [Hra Calculator](https://karuvilab.com/calculators/hra-calculator/): Calculate your House Rent Allowance tax exemptions.
+- [HTML Entities](https://karuvilab.com/security-tools/html-entities/): Convert characters to HTML entities
+- [HTML Online Viewer](https://karuvilab.com/developer-tools/html-viewer/): Professional live HTML/CSS/JS editor and sandboxed preview
+- [Iban Validator](https://karuvilab.com/security-tools/iban-validator/): Check the validity and checksums of IBAN bank account numbers.
+- [ICO Generator](https://karuvilab.com/image-tools/ico-generator/): Create Windows .ico icon files from standard images
+- [Image to Base64](https://karuvilab.com/image-tools/image-base64/): Encode images as Base64 data URIs
+- [Image Compressor](https://karuvilab.com/image-tools/image-compressor/): Reduce image file size
+- [Image Converter](https://karuvilab.com/image-tools/image-converter/): Convert between JPG, PNG, WebP, AVIF, and BMP
+- [Image Crop](https://karuvilab.com/image-tools/image-crop/): Crop images to ratio or freeform
+- [Image Flip](https://karuvilab.com/image-tools/image-flip/): Flip images horizontally, vertically, or both directions instantly
+- [Image Mirror](https://karuvilab.com/image-tools/image-mirror/): Mirror images with a horizontal reflection
+- [Image Padding](https://karuvilab.com/image-tools/image-padding/): Add uniform or per-side padding around your images
+- [Image Resizer](https://karuvilab.com/image-tools/image-resizer/): Resize images to exact dimensions
+- [Image Seo](https://karuvilab.com/developer-tools/image-seo/): Optimize image file names and alt attributes to rank higher on search engines.
+- [Image to PDF](https://karuvilab.com/pdf-tools/image-to-pdf/): Convert images into a single PDF
+- [Image Watermark](https://karuvilab.com/image-tools/image-watermark/): Add text or image watermarks to your pictures.
+- [Income Tax](https://karuvilab.com/calculators/income-tax/): Calculate annual income tax estimates and select the best tax regime.
+- [Inflation Calculator](https://karuvilab.com/calculators/inflation-calculator/): Calculate compound price escalation, future purchasing power erosion, loss percentage, and Rule of 70 halving time
+- [Interest Calculator](https://karuvilab.com/calculators/interest-calculator/): Calculate simple and compound interest.
+- [Speed Tester](https://karuvilab.com/utilities/internet-speed-test/): Measure your internet connection speed
+- [Invoice Generator](https://karuvilab.com/calculators/invoice-generator/): Build professional custom invoices and download them as PDFs.
+- [Iso8583 Bitmap Decoder](https://karuvilab.com/security-tools/iso8583-bitmap-decoder/): Parse and visualize ISO 8583 payment card transaction bitmaps.
+- [Iso8583 Message Parser](https://karuvilab.com/security-tools/iso8583-message-parser/): Decode raw financial transaction strings into human-readable messages.
+- [JSON ↔ CSV](https://karuvilab.com/developer-tools/json-csv/): Convert between JSON and CSV
+- [JSON Formatter](https://karuvilab.com/developer-tools/json-formatter/): Format and validate JSON
+- [JSON to TypeScript](https://karuvilab.com/developer-tools/json-to-ts/): Generate TypeScript interfaces from JSON
+- [Json To Xml](https://karuvilab.com/developer-tools/json-to-xml/): Convert JSON to XML and XML to JSON.
+- [JWT Decoder](https://karuvilab.com/security-tools/jwt-decoder/): Inspect JSON Web Tokens
+- [LLMs.txt Generator](https://karuvilab.com/developer-tools/llms-txt-generator/): Generate llms.txt files for AI agents and LLMs to index your site.
+- [Lock / Unlock PDF](https://karuvilab.com/pdf-tools/lock-unlock/): Add or remove PDF passwords
+- [Log Analyzer](https://karuvilab.com/developer-tools/log-analyzer/): Analyze and filter server and application access log files.
+- [Lorem Ipsum](https://karuvilab.com/developer-tools/lorem-ipsum/): Generate custom dummy placeholder text for layouts and copy.
+- [Luhn Validator](https://karuvilab.com/developer-tools/luhn-validator/): Check identification card numbers using the Luhn checksum algorithm.
+- [Lumpsum Calculator](https://karuvilab.com/calculators/lumpsum-calculator/): Future value of one-time investment
+- [Margin Adjustment](https://karuvilab.com/pdf-tools/margin-adjustment/): Adjust margins of PDF pages
+- [Markdown Editor](https://karuvilab.com/utilities/markdown/): Professional Markdown editor with live GitHub-style preview, Mermaid diagrams, and high-performance export options.
+- [Memory Match](https://karuvilab.com/break-time-tools/memory-match/): Flip cards and match pairs. A classic memory-training game with best-score tracking.
+- [Merge PDF](https://karuvilab.com/pdf-tools/merge-pdf/): Combine multiple PDFs into one
+- [Meta Tags](https://karuvilab.com/developer-tools/meta-tags/): Generate and preview HTML meta tags to optimize website social sharing.
+- [Mic & Camera Tester](https://karuvilab.com/utilities/mic-camera-tester/): Test your microphone and camera
+- [Minesweeper](https://karuvilab.com/break-time-tools/minesweeper/): Classic Minesweeper puzzle. Clear the board without clicking on hidden mines. Multiple difficulties and mobile friendly controls.
+- [Move PDF Pages](https://karuvilab.com/pdf-tools/move-pages/): Drag and drop to move pages around in your PDF document.
+- [Mutual Fund Returns](https://karuvilab.com/calculators/mutual-fund-returns/): Calculate absolute and annualized returns
+- [Nanoid Generator](https://karuvilab.com/developer-tools/nanoid-generator/): Generate secure, URL-friendly unique string IDs using NanoID.
+- [Notes](https://karuvilab.com/productivity/notes/): Write and save markdown notes locally in your browser.
+- [Nps Calculator](https://karuvilab.com/calculators/nps-calculator/): Calculate National Pension Scheme (NPS) maturity amounts.
+- [Numeral & Encoding Converter](https://karuvilab.com/calculators/numeral-converter/): Universal encoding converter. Paste hex, binary, Base64, URL-encoded, HTML entities, Unicode escapes, or plain text. Auto-detect format and convert to all others instantly. Supports UTF-8, UTF-16, UTF-32, Base64, URL encoding, HTML entities, JavaScript/Python/CSS escapes, Morse code, ROT13, JWT decode, and more. 100% local — nothing leaves your browser.
+- [Oauth Token Decoder](https://karuvilab.com/security-tools/oauth-token-decoder/): Inspect and decode OAuth 2.0 access and refresh token payloads.
+- [Odd Pages Extractor](https://karuvilab.com/pdf-tools/odd-pages-extractor/): Extract only the odd-numbered pages from a PDF document.
+- [Og Preview](https://karuvilab.com/developer-tools/og-preview/): Preview Open Graph card layouts for social media platforms.
+- [Organize PDF](https://karuvilab.com/pdf-tools/organize-pdf/): Sort, reorder, and organize pages in your PDF document visually.
+- [Page Numbering](https://karuvilab.com/pdf-tools/page-numbering/): Add page numbers to PDF
+- [Page Size Converter](https://karuvilab.com/pdf-tools/page-size-converter/): Convert PDF pages to a specific size
+- [Password Generator](https://karuvilab.com/security-tools/password-generator/): Strong, random passwords
+- [Pbkdf2 Generator](https://karuvilab.com/security-tools/pbkdf2-generator/): Derive cryptographic keys using PBKDF2 password hashing.
+- [PDF Attachments](https://karuvilab.com/pdf-tools/pdf-attachments/): Extract embedded files and attachments from PDFs
+- [PDF Bookmarks](https://karuvilab.com/pdf-tools/pdf-bookmarks/): View and export PDF bookmarks (outline)
+- [Compare PDFs](https://karuvilab.com/pdf-tools/pdf-compare/): Highlight textual and visual differences between two PDF files.
+- [PDF Editor](https://karuvilab.com/pdf-tools/pdf-editor/): View and annotate PDF documents
+- [Preview PDF](https://karuvilab.com/pdf-tools/pdf-preview/): A native, fast, offline PDF viewer with search and zoom capabilities.
+- [PDF to Image](https://karuvilab.com/pdf-tools/pdf-to-image/): Convert PDF pages to JPG or PNG images
+- [PDF to Word](https://karuvilab.com/pdf-tools/pdf-to-word/): Convert PDF text to editable Word
+- [Pem Viewer](https://karuvilab.com/security-tools/pem-viewer/): Inspect and parse PEM certificate and private key files.
+- [Percentage Calculator](https://karuvilab.com/calculators/percentage-calculator/): Calculate percentages, percentage increase/decrease, ratios, and reverse original values with precision math
+- [Phone Mockup Generator](https://karuvilab.com/image-tools/phone-mockup-generator/): Wrap screenshots in realistic device frames
+- [Pomodoro Timer](https://karuvilab.com/productivity/pomodoro-timer/): Boost your focus and productivity using the Pomodoro technique.
+- [PPF Calculator](https://karuvilab.com/calculators/ppf-calculator/): Public Provident Fund maturity & interest
+- [Private Key Checker](https://karuvilab.com/security-tools/private-key-checker/): Validate private key structures and format compatibility.
+- [Public Key Inspector](https://karuvilab.com/security-tools/public-key-inspector/): Inspect and display properties of public keys.
+- [QA Workbench](https://karuvilab.com/developer-tools/qa-workbench/): Unified testing suite for developers: API requests, Regex, Text Diff, JSON formatting, and Mock Data.
+- [QR Code Generator](https://karuvilab.com/utilities/qrcode/): Make QR codes for URLs, text, Wi-Fi
+- [Recurring Deposit (RD) Calculator](https://karuvilab.com/calculators/rd-calculator/): Calculate RD maturity amount, quarterly compound interest, senior citizen rate boost, and Section 194A TDS deductions
+- [Reaction Time Test](https://karuvilab.com/break-time-tools/reaction-time/): Test your reflexes and measure your reaction speed in milliseconds.
+- [Regex Tester](https://karuvilab.com/developer-tools/regex/): Test regular expressions live
+- [Remove PDF Metadata](https://karuvilab.com/pdf-tools/remove-metadata/): Clear all metadata and properties from a PDF document
+- [Remove PDF Pages](https://karuvilab.com/pdf-tools/remove-pages/): Easily delete and remove unwanted pages from any PDF document offline.
+- [Reorder PDF Pages](https://karuvilab.com/pdf-tools/reorder-pages/): Easily reorder the pages of your PDF document.
+- [Retirement Planner](https://karuvilab.com/calculators/retirement-calculator/): Corpus needed for your retirement
+- [Reverse PDF Pages](https://karuvilab.com/pdf-tools/reverse-pages/): Reverse the order of pages in a PDF document instantly.
+- [Robots Txt](https://karuvilab.com/developer-tools/robots-txt/): Generate and validate robots.txt configurations for SEO crawlers.
+- [Rotate PDF](https://karuvilab.com/pdf-tools/rotate-pdf/): Rotate one or all pages
+- [Rotate Selected Pages](https://karuvilab.com/pdf-tools/rotate-selected-pages/): Rotate specific pages in your PDF without rotating the whole document.
+- [Rsa Encrypt Decrypt](https://karuvilab.com/security-tools/rsa-encrypt-decrypt/): Encrypt or decrypt payloads using secure RSA key pairs.
+- [Rsa Key Generator](https://karuvilab.com/security-tools/rsa-key-generator/): Generate public and private RSA key pairs locally for authentication.
+- [Rsa Sign Verify](https://karuvilab.com/security-tools/rsa-sign-verify/): Sign messages or verify signatures using RSA keys.
+- [Safe-to-Spend](https://karuvilab.com/calculators/safe-to-spend/): Daily budget planner
+- [Salary & Take-Home Pay Calculator](https://karuvilab.com/calculators/salary-calculator/): Calculate Indian take-home monthly salary, gross vs net CTC breakdown, EPF, professional tax, and income tax under Old vs New Regime
+- [Saml Decoder](https://karuvilab.com/security-tools/saml-decoder/): Decode and format SAML assertion payloads for identity analysis.
+- [Seo Title](https://karuvilab.com/developer-tools/seo-title/): Optimize SEO title tags to maximize search engine click-through rates.
+- [Seo Tools](https://karuvilab.com/developer-tools/seo-tools/): Inspect and optimize website SEO meta tags and preview search snippets.
+- [SIP Calculator](https://karuvilab.com/calculators/sip-calculator/): Project mutual fund and equity SIP returns with step-up compounding, lumpsum deposits, tax deductions, and inflation adjustments
+- [Sitemap Generator](https://karuvilab.com/developer-tools/sitemap-generator/): Generate XML sitemaps to index website pages.
+- [Slug Generator](https://karuvilab.com/developer-tools/slug-generator/): Convert text into URL-friendly slug strings.
+- [Smart Unit Converter](https://karuvilab.com/calculators/smart-converter/): Natural-language unit conversion
+- [Snake Game](https://karuvilab.com/break-time-tools/snake-game/): Play the classic retro Snake game. Eat food, grow longer, and set new high scores entirely in your browser.
+- [Split & Copy](https://karuvilab.com/utilities/split-copy/): Break long text into chunks
+- [Split PDF](https://karuvilab.com/pdf-tools/split-pdf/): Extract pages from a PDF
+- [Sql Formatter](https://karuvilab.com/developer-tools/sql-formatter/): Beautify and format complex SQL queries to improve readability.
+- [Stock Average](https://karuvilab.com/calculators/stock-average-calculator/): Weighted average buy price for stocks
+- [Stopwatch](https://karuvilab.com/productivity/stopwatch/): Track elapsed time with lap support for productivity logging.
+- [Sudoku](https://karuvilab.com/break-time-tools/sudoku/): Classic 9x9 Sudoku logical number placement puzzle with multiple difficulty modes, hints, and local best times.
+- [AI Image Upscaler](https://karuvilab.com/image-tools/super-resolution/): Upscale and enhance images 2x or 4x locally using Real-ESRGAN AI
+- [SVG to PNG](https://karuvilab.com/image-tools/svg-converter/): Rasterize vector SVG files to transparent PNGs
+- [Swift Mt Mx](https://karuvilab.com/developer-tools/swift-mt-mx/): Parse and inspect SWIFT MT and MX banking message structures.
+- [SWP Calculator](https://karuvilab.com/calculators/swp-calculator/): Systematic Withdrawal Plan planning
+- [Task Reminder](https://karuvilab.com/utilities/task-reminder/): Lightweight private to-do list
+- [Tds Calculator](https://karuvilab.com/calculators/tds-calculator/): Calculate Tax Deducted at Source (TDS) percentages.
+- [Text Case Converter](https://karuvilab.com/productivity/text-case-converter/): Convert text between UPPERCASE, lowercase, and sentence case styles.
+- [Text Sorter & Deduplicator](https://karuvilab.com/productivity/text-sorter-deduper/): Sort and remove duplicates from text
+- [Text Utility](https://karuvilab.com/utilities/text-utility/): Clean, case convert, count words
+- [Tic-Tac-Toe](https://karuvilab.com/break-time-tools/tic-tac-toe/): Classic 2-player Tic-Tac-Toe right in your browser. No downloads, no sign-in.
+- [TIFF Converter](https://karuvilab.com/image-tools/tiff-converter/): Convert to and from the professional TIFF image format
+- [Time Calculator](https://karuvilab.com/calculators/time-calculator/): Calculate time intervals, sum durations, or add/subtract time with midnight rollover precision
+- [Time Zone Converter](https://karuvilab.com/productivity/timezone-converter/): Compare and convert time between multiple global time zones. Real-time offsets and DST support.
+- [Tlv Parser](https://karuvilab.com/security-tools/tlv-parser/): Parse and visualize EMV TLV hex streams into clear tree structures.
+- [Track 2 Parser](https://karuvilab.com/developer-tools/track-2-parser/): Decode magnetic stripe Track 2 data for payment card testing.
+- [Typing Speed Test](https://karuvilab.com/productivity/typing-speed-test/): Test and improve your typing WPM
+- [Unit Converter](https://karuvilab.com/calculators/unit-converter/): Length, weight, volume, and more
+- [Unix Timestamp Converter](https://karuvilab.com/developer-tools/unix-timestamp/): Convert between Unix epoch timestamps (seconds, ms, μs, ns) and human-readable dates with timezones, batch conversion, and code snippets.
+- [URL Cleaner](https://karuvilab.com/utilities/url-cleaner/): Strip tracking parameters
+- [URL Encoder](https://karuvilab.com/developer-tools/url-encoder/): Percent-encode and decode URLs
+- [UTC ↔ IST](https://karuvilab.com/calculators/utc-ist-converter/): Convert between UTC and IST
+- [Uuid Generator](https://karuvilab.com/developer-tools/uuid-generator/): Generate secure v4 UUIDs for database and entity keys.
+- [File Validator](https://karuvilab.com/utilities/validate/): Validate file size and type
+- [Video Metadata Viewer](https://karuvilab.com/media-tools/video-metadata-viewer/): Extract and inspect resolution, codec, and duration metadata from video files.
+- [Video Trim](https://karuvilab.com/media-tools/video-trim/): Trim and cut MP4 video clips directly in your browser.
+- [Watermark PDF](https://karuvilab.com/pdf-tools/watermark-pdf/): Add text or image watermark
+- [WebP Converter](https://karuvilab.com/image-tools/webp-converter/): Convert any image to the highly optimized WebP format
+- [WiFi QR Code Generator](https://karuvilab.com/productivity/wifi-qr-code/): Generate QR code to connect to WiFi
+- [Word Counter](https://karuvilab.com/productivity/word-counter/): Count characters, words, sentences, and reading times for any text.
+- [Word Guess](https://karuvilab.com/break-time-tools/word-guess/): A word guessing puzzle game. Find the secret 5-letter word in 6 tries using visual feedback.
+- [Word To Pdf](https://karuvilab.com/pdf-tools/word-to-pdf/): Convert Word documents (DOCX) into standard PDF files locally.
+- [Work Hours](https://karuvilab.com/calculators/work-hours/): Timesheet and overtime tracker
+- [World Clock](https://karuvilab.com/calculators/world-clock/): Track time across multiple cities with business hour indicators. Ideal for global teams.
+- [X509 Viewer](https://karuvilab.com/security-tools/x509-viewer/): Inspect and validate X.509 security certificates and expiry details.
+- [Xml Formatter](https://karuvilab.com/developer-tools/xml-formatter/): Format and prettify nested XML documents to inspect data tags.
+- [Yaml Json Converter](https://karuvilab.com/developer-tools/yaml-json-converter/): Convert between YAML formatting and JSON objects.
+- [Yaml Validator](https://karuvilab.com/developer-tools/yaml-validator/): Verify and validate YAML syntax correctness.

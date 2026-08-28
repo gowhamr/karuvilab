@@ -35,7 +35,7 @@ export function ToastProvider({ children }) {
         }
     }, []);
     const contextValue = React.useMemo(() => ({ toast }), [toast]);
-    return (_jsxs(ToastContext.Provider, { value: contextValue, children: [_jsx(Toaster, { closeButton: true, richColors: true, position: "bottom-right", theme: "system", toastOptions: {
+    return (_jsxs(ToastContext.Provider, { value: contextValue, children: [_jsx(Toaster, { closeButton: true, richColors: true, position: "bottom-right", theme: typeof document !== 'undefined' ? document.documentElement.getAttribute('data-theme') || 'dark' : 'dark', toastOptions: {
                     classNames: {
                         toast: "rounded-3xl font-inter",
                     },

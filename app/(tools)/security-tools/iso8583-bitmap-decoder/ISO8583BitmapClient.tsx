@@ -133,7 +133,7 @@ export default function ISO8583BitmapClient() {
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="text-sm font-bold text-text-2 flex items-center gap-2">
-              <Binary className="w-4 h-4 text-sky-400" />
+              <Binary className="w-4 h-4 text-sky-600 dark:text-sky-400" />
               Hex Bitmap Input
             </div>
             
@@ -193,7 +193,7 @@ export default function ISO8583BitmapClient() {
               />
               Space Bytes
             </label>
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-mono font-bold border border-emerald-500/20">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-mono font-bold border border-emerald-500/20">
               {selectedFields.size} Fields Active
             </span>
           </div>
@@ -228,7 +228,7 @@ export default function ISO8583BitmapClient() {
                         title={`Field ${b.fieldNum}: ${ISO8583_FIELD_NAMES[b.fieldNum] || 'Reserved'}`}
                         className={`h-6 rounded text-[10px] font-mono font-bold flex items-center justify-center transition ${
                           b.active
-                            ? "bg-emerald-500 text-black shadow-xs"
+                            ? "bg-emerald-600 dark:bg-emerald-500 text-white shadow-xs"
                             : "bg-surface text-text-muted hover:bg-surface/80"
                         }`}
                       >
@@ -313,13 +313,13 @@ export default function ISO8583BitmapClient() {
                     onClick={() => toggleField(fieldNum)}
                     className={`p-3 rounded-xl border cursor-pointer flex items-center justify-between transition ${
                       isPresent
-                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300 shadow-xs'
+                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-300 shadow-xs'
                         : 'bg-surface-2 border-border text-text-muted hover:border-text-muted'
                     }`}
                   >
                     <div className="flex items-center gap-2.5 truncate pr-2">
                       <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-mono font-bold shrink-0 ${
-                        isPresent ? 'bg-emerald-500 text-black' : 'bg-surface text-text-muted border border-border'
+                        isPresent ? 'bg-emerald-600 dark:bg-emerald-500 text-white' : 'bg-surface text-text-muted border border-border'
                       }`}>
                         {fieldNum}
                       </span>

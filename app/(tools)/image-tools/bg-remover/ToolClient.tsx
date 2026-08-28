@@ -565,7 +565,7 @@ export default function ToolClient() {
               {file && (
                 <button 
                   onClick={handleReset}
-                  className="text-xs font-bold text-red-400 hover:text-red-300 flex items-center gap-1 transition-colors cursor-pointer"
+                  className="text-xs font-bold text-red-600 dark:text-red-400 hover:text-red-300 flex items-center gap-1 transition-colors cursor-pointer"
                 >
                   <Trash2 className="w-3.5 h-3.5" /> Clear Image
                 </button>
@@ -622,7 +622,7 @@ export default function ToolClient() {
 
             {/* Error notifications with recovery buttons */}
             {(canvasError || aiError) && (
-              <div className="p-3.5 bg-red-500/10 text-red-400 text-xs rounded-xl border border-red-500/20 flex flex-col gap-2.5">
+              <div className="p-3.5 bg-red-500/10 text-red-600 dark:text-red-400 text-xs rounded-xl border border-red-500/20 flex flex-col gap-2.5">
                 <div className="flex items-start gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                   <div className="space-y-1">
@@ -1102,7 +1102,7 @@ export default function ToolClient() {
                     className="p-1.5 rounded-xl border border-border bg-surface hover:bg-surface-elevated text-text text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
                     title="Copy cutout image to clipboard"
                   >
-                    {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copied ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{copied ? 'Copied' : 'Copy'}</span>
                   </button>
 

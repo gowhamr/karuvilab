@@ -3,7 +3,7 @@ import { ToolEntry } from '../types';
 export const timeCalculator: ToolEntry = {
   "id": "time-calculator",
   "name": "Time Calculator",
-  "desc": "Add or subtract hours and minutes",
+  "desc": "Calculate time intervals, sum durations, or add/subtract time with midnight rollover precision",
   "href": "/calculators/time-calculator/",
   "category": "calculators",
   "subCategory": "Date & Time",
@@ -11,8 +11,22 @@ export const timeCalculator: ToolEntry = {
     "time",
     "duration",
     "hours",
-    "minutes"
+    "minutes",
+    "time difference",
+    "add time",
+    "timesheet",
+    "overnight shift"
   ],
+  "difficulty": "beginner",
   "searchIntent": "transactional",
-  "schemaType": "WebApplication"
+  "priority": 0.8,
+  "schemaType": "WebApplication",
+  "related": [
+    "date-calculator",
+    "age-calculator",
+    "work-hours",
+    "stopwatch"
+  ],
+  "status": "stable",
+  "lastUpdated": "2026-08-25"
 };

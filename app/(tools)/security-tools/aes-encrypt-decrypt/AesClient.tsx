@@ -131,7 +131,7 @@ export default function AesClient() {
           </button>
 
           {error && (
-            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center gap-2" role="alert">
+            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 flex items-center gap-2" role="alert">
               <AlertCircle className="w-5 h-5 shrink-0" />
               <p className="text-sm font-medium">{error}</p>
             </div>
@@ -280,13 +280,13 @@ export default function AesClient() {
           {ivHex && (
             <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 space-y-1 mb-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-amber-400">
+                <span className="text-xs font-semibold text-amber-600 dark:text-amber-400">
                   IV (Initialisation Vector) — save this for decryption
                 </span>
                 <CopyButton text={ivHex} />
               </div>
-              <p className="font-mono text-xs text-amber-300 break-all">{ivHex}</p>
-              <p className="text-xs text-amber-400/70">
+              <p className="font-mono text-xs text-amber-700 dark:text-amber-300 break-all">{ivHex}</p>
+              <p className="text-xs text-amber-600 dark:text-amber-400/70">
                 When using raw key mode, you must provide this IV to decrypt. For passphrase mode, the IV is embedded in the ciphertext automatically.
               </p>
             </div>

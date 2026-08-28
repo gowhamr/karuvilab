@@ -83,12 +83,7 @@ const BREAKPOINTS = ['320', '375', '390', '768', '1024', '1440'];
 function GlassCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
     <div
-      className={`rounded-2xl border ${className}`}
-      style={{
-        background: 'rgba(255,255,255,0.04)',
-        borderColor: 'rgba(255,255,255,0.07)',
-        backdropFilter: 'blur(12px)',
-      }}
+      className={`rounded-2xl border border-border bg-surface-elevated/70 backdrop-blur-md transition-colors ${className}`}
     >
       {children}
     </div>
@@ -956,17 +951,12 @@ export default function CaseStudyClient() {
 
   return (
     <div
-      className="min-h-screen"
-      style={{ background: '#0A0F1E', fontFamily: 'var(--font-inter)' }}
+      className="min-h-screen bg-bg text-text transition-colors duration-300"
+      style={{ fontFamily: 'var(--font-inter)' }}
     >
       {/* ── Header ── */}
       <header
-        className="sticky top-0 z-modal border-b"
-        style={{
-          background: 'rgba(10,15,30,0.85)',
-          backdropFilter: 'blur(20px)',
-          borderColor: 'rgba(255,255,255,0.06)',
-        }}
+        className="sticky top-0 z-modal border-b bg-surface/85 backdrop-blur-xl border-border transition-colors duration-300"
       >
         <div className="max-w-screen-2xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -975,21 +965,21 @@ export default function CaseStudyClient() {
               KV
             </div>
             <div>
-              <p className="text-sm font-bold text-white" style={{ fontFamily: 'var(--font-dm-serif)' }}>KaruviLab</p>
-              <p className="text-[10px]" style={{ color: '#64748B' }}>UI/UX Case Study</p>
+              <p className="text-sm font-bold text-text" style={{ fontFamily: 'var(--font-dm-serif)' }}>KaruviLab</p>
+              <p className="text-[10px] text-text-muted">UI/UX Case Study</p>
             </div>
           </div>
           {/* Nav tabs */}
-          <nav className="flex gap-1 p-1 rounded-xl" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }} aria-label="Case study sections">
+          <nav className="flex gap-1 p-1 rounded-xl bg-surface-elevated border border-border" aria-label="Case study sections">
             {navTabs.map(tab => (
               <button
                 key={tab.key}
                 onClick={() => handleSectionChange(tab.key)}
-                className="px-4 py-1.5 rounded-lg text-xs font-semibold transition-all"
-                style={{
-                  background: activeSection === tab.key ? '#4F46E5' : 'transparent',
-                  color: activeSection === tab.key ? '#fff' : '#94A3B8',
-                }}
+                className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                  activeSection === tab.key 
+                    ? 'bg-primary text-white shadow-sm' 
+                    : 'text-text-muted hover:text-text'
+                }`}
                 aria-current={activeSection === tab.key ? 'page' : undefined}
               >
                 {tab.label}
@@ -998,8 +988,7 @@ export default function CaseStudyClient() {
           </nav>
           <div className="flex items-center gap-2">
             {['✓ No Uploads', '✓ Offline', '✓ Private'].map(b => (
-              <span key={b} className="px-2.5 py-1 rounded-full text-[10px] font-semibold hidden lg:inline-flex"
-                style={{ background: 'rgba(16,185,129,0.12)', color: '#34D399', border: '1px solid rgba(16,185,129,0.2)' }}>
+              <span key={b} className="px-2.5 py-1 rounded-full text-[10px] font-semibold hidden lg:inline-flex bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                 {b}
               </span>
             ))}
@@ -1008,7 +997,7 @@ export default function CaseStudyClient() {
       </header>
 
       {/* ── Hero Banner ── */}
-      <section className="relative overflow-hidden border-b" style={{ borderColor: 'rgba(255,255,255,0.04)' }}>
+      <section className="relative overflow-hidden border-b border-border/40">
         {/* Glow orbs */}
         <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full opacity-20 blur-3xl pointer-events-none"
           style={{ background: 'radial-gradient(circle, #4F46E5, transparent)' }} />
@@ -1016,18 +1005,17 @@ export default function CaseStudyClient() {
           style={{ background: 'radial-gradient(circle, #3B82F6, transparent)' }} />
 
         <div className="max-w-screen-2xl mx-auto px-6 py-16 text-center relative">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-6 text-xs font-semibold"
-            style={{ background: 'rgba(79,70,229,0.15)', color: '#A5B4FC', border: '1px solid rgba(79,70,229,0.3)' }}>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-6 text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
             ✦ Behance Case Study · 2026
           </div>
-          <h1 className="text-4xl lg:text-6xl font-black text-white mb-4 leading-tight"
+          <h1 className="text-4xl lg:text-6xl font-black text-text mb-4 leading-tight"
             style={{ fontFamily: 'var(--font-poppins)' }}>
             KaruviLab
           </h1>
-          <p className="text-lg lg:text-xl mb-3" style={{ color: '#94A3B8' }}>
+          <p className="text-lg lg:text-xl mb-3 text-text-secondary">
             Privacy-First Browser-Native Productivity Toolkit
           </p>
-          <p className="text-sm mb-8 max-w-2xl mx-auto" style={{ color: '#64748B' }}>
+          <p className="text-sm mb-8 max-w-2xl mx-auto text-text-muted">
             A complete UI/UX case study — from design system to pixel-perfect screens,
             covering 6 core app flows in both dark and light themes.
           </p>
@@ -1040,8 +1028,7 @@ export default function CaseStudyClient() {
               { label: 'No Login', icon: '🔑' },
               { label: 'WCAG AA', icon: '♿' },
             ].map(stat => (
-              <div key={stat.label} className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold"
-                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', color: '#CBD5E1' }}>
+              <div key={stat.label} className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-surface-elevated border border-border text-text-2">
                 <span>{stat.icon}</span> {stat.label}
               </div>
             ))}
@@ -1058,9 +1045,9 @@ export default function CaseStudyClient() {
             <div className="mb-10">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-1.5 h-6 rounded-full" style={{ background: 'linear-gradient(180deg, #4F46E5, #7C3AED)' }} />
-                <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-poppins)' }}>Dark Mode</h2>
+                <h2 className="text-2xl font-bold text-text" style={{ fontFamily: 'var(--font-poppins)' }}>Dark Mode</h2>
               </div>
-              <p className="text-sm pl-5" style={{ color: '#64748B' }}>
+              <p className="text-sm pl-5 text-text-muted">
                 Deep navy base · Glassmorphism surfaces · Indigo accent system
               </p>
             </div>
@@ -1080,9 +1067,9 @@ export default function CaseStudyClient() {
             <div className="mb-10">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-1.5 h-6 rounded-full" style={{ background: 'linear-gradient(180deg, #E2E8F0, #94A3B8)' }} />
-                <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-poppins)' }}>Light Mode</h2>
+                <h2 className="text-2xl font-bold text-text" style={{ fontFamily: 'var(--font-poppins)' }}>Light Mode</h2>
               </div>
-              <p className="text-sm pl-5" style={{ color: '#64748B' }}>
+              <p className="text-sm pl-5 text-text-muted">
                 Pure white surfaces · Soft shadows · Minimal borders · Blue-slate accents
               </p>
             </div>
@@ -1102,9 +1089,9 @@ export default function CaseStudyClient() {
             <div className="mb-10">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-1.5 h-6 rounded-full" style={{ background: 'linear-gradient(180deg, #F59E0B, #F43F5E)' }} />
-                <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-poppins)' }}>Design System</h2>
+                <h2 className="text-2xl font-bold text-text" style={{ fontFamily: 'var(--font-poppins)' }}>Design System</h2>
               </div>
-              <p className="text-sm pl-5" style={{ color: '#64748B' }}>
+              <p className="text-sm pl-5 text-text-muted">
                 Tokens · Components · Typography · Spacing · Motion
               </p>
             </div>
@@ -1120,13 +1107,13 @@ export default function CaseStudyClient() {
             <div className="mb-10">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-1.5 h-6 rounded-full" style={{ background: 'linear-gradient(180deg, #06B6D4, #3B82F6)' }} />
-                <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-poppins)' }}>Dark / Light Comparison</h2>
+                <h2 className="text-2xl font-bold text-text" style={{ fontFamily: 'var(--font-poppins)' }}>Dark / Light Comparison</h2>
               </div>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-10">
               {DARK_SCREENS.slice(0, 3).map(({ label, Screen }) => (
                 <div key={label} className="flex flex-col gap-4">
-                  <p className="text-xs font-semibold uppercase tracking-widest text-center" style={{ color: '#64748B' }}>{label}</p>
+                  <p className="text-xs font-semibold uppercase tracking-widest text-center text-text-muted">{label}</p>
                   <div className="flex gap-4 justify-center">
                     <PhoneFrame label="Dark" light={false}>
                       <Screen light={false} />
@@ -1143,25 +1130,24 @@ export default function CaseStudyClient() {
       </div>
 
       {/* ── Footer ── */}
-      <footer className="border-t" style={{ borderColor: 'rgba(255,255,255,0.05)', background: 'rgba(10,15,30,0.6)' }}>
+      <footer className="border-t border-border bg-surface/60 transition-colors duration-300">
         <div className="max-w-screen-2xl mx-auto px-6 py-10 text-center">
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-xs font-black"
               style={{ background: 'linear-gradient(135deg, #4F46E5, #3B82F6)', fontFamily: 'var(--font-dm-serif)' }}>KV</div>
-            <p className="text-sm font-bold text-white" style={{ fontFamily: 'var(--font-dm-serif)' }}>KaruviLab</p>
+            <p className="text-sm font-bold text-text" style={{ fontFamily: 'var(--font-dm-serif)' }}>KaruviLab</p>
           </div>
-          <p className="text-sm mb-5" style={{ color: '#64748B' }}>
+          <p className="text-sm mb-5 text-text-muted">
             Built for Privacy. Designed for Speed. Made for Everyone.
           </p>
           <div className="flex flex-wrap justify-center gap-3 mb-6">
             {['✓ No Server Uploads', '✓ 100% Browser Processing', '✓ Works Offline', '✓ No Account Required', '✓ Zero Tracking'].map(b => (
-              <span key={b} className="px-3 py-1.5 rounded-full text-xs font-semibold"
-                style={{ background: 'rgba(16,185,129,0.08)', color: '#34D399', border: '1px solid rgba(16,185,129,0.15)' }}>
+              <span key={b} className="px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                 {b}
               </span>
             ))}
           </div>
-          <p className="text-[11px]" style={{ color: '#334155' }}>
+          <p className="text-[11px] text-text-4">
             Designed with precision · WCAG AA Accessible · 150+ Tools · Open Source
           </p>
         </div>

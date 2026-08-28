@@ -350,7 +350,7 @@ export default function HashGeneratorClient() {
               return (
                 <div key={algo} className="relative">
                   {expectedHash && res?.value && (
-                    <div className={`absolute top-2 right-2 z-10 px-2 py-1 rounded text-xs font-bold ${isMatch ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500'}`}>
+                    <div className={`absolute top-2 right-2 z-content px-2 py-1 rounded text-xs font-bold ${isMatch ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500'}`}>
                       {isMatch ? 'MATCH' : 'MISMATCH'}
                     </div>
                   )}

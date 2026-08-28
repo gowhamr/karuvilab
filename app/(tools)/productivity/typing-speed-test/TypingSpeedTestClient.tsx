@@ -241,9 +241,9 @@ export default function TypingSpeedTestClient() {
       if (index < input.length) {
         cls = input[index] === char
           ? "text-emerald-500"
-          : "text-rose-400 bg-rose-400/10 rounded-sm";
+          : "text-rose-600 dark:text-rose-400 bg-rose-400/10 rounded-sm";
       } else if (index === input.length) {
-        cls = "text-text border-b-2 border-[#8B5CF6] animate-pulse";
+        cls = "text-text border-b-2 border-primary animate-pulse";
       }
       return (
         <span key={index} className={`transition-colors ${cls}`}>
@@ -257,10 +257,10 @@ export default function TypingSpeedTestClient() {
   const isNewBestAcc = status === "finished" && bestLoaded && (bestAcc === stats.accuracy);
 
   const getTypingLevel = (wpm: number) => {
-    if (wpm < 30) return { title: "Beginner", color: "text-blue-400" };
-    if (wpm <= 50) return { title: "Intermediate", color: "text-emerald-400" };
-    if (wpm <= 70) return { title: "Advanced", color: "text-purple-400" };
-    if (wpm <= 90) return { title: "Professional", color: "text-orange-400" };
+    if (wpm < 30) return { title: "Beginner", color: "text-blue-600 dark:text-blue-400" };
+    if (wpm <= 50) return { title: "Intermediate", color: "text-emerald-600 dark:text-emerald-400" };
+    if (wpm <= 70) return { title: "Advanced", color: "text-purple-600 dark:text-purple-400" };
+    if (wpm <= 90) return { title: "Professional", color: "text-orange-600 dark:text-orange-400" };
     return { title: "Typemaster", color: "text-rose-500" };
   };
 
@@ -291,7 +291,7 @@ export default function TypingSpeedTestClient() {
             onClick={() => inputRef.current?.focus()}
           >
             {status === "idle" && (
-              <p className="text-xs font-bold text-[#8B5CF6] uppercase tracking-widest mb-2">
+              <p className="text-xs font-bold text-primary uppercase tracking-widest mb-2">
                 <Keyboard className="w-3 h-3 inline mr-1.5" aria-hidden="true" />
                 Click here or start typing
               </p>
@@ -325,7 +325,7 @@ export default function TypingSpeedTestClient() {
                 >
                   <button
                     onClick={reset}
-                    className="flex items-center gap-2 px-6 py-3 bg-[#8B5CF6] text-white rounded-xl font-bold hover:bg-[#7C3AED] transition-colors shadow-lg shadow-[#8B5CF6]/20"
+                    className="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
                   >
                     <RefreshCw className="w-4 h-4" /> Next Test
                   </button>
@@ -344,7 +344,7 @@ export default function TypingSpeedTestClient() {
               </p>
               <button
                 onClick={reset}
-                className="flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-lg text-sm font-bold text-text-2 hover:border-[#8B5CF6] transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-lg text-sm font-bold text-text-2 hover:border-primary transition-colors"
               >
                 <RefreshCw className="w-4 h-4" /> Skip
               </button>
@@ -366,7 +366,7 @@ export default function TypingSpeedTestClient() {
                 className="p-4 bg-bg border border-border rounded-3xl flex flex-col items-center justify-center gap-1.5"
                 aria-label={`${label}: ${val}${suffix}`}
               >
-                <Icon className="w-5 h-5 text-[#8B5CF6]" aria-hidden="true" />
+                <Icon className="w-5 h-5 text-primary" aria-hidden="true" />
                 <div className="text-2xl sm:text-3xl font-black text-text">{val}{suffix}</div>
                 <div className="text-[10px] sm:text-xs font-bold text-text-muted uppercase tracking-widest">{label}</div>
                 {best !== null && (
@@ -437,13 +437,13 @@ export default function TypingSpeedTestClient() {
                   {topMissed.length > 0 && (
                     <div className="pt-3">
                        <div className="flex items-center gap-2 mb-3">
-                         <AlertTriangle className="w-3.5 h-3.5 text-orange-400" />
+                         <AlertTriangle className="w-3.5 h-3.5 text-orange-600 dark:text-orange-400" />
                          <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Trouble Keys</span>
                        </div>
                        <div className="flex gap-2 flex-wrap">
                          {topMissed.map(([char, count]) => (
                            <div key={char} className="flex items-center gap-1.5 px-3 py-1.5 bg-surface border border-border rounded-lg text-sm">
-                             <span className="font-mono font-bold text-rose-400">
+                             <span className="font-mono font-bold text-rose-600 dark:text-rose-400">
                                {char === ' ' ? 'Space' : char}
                              </span>
                              <span className="text-text-muted text-xs font-bold">×{count}</span>

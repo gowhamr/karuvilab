@@ -68,7 +68,7 @@ export default function PemViewerClient() {
             Inspect PEM Blocks & ASN.1
           </button>
           {error && (
-            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium">
+            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-sm font-medium">
               {error}
             </div>
           )}
@@ -100,7 +100,7 @@ export default function PemViewerClient() {
             {blocks[selectedBlockIdx] && (
               <div className="p-4 rounded-xl bg-surface-2 border border-border flex flex-col gap-4 flex-1 overflow-hidden">
                 <div className="flex items-center justify-between shrink-0">
-                  <h4 className="font-bold text-sm text-sky-400">
+                  <h4 className="font-bold text-sm text-sky-600 dark:text-sky-400">
                     Block Type: {blocks[selectedBlockIdx]!.type}
                   </h4>
                   <CopyButton text={blocks[selectedBlockIdx]!.b64} />
@@ -108,7 +108,7 @@ export default function PemViewerClient() {
 
                 <div className="space-y-1 shrink-0">
                   <label className="text-xs font-semibold text-text-muted">Hex Dump (DER):</label>
-                  <div className="p-3 rounded-lg bg-surface border border-border font-mono text-xs text-emerald-300 break-all max-h-40 overflow-y-auto">
+                  <div className="p-3 rounded-lg bg-surface border border-border font-mono text-xs text-emerald-700 dark:text-emerald-300 break-all max-h-40 overflow-y-auto">
                     {bytesToHex(blocks[selectedBlockIdx]!.bytes, " ")}
                   </div>
                 </div>
@@ -138,7 +138,7 @@ function ASN1TreeView({ node, depth }: { node: ASN1Node; depth: number }) {
   return (
     <div className="ml-3 my-0.5 border-l border-border/50 pl-2">
       <span className="text-text-muted">[{node.typeHex}]</span>{" "}
-      <span className="text-amber-300">
+      <span className="text-amber-700 dark:text-amber-300">
         {node.isConstructed ? "CONSTRUCTED" : "PRIMITIVE"}
       </span>{" "}
       <span className="text-text font-bold">Tag {node.tag}</span>{" "}

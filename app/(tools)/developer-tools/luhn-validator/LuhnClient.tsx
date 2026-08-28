@@ -84,14 +84,14 @@ export default function LuhnClient() {
             {/* Validation Result Box */}
             <div className={`p-5 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition ${
               isValid
-                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
-                : 'bg-red-500/10 border-red-500/30 text-red-400'
+                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-300'
+                : 'bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400'
             }`}>
               <div className="flex items-center gap-3">
                 {isValid ? (
-                  <CheckCircle2 className="w-8 h-8 text-emerald-400 shrink-0" />
+                  <CheckCircle2 className="w-8 h-8 text-emerald-600 dark:text-emerald-400 shrink-0" />
                 ) : (
-                  <XCircle className="w-8 h-8 text-red-400 shrink-0" />
+                  <XCircle className="w-8 h-8 text-red-600 dark:text-red-400 shrink-0" />
                 )}
                 <div>
                   <h3 className="font-bold text-base font-sans">
@@ -111,7 +111,7 @@ export default function LuhnClient() {
             {/* Check Digit Generator */}
             <div className="space-y-3 flex-1 flex flex-col">
               <h4 className="font-bold text-sm text-text flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-sky-400" />
+                <ShieldCheck className="w-4 h-4 text-sky-600 dark:text-sky-400" />
                 Calculated Luhn Check Digit
               </h4>
 

@@ -209,7 +209,8 @@ describe('Age Calculator Core Engine (calculateAge)', () => {
             dateOfBirth: '1995-05-12',
             asOfDate: '2025-05-12',
         });
-        expect(() => calculateAge(input)).not.toThrow();
+        const res = calculateAge(input);
+        expect(res.success).toBe(true);
     });
     it('is purely deterministic: same inputs always produce identical results', () => {
         const input = {

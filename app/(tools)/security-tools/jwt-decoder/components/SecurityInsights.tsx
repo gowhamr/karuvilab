@@ -91,10 +91,10 @@ export function SecurityInsights({ decoded }: SecurityInsightsProps) {
       {/* Expiration Card */}
       <div className={`p-4 rounded-2xl border flex items-start gap-3 ${
         expInfo?.isExpired 
-          ? "bg-rose-500/10 border-rose-500/20 text-rose-400" 
+          ? "bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-400" 
           : expInfo?.expiresSoon 
-          ? "bg-amber-500/10 border-amber-500/20 text-amber-400"
-          : "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+          ? "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400"
+          : "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400"
       }`}>
         <Clock className="w-5 h-5 shrink-0 mt-0.5" aria-hidden="true" />
         <div>
@@ -107,7 +107,7 @@ export function SecurityInsights({ decoded }: SecurityInsightsProps) {
       {/* Algorithm Safety Card */}
       <div className={`p-4 rounded-2xl border flex items-start gap-3 ${
         decoded.header.alg === "none"
-          ? "bg-rose-500/10 border-rose-500/20 text-rose-400"
+          ? "bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-400"
           : "bg-blue/10 border-blue/20 text-blue"
       }`}>
         {decoded.header.alg === "none" ? (
@@ -153,7 +153,7 @@ export function SecurityInsights({ decoded }: SecurityInsightsProps) {
           </div>
           {verifyStatus !== "idle" && (
             <p role="status" className={`text-xs font-bold mt-2 ${
-              verifyStatus === "valid" ? "text-emerald-400" : "text-rose-400"
+              verifyStatus === "valid" ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"
             }`}>
               {verifyStatus === "valid" ? "✅ Signature Verified Valid" : "❌ Invalid Signature Match"}
             </p>

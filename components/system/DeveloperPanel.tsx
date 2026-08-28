@@ -488,7 +488,7 @@ export function DeveloperPanel() {
                   User Event / Action
                 </div>
                 <div className="text-text-4">↓ (Direct Render)</div>
-                <div className="p-2 bg-purple/10 border border-purple/30 rounded-xl text-purple-400 font-bold">
+                <div className="p-2 bg-purple/10 border border-purple/30 rounded-xl text-purple-600 dark:text-purple-400 font-bold">
                   React 19 Server/Client Shell
                 </div>
                 <div className="text-text-4">↓ (WorkerOrchestrator RPC)</div>
@@ -554,7 +554,7 @@ export function DeveloperPanel() {
                     <strong>What it measures:</strong> Memory allocated by V8 for objects and binary buffers.
                   </p>
                   <p className="text-text-muted text-[11px]">
-                    <strong>Optimization:</strong> KaruviLab uses zero-copy ArrayBuffers and revokes Blob URLs via <code className="bg-surface px-1 py-0.5 rounded text-purple-400">blobManager</code>.
+                    <strong>Optimization:</strong> KaruviLab uses zero-copy ArrayBuffers and revokes Blob URLs via <code className="bg-surface px-1 py-0.5 rounded text-purple-600 dark:text-purple-400">blobManager</code>.
                   </p>
                 </div>
               )}

@@ -73,7 +73,7 @@ export default function PublicKeyClient() {
           </Button>
 
           {error && (
-            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium flex items-center gap-2">
+            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-sm font-medium flex items-center gap-2">
               <AlertCircle className="w-5 h-5" />
               {error}
             </div>
@@ -84,11 +84,11 @@ export default function PublicKeyClient() {
         info ? (
           <div className="space-y-4">
             <div className="flex items-center justify-between border-b border-border pb-3">
-              <h3 className="font-bold text-base text-sky-400 flex items-center gap-2">
+              <h3 className="font-bold text-base text-sky-600 dark:text-sky-400 flex items-center gap-2">
                 <Key className="w-5 h-5" />
                 Public Key Verified
               </h3>
-              <span className="text-xs px-2.5 py-1 rounded-full bg-sky-500/10 text-sky-400 font-semibold border border-sky-500/20">
+              <span className="text-xs px-2.5 py-1 rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-400 font-semibold border border-sky-500/20">
                 Valid SPKI
               </span>
             </div>
@@ -100,7 +100,7 @@ export default function PublicKeyClient() {
               </div>
               <div>
                 <span className="text-text-muted block font-sans text-xs">DER Payload Length:</span>
-                <span className="text-emerald-300">{info.sizeBits / 8} Bytes ({info.sizeBits} bits)</span>
+                <span className="text-emerald-700 dark:text-emerald-300">{info.sizeBits / 8} Bytes ({info.sizeBits} bits)</span>
               </div>
             </div>
 
@@ -109,7 +109,7 @@ export default function PublicKeyClient() {
                 <span className="text-xs font-semibold text-text-muted">SHA-256 Fingerprint:</span>
                 <CopyButton text={info.fp} />
               </div>
-              <p className="font-mono text-xs text-emerald-300 break-all">{info.fp}</p>
+              <p className="font-mono text-xs text-emerald-700 dark:text-emerald-300 break-all">{info.fp}</p>
             </div>
           </div>
         ) : (

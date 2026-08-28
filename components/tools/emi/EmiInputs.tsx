@@ -265,7 +265,7 @@ export function EmiInputs() {
       </div>
 
       {/* 1. Loan Amount Section */}
-      <div className="space-y-2">
+      <div className="space-y-2" data-input-field="loan-amount">
         <ToolInput
           label="Loan Amount"
           type="number"
@@ -296,7 +296,7 @@ export function EmiInputs() {
       </div>
 
       {/* 2. Interest Rate Section */}
-      <div className="space-y-2">
+      <div className="space-y-2" data-input-field="interest-rate">
         <ToolInput
           label="Interest Rate (% p.a.)"
           type="number"
@@ -337,20 +337,24 @@ export function EmiInputs() {
 
         {/* Dual Side-by-Side Inputs: Years & Months with robust local text state */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          <ToolInput
-            label="Tenure in Years"
-            type="number"
-            value={localYears}
-            onChange={handleYearsChange}
-            description="Enter loan duration in years (e.g. 5, 10, 20, 30)"
-          />
-          <ToolInput
-            label="Tenure in Months"
-            type="number"
-            value={localMonths}
-            onChange={handleMonthsChange}
-            description="Enter loan duration in months (e.g. 60, 120, 240, 360)"
-          />
+          <div data-input-field="tenure-years">
+            <ToolInput
+              label="Tenure in Years"
+              type="number"
+              value={localYears}
+              onChange={handleYearsChange}
+              description="Enter loan duration in years (e.g. 5, 10, 20, 30)"
+            />
+          </div>
+          <div data-input-field="tenure-months">
+            <ToolInput
+              label="Tenure in Months"
+              type="number"
+              value={localMonths}
+              onChange={handleMonthsChange}
+              description="Enter loan duration in months (e.g. 60, 120, 240, 360)"
+            />
+          </div>
         </div>
 
         {/* Real-Time Interactive Slider */}

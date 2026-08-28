@@ -20,7 +20,7 @@ export function DeveloperAnalysis({ decoded }: DeveloperAnalysisProps) {
            </div>
            <div className="bg-bg border border-border rounded-xl p-3">
               <p className="text-[10px] uppercase font-bold text-text-muted">Header Size</p>
-              <p className="text-sm font-mono text-purple-400 mt-1">{decoded.sizes.header} B</p>
+              <p className="text-sm font-mono text-purple-600 dark:text-purple-400 mt-1">{decoded.sizes.header} B</p>
            </div>
            <div className="bg-bg border border-border rounded-xl p-3">
               <p className="text-[10px] uppercase font-bold text-text-muted">Payload Size</p>
@@ -28,7 +28,7 @@ export function DeveloperAnalysis({ decoded }: DeveloperAnalysisProps) {
            </div>
            <div className="bg-bg border border-border rounded-xl p-3">
               <p className="text-[10px] uppercase font-bold text-text-muted">Signature Size</p>
-              <p className="text-sm font-mono text-emerald-400 mt-1">{decoded.sizes.sig} B</p>
+              <p className="text-sm font-mono text-emerald-600 dark:text-emerald-400 mt-1">{decoded.sizes.sig} B</p>
            </div>
            <div className="bg-bg border border-border rounded-xl p-3">
               <p className="text-[10px] uppercase font-bold text-text-muted">Encoding</p>

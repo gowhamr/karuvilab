@@ -97,7 +97,7 @@ export function AmortisationTable({ schedule }: AmortisationTableProps) {
                   <span className="text-text-muted font-mono" role="rowheader">M{entry.month}</span>
                   <span className="text-text font-medium" role="cell">{formatCurrency(entry.principal)}</span>
                   <span className="text-text-muted" role="cell">{formatCurrency(entry.interest)}</span>
-                  <span className="text-emerald-400 font-medium" role="cell">
+                  <span className="text-emerald-600 dark:text-emerald-400 font-medium" role="cell">
                     {entry.prepayment > 0 ? formatCurrency(entry.prepayment) : '—'}
                   </span>
                   <span className="font-bold text-blue font-mono" role="cell">{formatCurrency(entry.balance)}</span>

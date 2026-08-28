@@ -359,7 +359,7 @@ body {
   min-height: 100svh;
 }
 
-header, aside, footer, nav, .mat-surface-1, .mat-surface-2, .mat-surface-3, .kv-glass, .bg-surface, .bg-bg, .bg-bg-input, .border-border {
+header, aside, footer, nav, .mat-surface-1, .mat-surface-2, .mat-surface-3, .kv-glass, .bg-surface, .bg-surface-elevated, .bg-surface-2, .bg-elevated, .bg-bg, .bg-bg-input, .border-border, .border-border-2, .border-divider {
   transition: 
     background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
     border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), 

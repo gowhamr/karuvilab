@@ -1,7 +1,7 @@
 export const ageCalculator = {
     "id": "age-calculator",
     "name": "Age Calculator",
-    "desc": "Calculate exact age in years, months, and days with offline precision date math",
+    "desc": "Calculate exact age in years, months, and days with offline precision date math. Supports canonical query parameters ?dob=YYYY-MM-DD&as_of=YYYY-MM-DD.",
     "href": "/calculators/age-calculator/",
     "category": "calculators",
     "subCategory": "Date & Time",

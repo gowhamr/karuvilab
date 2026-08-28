@@ -68,6 +68,7 @@ const METHOD_TO_POOL: Partial<Record<keyof WorkerAPI, PoolType>> = {
   processJson: 'compute',
   evaluateMath: 'compute',
   calculateEmiSchedule: 'compute',
+  calculateMonteCarloSimulation: 'compute',
   convertNumeral: 'compute',
   detectNumeralFormat: 'compute',
   checkGrammar: 'compute',

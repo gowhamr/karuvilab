@@ -155,7 +155,7 @@ export default function ChartGeneratorClient() {
       output={
         <div className="flex flex-col items-center justify-center min-h-[500px] h-full relative overflow-hidden group/canvas py-4 md:py-8">
           {/* Background Texture */}
-          <div className="absolute inset-0 opacity-[0.03] pointer-events-none rounded-3xl" style={{ backgroundImage: 'radial-gradient(#4F46E5 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+          <div className="absolute inset-0 opacity-[0.04] pointer-events-none rounded-3xl" style={{ backgroundImage: 'radial-gradient(var(--color-primary, #4F46E5) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
           <div className="relative z-content w-full flex flex-col items-center gap-12">
             {options.title && (

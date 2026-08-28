@@ -57,7 +57,7 @@ export default function PrivateKeyClient() {
     <ToolWorkspace
       layout="split"
       infoPanel={
-        <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-medium flex items-center gap-2">
+        <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-medium flex items-center gap-2">
           <ShieldAlert className="w-5 h-5 flex-shrink-0" />
           <span>Your private key is parsed 100% locally in memory and is NEVER transmitted or stored anywhere.</span>
         </div>
@@ -90,7 +90,7 @@ export default function PrivateKeyClient() {
           </div>
 
           {error && (
-            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium flex items-center gap-2">
+            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-sm font-medium flex items-center gap-2">
               <AlertCircle className="w-5 h-5" />
               {error}
             </div>
@@ -99,11 +99,11 @@ export default function PrivateKeyClient() {
           {info && (
             <div className="p-5 rounded-xl bg-surface-2 border border-border space-y-4 flex-1">
               <div className="flex items-center justify-between border-b border-border pb-3">
-                <h3 className="font-bold text-base text-amber-400 flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                <h3 className="font-bold text-base text-amber-600 dark:text-amber-400 flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                   Private Key Validated ({info.format})
                 </h3>
-                <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-semibold border border-emerald-500/20">
+                <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold border border-emerald-500/20">
                   Valid Structure
                 </span>
               </div>
@@ -115,7 +115,7 @@ export default function PrivateKeyClient() {
                 </div>
                 <div>
                   <span className="text-text-muted block font-sans text-xs">DER Length:</span>
-                  <span className="text-amber-300">{info.sizeBits / 8} Bytes ({info.sizeBits} bits)</span>
+                  <span className="text-amber-700 dark:text-amber-300">{info.sizeBits / 8} Bytes ({info.sizeBits} bits)</span>
                 </div>
               </div>
 
@@ -124,7 +124,7 @@ export default function PrivateKeyClient() {
                   <span className="text-xs font-semibold text-text-muted">Key Digest SHA-256 Fingerprint:</span>
                   <CopyButton text={info.fp} />
                 </div>
-                <p className="font-mono text-xs text-amber-300 break-all">{info.fp}</p>
+                <p className="font-mono text-xs text-amber-700 dark:text-amber-300 break-all">{info.fp}</p>
               </div>
             </div>
           )}

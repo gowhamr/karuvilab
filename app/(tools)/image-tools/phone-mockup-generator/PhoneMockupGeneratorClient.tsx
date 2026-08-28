@@ -367,23 +367,25 @@ export default function PhoneMockupGeneratorClient() {
               <button
                 id="device-color-dark"
                 onClick={() => setColorScheme("dark")}
-                className={`flex-1 py-2 rounded-xl border text-sm font-semibold transition-all ${
+                className={`flex-1 py-2 px-3 rounded-xl border text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
                   colorScheme === "dark"
-                    ? "bg-slate-900 text-white border-blue"
-                    : "bg-bg border-border text-text-3"
+                    ? "bg-primary/10 border-primary text-primary font-bold shadow-sm"
+                    : "bg-bg border-border text-text-3 hover:text-text"
                 }`}
               >
+                <span className="w-3 h-3 rounded-full bg-slate-900 border border-slate-700 inline-block" />
                 Space Black
               </button>
               <button
                 id="device-color-silver"
                 onClick={() => setColorScheme("silver")}
-                className={`flex-1 py-2 rounded-xl border text-sm font-semibold transition-all ${
+                className={`flex-1 py-2 px-3 rounded-xl border text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
                   colorScheme === "silver"
-                    ? "bg-gray-100 text-gray-800 border-blue"
-                    : "bg-bg border-border text-text-3"
+                    ? "bg-primary/10 border-primary text-primary font-bold shadow-sm"
+                    : "bg-bg border-border text-text-3 hover:text-text"
                 }`}
               >
+                <span className="w-3 h-3 rounded-full bg-slate-200 border border-slate-400 inline-block" />
                 Silver
               </button>
             </div>

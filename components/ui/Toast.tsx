@@ -57,7 +57,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         closeButton
         richColors
         position="bottom-right"
-        theme="system"
+        theme={typeof document !== 'undefined' ? (document.documentElement.getAttribute('data-theme') as 'light' | 'dark') || 'dark' : 'dark'}
         toastOptions={{
           classNames: {
             toast: "rounded-3xl font-inter",

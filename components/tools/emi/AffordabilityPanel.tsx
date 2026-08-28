@@ -25,9 +25,9 @@ export function AffordabilityPanel({ currentEmi }: { currentEmi: number }) {
   };
 
   const riskTextColors = {
-    low: "text-emerald-400",
-    medium: "text-amber-400",
-    high: "text-red-400"
+    low: "text-emerald-600 dark:text-emerald-400",
+    medium: "text-amber-600 dark:text-amber-400",
+    high: "text-red-600 dark:text-red-400"
   };
 
   const riskIcons = {
@@ -79,9 +79,9 @@ export function AffordabilityPanel({ currentEmi }: { currentEmi: number }) {
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-text-muted">Debt-to-Income (DTI) Ratio</span>
               <div className={cn("flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border", 
-                result.riskLevel === 'low' ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" :
-                result.riskLevel === 'medium' ? "bg-amber-500/10 text-amber-400 border-amber-500/20" :
-                "bg-red-500/10 text-red-400 border-red-500/20"
+                result.riskLevel === 'low' ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20" :
+                result.riskLevel === 'medium' ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20" :
+                "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20"
               )}>
                 <RiskIcon className="w-3.5 h-3.5" />
                 <span>{result.riskLevel} Risk ({result.emiPercentOfDisposable.toFixed(1)}%)</span>
@@ -105,9 +105,9 @@ export function AffordabilityPanel({ currentEmi }: { currentEmi: number }) {
             </div>
 
             <p className={cn("text-xs font-semibold leading-relaxed p-3.5 rounded-xl border mt-2", 
-              result.riskLevel === 'low' ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-300" :
-              result.riskLevel === 'medium' ? "bg-amber-500/10 border-amber-500/20 text-amber-300" :
-              "bg-red-500/10 border-red-500/20 text-red-300"
+              result.riskLevel === 'low' ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-300" :
+              result.riskLevel === 'medium' ? "bg-amber-500/10 border-amber-500/20 text-amber-700 dark:text-amber-300" :
+              "bg-red-500/10 border-red-500/20 text-red-700 dark:text-red-300"
             )}>
               {result.message}
             </p>

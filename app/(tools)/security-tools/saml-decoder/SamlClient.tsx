@@ -68,8 +68,8 @@ export default function SamlClient() {
           {parsed && (
             <div className="p-5 rounded-xl bg-surface-2 border border-border space-y-3">
               <div className="flex items-center justify-between border-b border-border pb-3">
-                <h3 className="font-bold text-base text-sky-400 flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                <h3 className="font-bold text-base text-sky-600 dark:text-sky-400 flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                   {parsed.isResponse ? "SAML Response / Assertion" : parsed.isRequest ? "SAML AuthnRequest / LogoutRequest" : "SAML Document"}
                 </h3>
               </div>
@@ -81,15 +81,15 @@ export default function SamlClient() {
                 </div>
                 <div>
                   <span className="text-text-muted block font-sans text-xs">Subject NameID:</span>
-                  <span className="text-emerald-300 break-all">{parsed.nameId || "N/A"}</span>
+                  <span className="text-emerald-700 dark:text-emerald-300 break-all">{parsed.nameId || "N/A"}</span>
                 </div>
                 <div>
                   <span className="text-text-muted block font-sans text-xs">Destination Endpoint:</span>
-                  <span className="text-sky-300 break-all">{parsed.destination || "N/A"}</span>
+                  <span className="text-sky-700 dark:text-sky-300 break-all">{parsed.destination || "N/A"}</span>
                 </div>
                 <div>
                   <span className="text-text-muted block font-sans text-xs">Issue Instant:</span>
-                  <span className="text-amber-300">{parsed.issueInstant || "N/A"}</span>
+                  <span className="text-amber-700 dark:text-amber-300">{parsed.issueInstant || "N/A"}</span>
                 </div>
               </div>
   
@@ -99,7 +99,7 @@ export default function SamlClient() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {Object.entries(parsed.attributes).map(([k, v], i) => (
                       <div key={i} className="p-2 rounded-lg bg-surface border border-border text-xs font-mono break-all">
-                        <span className="text-sky-400 font-bold">{k}:</span> <span className="text-text">{v}</span>
+                        <span className="text-sky-600 dark:text-sky-400 font-bold">{k}:</span> <span className="text-text">{v}</span>
                       </div>
                     ))}
                   </div>

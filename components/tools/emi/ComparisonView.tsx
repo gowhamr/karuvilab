@@ -40,7 +40,7 @@ export function ComparisonView() {
         </div>
         <button 
           onClick={clearComparison}
-          className="text-xs font-bold text-red-400 hover:text-red-300 transition-colors cursor-pointer"
+          className="text-xs font-bold text-red-600 dark:text-red-400 hover:text-red-300 transition-colors cursor-pointer"
         >
           Clear All
         </button>
@@ -116,11 +116,11 @@ function MetricItem({ label, value, isBest, diff }: { label: string, value: stri
   return (
     <dl className="space-y-0.5">
       <dt className="text-[10px] font-bold text-text-muted uppercase tracking-wider">{label}</dt>
-      <dd className={cn("text-base font-bold tabular-nums", isBest ? "text-emerald-400" : "text-text")}>
+      <dd className={cn("text-base font-bold tabular-nums", isBest ? "text-emerald-600 dark:text-emerald-400" : "text-text")}>
         {value}
       </dd>
       {diff !== undefined && diff > 0 && (
-        <dd className="text-[10px] font-semibold text-amber-400">
+        <dd className="text-[10px] font-semibold text-amber-600 dark:text-amber-400">
           +{formatCurrency(diff)} diff
         </dd>
       )}

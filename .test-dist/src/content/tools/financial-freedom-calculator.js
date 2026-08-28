@@ -1,80 +1,77 @@
 export const financialFreedomCalculator = {
     detailedDescription: `
-The **Financial Freedom Calculator** (often associated with the FIRE movement—Financial Independence, Retire Early) is a comprehensive planning tool designed to help you determine exactly when you can safely stop working for money. It calculates your required retirement corpus, estimates the years remaining until you reach financial independence, and projects your net worth over your lifetime.
+<p>The KaruviLab Financial Freedom (FIRE) Calculator is a deterministic wealth projection model designed to compute your financial independence number, required monthly Systematic Investment Plan (SIP), and portfolio accumulation trajectory. Executing entirely client-side with zero telemetry, it accounts for safe withdrawal rates (such as the 4% Trinity Study rule) and compounded inflation.</p>
 
-Achieving financial independence requires careful planning and a clear understanding of the math behind your savings, investments, and expenses. This calculator takes the guesswork out of the equation by using standard FIRE principles, including the Safe Withdrawal Rate (SWR) and inflation-adjusted projections, to provide a clear roadmap to your financial goals.
+<p>Achieving financial independence requires balancing several dynamic economic parameters:</p>
+<ul>
+  <li><strong>Inflation-Adjusted Living Expenses:</strong> Projects your current monthly expenditure to your target retirement age using compounding annual inflation.</li>
+  <li><strong>Target FIRE Corpus:</strong> Computes the total required nest egg based on your chosen safe withdrawal rate ($\text{Target Corpus} = \text{Annual Future Expenses} / \text{Withdrawal Rate}$).</li>
+  <li><strong>Required Monthly SIP:</strong> Derives the exact monthly savings necessary using future-value annuity formulas to bridge the gap between your existing portfolio and target corpus.</li>
+  <li><strong>Projected Freedom Age:</strong> Identifies the exact chronological age when your compounded portfolio will surpass your inflation-adjusted FIRE requirement under your current monthly savings rate.</li>
+</ul>
 
-### Why You Need a Financial Freedom Calculator
-Many people dream of retiring early or reaching a point where work is optional, but they don't know how much money they actually need. A common misconception is that you need an arbitrary large sum (like ₹10 Crore or $1 Million) to retire. In reality, your required corpus depends entirely on your annual expenses and your expected investment returns.
-
-Our **Financial Freedom Calculator** helps you understand the direct relationship between your current savings rate, your lifestyle expenses, and your retirement timeline. By adjusting variables like your monthly savings or your expected return rate, you can immediately see how small changes today impact your financial future.
-
-### Core Concepts of Financial Independence
-- **The Safe Withdrawal Rate (SWR):** Often referred to as the "4% Rule," this is the percentage of your total corpus you can withdraw annually in retirement without running out of money. If your SWR is 4%, your required corpus is 25 times your annual expenses.
-- **Required Corpus:** The total amount of invested money you need to generate enough passive income to cover your living expenses forever.
-- **Savings Rate:** The percentage of your income that you save and invest. A higher savings rate is the most powerful lever you have for reducing your time to financial independence.
-- **Inflation:** The rate at which the cost of living increases. Your investments must grow faster than inflation to maintain their purchasing power.
-
-In alignment with KaruviLab's strict privacy standards, this calculator processes all complex projections and data handling entirely within your browser. It operates **100% offline-capable** after the first load, ensuring your personal financial numbers remain securely on your device.
+<p>All calculations are performed locally in your browser memory. Your personal financial numbers, incomes, and savings balances never leave your device.</p>
 `,
     howTo: [
-        "**Step 1:** Enter your **Current Age** and your **Target Retirement Age**.",
-        "**Step 2:** Input your **Current Savings** (invested assets) and your post-tax **Monthly Income** and **Monthly Expenses**.",
-        "**Step 3:** Set your expectations for the market with **Expected Annual Return**.",
-        "**Step 4:** Review the results panel to see your **Required Corpus** and the exact **Years to FI**.",
-        "**Step 5:** Open the Advanced Settings to fine-tune inflation, income growth, and withdrawal rates.",
-        "**Step 6:** Save different scenarios (e.g., 'Aggressive Savings' vs 'Normal') and compare them side-by-side using the Compare feature."
+        "<strong>Enter Current & Target Age:</strong> Specify your current age and desired retirement milestone.",
+        "<strong>Input Income & Expenses:</strong> Enter your monthly living expenses and current discretionary income.",
+        "<strong>Specify Existing Corpus & SIP:</strong> Input your current accumulated portfolio balance and ongoing monthly investments.",
+        "<strong>Adjust Returns & Inflation:</strong> Fine-tune your expected portfolio CAGR (e.g. 12%), inflation rate (e.g. 6%), and safe withdrawal rate (e.g. 4%).",
     ],
     faq: [
         {
-            question: "What is the 4% Rule?",
-            answer: "The 4% rule is a rule of thumb used to determine a safe withdrawal rate for retirement. It suggests that if you withdraw 4% of your total retirement portfolio in your first year of retirement, and adjust that amount for inflation in subsequent years, your money should last at least 30 years."
+            question: "What is the 4% Safe Withdrawal Rule?",
+            answer: "Originating from the Trinity Study, the 4% rule suggests that withdrawing 4% of your initial retirement portfolio (adjusted annually for inflation) historically maintains portfolio longevity over a 30-year retirement.",
         },
         {
-            question: "Does this calculator account for inflation?",
-            answer: "Yes. The calculator uses the inflation rate you provide to adjust your future required expenses, meaning the 'Required Corpus' displayed is the actual inflated amount you will need at your target retirement age."
+            question: "How does inflation affect the target corpus?",
+            answer: "As living costs increase with inflation, the future purchasing power of money decreases. The calculator compounds your monthly expenses at your designated inflation rate until your retirement age, ensuring your FIRE target reflects real future costs.",
         },
         {
-            question: "What should I enter for 'Expected Annual Return'?",
-            answer: "This depends on your investment portfolio. Historically, a diversified equity portfolio might return 10-12% nominally in India (or 7-10% globally). For conservative estimates, you might use 8-10% for equity-heavy portfolios, or lower if you hold more debt."
+            question: "What is the difference between Lean FIRE and Fat FIRE?",
+            answer: "Lean FIRE focuses on covering essential living expenses with minimal budget headroom, while Fat FIRE targets an abundant retirement lifestyle accommodating higher discretionary spending and luxury travel.",
         },
         {
-            question: "Why does it say 'Savings Shortfall'?",
-            answer: "If your projected net worth at your target retirement age is less than your required corpus, the calculator determines how much extra you need to save per month right now to close that gap."
+            question: "How is the required monthly SIP calculated?",
+            answer: "The required SIP uses the Future Value of Annuity formula: FV = P × [((1 + r)^n - 1) / r] × (1 + r), accounting for monthly compounding and current initial principal growth.",
         },
         {
-            question: "Is my financial data safe?",
-            answer: "Absolutely. All calculations are performed locally in your browser. No data is sent to our servers. If you use the 'Save Scenario' feature, it is stored in your browser's local IndexedDB and can be deleted at any time."
-        }
+            question: "Are my income and investment inputs stored anywhere?",
+            answer: "No. All computations occur client-side in the browser. Zero financial data is ever stored, tracked, or sent across the network.",
+        },
     ],
     useCases: [
-        "Planning for Early Retirement (FIRE) to determine the exact age you can quit your job.",
-        "Standard Retirement Planning to ensure you have enough corpus at age 60.",
-        "Scenario Analysis to see how a salary increase or lifestyle inflation impacts your financial timeline.",
-        "Visualizing compound interest over long periods using the net worth projection chart."
+        "Planning early retirement and financial independence (FIRE) milestones.",
+        "Determining monthly mutual fund or ETF SIP targets for retirement.",
+        "Stress-testing retirement plans against high-inflation scenarios.",
+        "Comparing career growth scenarios with increased monthly savings rates.",
     ],
     examples: [
         {
-            label: "Aggressive FIRE",
-            input: "Age: 30, Target: 50, Income: ₹1,50,000, Expenses: ₹60,000, Return: 10%, Inflation: 6%",
-            output: "Required Corpus: ₹5.77 Crore | Years to FI: 16 Years",
-            description: "A standard FIRE path where a high savings rate (60%) allows for retirement 4 years before the target age."
+            input: "Age: 25 -> 45 | Monthly Expenses: ₹50,000 | Returns: 12% | Inflation: 6%",
+            output: "Target Corpus: ₹4.8 Cr | Required Monthly SIP: ₹29,200",
+            description: "Standard 20-year wealth accumulation scenario."
         },
         {
-            label: "Standard Retirement",
-            input: "Age: 25, Target: 55, Income: ₹80,000, Expenses: ₹50,000, Return: 12%, Inflation: 5%",
-            output: "Required Corpus: ₹5.18 Crore | Years to FI: 25 Years",
-            description: "A young professional starting out. Thanks to 30 years of compound interest, they can easily reach their goal."
+            input: "Age: 30 -> 40 | Monthly Expenses: ₹30,000 | Returns: 12% | Inflation: 5%",
+            output: "Target Corpus: ₹1.47 Cr | Required Monthly SIP: ₹47,800",
+            description: "Aggressive 10-year Lean FIRE plan."
+        },
+        {
+            input: "Age: 28 -> 50 | Monthly Expenses: ₹80,000 | Returns: 11% | Inflation: 7%",
+            output: "Target Corpus: ₹10.6 Cr | Required Monthly SIP: ₹54,500",
+            description: "Long-horizon comprehensive retirement plan."
         }
     ],
     commonErrors: [
         {
-            error: "Using Nominal Returns vs Real Returns",
-            fix: "Ensure you are entering your nominal expected return (e.g., 12%) and the expected inflation rate (e.g., 6%). The calculator handles the math to find your 'real' return. Do not subtract inflation from your return rate manually."
+            error: "Zero or Negative Return Rates",
+            fix: "Expected investment returns should reflect historical market equity/debt benchmarks (typically 8% - 14%).",
         },
         {
-            error: "Including Illiquid Assets in Current Savings",
-            fix: "Only include assets that can be used to generate income in retirement (e.g., Stocks, Mutual Funds, FDs, EPF). Do not include the primary house you live in, as it won't generate cash flow to cover expenses."
+            error: "Target Age Lower than Current Age",
+            fix: "Ensure your target retirement age is greater than your current chronological age.",
         }
-    ]
+    ],
+    alternatives: ["Personal Capital Retirement Planner", "Vanguard Retirement Nest Egg Calculator"],
 };

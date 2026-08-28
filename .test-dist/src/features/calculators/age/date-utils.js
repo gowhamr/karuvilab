@@ -31,6 +31,29 @@ export function daysFromCivil(year, month, day) {
     return era * 146097 + doe - 719468;
 }
 /**
+ * Converts days since Unix epoch (1970-01-01) back to civil date { year, month, day }.
+ * Algorithm by Howard Hinnant (std::chrono). Pure integer arithmetic.
+ */
+export function civilFromDays(daysSinceEpoch) {
+    const z = daysSinceEpoch + 719468;
+    const era = Math.floor((z >= 0 ? z : z - 146096) / 146097);
+    const doe = z - era * 146097; // [0, 146096]
+    const yoe = Math.floor((doe - Math.floor(doe / 1460) + Math.floor(doe / 36524) - Math.floor(doe / 146096)) / 365); // [0, 399]
+    const y = yoe + era * 400;
+    const doy = doe - (365 * yoe + Math.floor(yoe / 4) - Math.floor(yoe / 100)); // [0, 365]
+    const mp = Math.floor((5 * doy + 2) / 153); // [0, 11]
+    const d = doy - Math.floor((153 * mp + 2) / 5) + 1; // [1, 31]
+    const m = mp < 10 ? mp + 3 : mp - 9; // [1, 12]
+    const year = y + (m <= 2 ? 1 : 0);
+    return { year, month: m, day: d };
+}
+export function formatDateParts(parts) {
+    const y = String(parts.year).padStart(4, '0');
+    const m = String(parts.month).padStart(2, '0');
+    const d = String(parts.day).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+}
+/**
  * Calculates day of the week for a given civil date using Sakamoto's algorithm.
  * Returns the day name (e.g. 'Monday').
  */

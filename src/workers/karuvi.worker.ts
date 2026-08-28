@@ -1561,6 +1561,11 @@ const api: Partial<WorkerAPI> = {
     return generateSchedule(inputs);
   },
 
+  async calculateMonteCarloSimulation(inputs, trials = 1000, stdDevMultiplier = 1.0) {
+    const { runMonteCarloSimulation } = await import("../features/calculators/financial-freedom/engine/monte-carlo-engine");
+    return runMonteCarloSimulation(inputs, trials, stdDevMultiplier);
+  },
+
   // Media Tasks
   async encodeMp3(left, right, sampleRate, onProgress) {
     const lamejs = (await import("lamejs")) as any;

@@ -50,7 +50,7 @@ export function ApiSnippets({ decoded }: ApiSnippetsProps) {
       </div>
 
       <div className="relative">
-        <pre className="p-4 rounded-2xl bg-bg border border-border font-mono text-xs text-amber-400 leading-relaxed overflow-x-auto">
+        <pre className="p-4 rounded-2xl bg-bg border border-border font-mono text-xs text-amber-600 dark:text-amber-400 leading-relaxed overflow-x-auto">
           {codeSnippets[snippetLang]}
         </pre>
         <div className="absolute top-3 right-3">

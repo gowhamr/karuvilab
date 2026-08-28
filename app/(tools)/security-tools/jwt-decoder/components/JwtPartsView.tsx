@@ -18,7 +18,7 @@ export function JwtPartsView({ decoded }: JwtPartsViewProps) {
           </h3>
           <CopyButton text={JSON.stringify(decoded.header, null, 2)} label="Copy" />
         </div>
-        <pre className="p-4 rounded-2xl bg-bg border border-border font-mono text-xs text-purple-400 leading-relaxed overflow-x-auto">
+        <pre className="p-4 rounded-2xl bg-bg border border-border font-mono text-xs text-purple-600 dark:text-purple-400 leading-relaxed overflow-x-auto">
           {JSON.stringify(decoded.header, null, 2)}
         </pre>
       </section>
@@ -69,7 +69,7 @@ export function JwtPartsView({ decoded }: JwtPartsViewProps) {
           <div className="space-y-3">
             <div>
               <p className="text-[10px] uppercase font-bold text-text-muted mb-1">Raw Base64URL</p>
-              <div className="p-3 rounded-xl bg-bg border border-border font-mono text-xs text-emerald-400 break-all">
+              <div className="p-3 rounded-xl bg-bg border border-border font-mono text-xs text-emerald-600 dark:text-emerald-400 break-all">
                 {decoded.sig}
               </div>
             </div>

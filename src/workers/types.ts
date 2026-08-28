@@ -449,8 +449,9 @@ export interface WorkerAPI {
   // Math Tasks
   evaluateMath(expr: string): Promise<number>;
 
-  // EMI Tasks
+  // Financial Tasks
   calculateEmiSchedule(inputs: EmiInputs): Promise<EmiResult>;
+  calculateMonteCarloSimulation(inputs: any, trials: number, stdDevMultiplier: number): Promise<any>;
 
   // Document Tasks
   extractRawTextFromDocx(

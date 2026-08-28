@@ -185,7 +185,7 @@ export default function JWTDecoderClient() {
       output={
         <div aria-live="polite" className="space-y-6">
           {decoded && "error" in decoded && (
-            <div role="alert" className="bg-rose-500/10 border border-rose-500/20 rounded-2xl p-4 text-xs font-medium text-rose-400 flex items-center gap-3">
+            <div role="alert" className="bg-rose-500/10 border border-rose-500/20 rounded-2xl p-4 text-xs font-medium text-rose-600 dark:text-rose-400 flex items-center gap-3">
               <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0" aria-hidden="true" />
               <div>
                 <p className="font-bold">Invalid JWT</p>

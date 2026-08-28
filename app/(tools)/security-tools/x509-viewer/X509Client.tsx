@@ -73,7 +73,7 @@ export default function X509Client() {
         (error || certInfo) ? (
           <div className="space-y-6">
             {error && (
-              <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium flex items-center gap-2">
+              <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-sm font-medium flex items-center gap-2">
                 <AlertCircle className="w-5 h-5" />
                 {error}
               </div>
@@ -84,11 +84,11 @@ export default function X509Client() {
                 {/* Main Info Card */}
                 <div className="p-5 rounded-xl bg-surface-2 border border-border space-y-4">
                   <div className="flex items-center justify-between border-b border-border pb-3">
-                    <h3 className="font-bold text-base text-sky-400 flex items-center gap-2">
-                      <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                    <h3 className="font-bold text-base text-sky-600 dark:text-sky-400 flex items-center gap-2">
+                      <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                       Certificate Decoded Successfully (v{certInfo.version})
                     </h3>
-                    <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-semibold border border-emerald-500/20">
+                    <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold border border-emerald-500/20">
                       Valid Format
                     </span>
                   </div>
@@ -106,22 +106,22 @@ export default function X509Client() {
 
                     <div>
                       <span className="text-text-muted block font-sans text-xs">Valid From:</span>
-                      <span className="text-emerald-300">{certInfo.validFrom}</span>
+                      <span className="text-emerald-700 dark:text-emerald-300">{certInfo.validFrom}</span>
                     </div>
 
                     <div>
                       <span className="text-text-muted block font-sans text-xs">Valid Until (Expires):</span>
-                      <span className="text-amber-300">{certInfo.validTo}</span>
+                      <span className="text-amber-700 dark:text-amber-300">{certInfo.validTo}</span>
                     </div>
 
                     <div>
                       <span className="text-text-muted block font-sans text-xs">Signature Algorithm:</span>
-                      <span className="text-sky-300">{certInfo.signatureAlgorithm}</span>
+                      <span className="text-sky-700 dark:text-sky-300">{certInfo.signatureAlgorithm}</span>
                     </div>
 
                     <div>
                       <span className="text-text-muted block font-sans text-xs">Public Key Algorithm & Size:</span>
-                      <span className="text-sky-300">
+                      <span className="text-sky-700 dark:text-sky-300">
                         {certInfo.publicKeyAlgorithm} {certInfo.keySizeBits ? `(${certInfo.keySizeBits}-bit)` : ''}
                       </span>
                     </div>
@@ -134,7 +134,7 @@ export default function X509Client() {
                         <span className="text-xs font-semibold text-text-muted">SHA-256 Fingerprint:</span>
                         <CopyButton text={fingerprintSha256} />
                       </div>
-                      <p className="font-mono text-xs text-emerald-300 break-all">{fingerprintSha256}</p>
+                      <p className="font-mono text-xs text-emerald-700 dark:text-emerald-300 break-all">{fingerprintSha256}</p>
                     </div>
                   )}
                 </div>
@@ -147,8 +147,8 @@ export default function X509Client() {
                       {certInfo.extensions.map((ext, i) => (
                         <div key={i} className="p-3 rounded-lg bg-surface border border-border text-xs font-mono flex flex-col gap-1">
                           <div className="flex items-center justify-between">
-                            <span className="text-sky-400 font-bold">{ext.name}</span>
-                            {ext.critical && <span className="text-red-400 text-[10px] uppercase font-bold">Critical</span>}
+                            <span className="text-sky-600 dark:text-sky-400 font-bold">{ext.name}</span>
+                            {ext.critical && <span className="text-red-600 dark:text-red-400 text-[10px] uppercase font-bold">Critical</span>}
                           </div>
                           <span className="text-text-muted text-[11px]">{ext.oid}</span>
                           <span className="text-text-muted text-[11px] break-all">{ext.valueHex}</span>

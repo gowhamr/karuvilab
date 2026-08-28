@@ -113,7 +113,7 @@ export default function HkdfClient() {
           </button>
 
           {error && (
-            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium flex items-center gap-2">
+            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-sm font-medium flex items-center gap-2">
               <AlertCircle className="w-5 h-5" />
               {error}
             </div>

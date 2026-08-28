@@ -31,7 +31,7 @@ export function Badge({
         variant === "warning" && "bg-warning/10 text-warning border border-warning/20",
         variant === "danger" && "bg-danger/10 text-danger border border-danger/20",
         variant === "neutral" && "bg-surface-elevated text-text-secondary border border-divider",
-        variant === "glass" && "bg-white/5 backdrop-blur-sm text-text-primary border border-white/10",
+        variant === "glass" && "bg-black/5 dark:bg-white/5 backdrop-blur-sm text-text-primary border border-black/10 dark:border-white/10",
 
         className
       )}

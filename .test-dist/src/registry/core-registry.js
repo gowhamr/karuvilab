@@ -36,7 +36,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "aes encrypt decrypt",
             "security"
@@ -50,7 +50,7 @@ export const CORE_TOOLS = [
     {
         "id": "age-calculator",
         "name": "Age Calculator",
-        "desc": "Calculate age in years, months, and days",
+        "desc": "Calculate exact age in years, months, and days with offline precision date math. Supports canonical query parameters ?dob=YYYY-MM-DD&as_of=YYYY-MM-DD.",
         "href": "/calculators/age-calculator/",
         "category": "calculators",
         "icon": null,
@@ -62,13 +62,20 @@ export const CORE_TOOLS = [
         "keywords": [
             "age",
             "birthday",
-            "years"
+            "years",
+            "exact age",
+            "calendar diff",
+            "birth date",
+            "zodiac",
+            "nakshatra"
         ],
         "input": null,
         "output": null,
         "related": [
             "date-calculator",
-            "time-calculator"
+            "time-calculator",
+            "countdown-timer",
+            "calendar"
         ],
         "subCategory": "Date & Time",
         "requiresNetwork": false
@@ -141,7 +148,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "audio converter",
             "media"
@@ -189,7 +196,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "banking tools",
             "iso 8583",
@@ -267,7 +274,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "base64url converter",
             "security"
@@ -334,23 +341,35 @@ export const CORE_TOOLS = [
     {
         "id": "bmi-calculator",
         "name": "Bmi Calculator",
-        "desc": "Calculate your Body Mass Index (BMI) and health category to track fitness goals.",
+        "desc": "Calculate your Body Mass Index (BMI), BMI Prime, Ponderal Index, and healthy weight category",
         "href": "/calculators/bmi-calculator/",
         "category": "calculators",
         "icon": null,
         "color": null,
         "featured": false,
         "popular": false,
-        "status": "new",
-        "lastAdded": "2026-08-22",
+        "status": "stable",
+        "lastAdded": null,
         "keywords": [
+            "bmi",
             "bmi calculator",
-            "calculators"
+            "body mass index",
+            "bmi prime",
+            "ponderal index",
+            "healthy weight",
+            "overweight",
+            "underweight",
+            "fitness",
+            "weight loss"
         ],
         "input": null,
         "output": null,
-        "related": [],
-        "subCategory": null,
+        "related": [
+            "percentage-calculator",
+            "date-calculator",
+            "age-calculator"
+        ],
+        "subCategory": "Health & Fitness",
         "requiresNetwork": false
     },
     {
@@ -416,7 +435,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "box shadow generator",
             "developer"
@@ -566,7 +585,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "card masker",
             "security"
@@ -614,7 +633,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "cipher tools",
             "security"
@@ -660,7 +679,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "color converter",
             "developer"
@@ -711,7 +730,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "color palette extractor",
             "image"
@@ -733,7 +752,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "command cheat sheet",
             "developer"
@@ -747,7 +766,7 @@ export const CORE_TOOLS = [
     {
         "id": "compound-interest",
         "name": "Compound Interest Calculator",
-        "desc": "Calculate compounded growth on your investment.",
+        "desc": "Calculate exponential compound interest, recurring monthly contributions, APY yields, and inflation-adjusted future value",
         "href": "/calculators/compound-interest/",
         "category": "calculators",
         "icon": null,
@@ -758,14 +777,23 @@ export const CORE_TOOLS = [
         "lastAdded": null,
         "keywords": [
             "compound interest",
+            "compound interest calculator",
+            "cagr calculator",
+            "apy calculator",
             "interest calculator",
             "investment growth",
-            "savings calculator"
+            "savings calculator",
+            "future value",
+            "sip calculator"
         ],
         "input": null,
         "output": null,
-        "related": [],
-        "subCategory": "Financial",
+        "related": [
+            "financial-freedom-calculator",
+            "percentage-calculator",
+            "discount-calculator"
+        ],
+        "subCategory": "Finance & Investment",
         "requiresNetwork": false
     },
     {
@@ -808,7 +836,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "compress",
             "image"
@@ -830,7 +858,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "contrast checker",
             "developer"
@@ -852,7 +880,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "finacle tools",
             "banking"
@@ -874,7 +902,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "countdown timer",
             "productivity"
@@ -896,7 +924,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "crontab editor",
             "developer"
@@ -942,7 +970,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "csp builder",
             "security"
@@ -964,7 +992,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "csr generator",
             "security"
@@ -986,7 +1014,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "csv to json",
             "developer"
@@ -1057,7 +1085,7 @@ export const CORE_TOOLS = [
     {
         "id": "date-calculator",
         "name": "Date Calculator",
-        "desc": "Add, subtract, or diff dates",
+        "desc": "Calculate date differences or add/subtract time from any date with offline precision math",
         "href": "/calculators/date-calculator/",
         "category": "calculators",
         "icon": null,
@@ -1070,11 +1098,20 @@ export const CORE_TOOLS = [
             "date",
             "days",
             "difference",
-            "add"
+            "add days",
+            "subtract days",
+            "business days",
+            "calendar diff",
+            "date offset"
         ],
         "input": null,
         "output": null,
-        "related": [],
+        "related": [
+            "age-calculator",
+            "time-calculator",
+            "countdown-timer",
+            "calendar"
+        ],
         "subCategory": "Date & Time",
         "requiresNetwork": false
     },
@@ -1135,7 +1172,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "directory manifest",
             "security"
@@ -1149,7 +1186,7 @@ export const CORE_TOOLS = [
     {
         "id": "discount-calculator",
         "name": "Discount Calculator",
-        "desc": "Find sale price and savings",
+        "desc": "Calculate sale price, double-stacked promo discounts, sales tax, and reverse original price",
         "href": "/calculators/discount-calculator/",
         "category": "calculators",
         "icon": null,
@@ -1160,13 +1197,21 @@ export const CORE_TOOLS = [
         "lastAdded": null,
         "keywords": [
             "discount",
-            "sale",
-            "percent",
-            "savings"
+            "discount calculator",
+            "sale price",
+            "percent off",
+            "savings",
+            "double discount",
+            "tax calculator",
+            "reverse discount"
         ],
         "input": null,
         "output": null,
-        "related": [],
+        "related": [
+            "percentage-calculator",
+            "gst-calculator",
+            "compound-interest"
+        ],
         "subCategory": "Financial",
         "requiresNetwork": false
     },
@@ -1204,7 +1249,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "ecdh key exchange",
             "security"
@@ -1226,7 +1271,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "ecdsa sign",
             "security"
@@ -1265,7 +1310,7 @@ export const CORE_TOOLS = [
     {
         "id": "emi-calculator",
         "name": "EMI Calculator",
-        "desc": "Loan EMI, interest, and amortization",
+        "desc": "Calculate home loan & car loan EMI, reducing balance interest, amortization schedule, and prepayment savings",
         "href": "/calculators/emi-calculator/",
         "category": "calculators",
         "icon": null,
@@ -1276,17 +1321,23 @@ export const CORE_TOOLS = [
         "lastAdded": null,
         "keywords": [
             "emi",
+            "emi calculator",
             "loan",
+            "loan calculator",
+            "home loan emi",
+            "car loan emi",
             "interest",
             "mortgage",
-            "amortization"
+            "amortization",
+            "prepayment"
         ],
         "input": null,
         "output": null,
         "related": [
-            "sip-calculator",
-            "salary-calculator",
-            "compound-interest"
+            "compound-interest",
+            "financial-freedom-calculator",
+            "percentage-calculator",
+            "discount-calculator"
         ],
         "subCategory": "Financial",
         "requiresNetwork": false
@@ -1302,7 +1353,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "emv tlv tree",
             "banking"
@@ -1496,33 +1547,30 @@ export const CORE_TOOLS = [
     {
         "id": "financial-freedom-calculator",
         "name": "Financial Freedom Calculator",
-        "desc": "Calculate your path to FIRE and plan your retirement.",
+        "desc": "Calculate your FIRE number, required SIP, and projected wealth accumulation",
         "href": "/calculators/financial-freedom-calculator/",
         "category": "calculators",
         "icon": null,
-        "color": "#4F46E5",
+        "color": null,
         "featured": false,
         "popular": false,
         "status": "stable",
         "lastAdded": null,
         "keywords": [
-            "fire",
             "financial freedom",
-            "retirement",
-            "savings",
-            "net worth",
-            "corpus"
+            "fire calculator",
+            "retirement corpus",
+            "sip calculator",
+            "wealth accumulation"
         ],
         "input": null,
         "output": null,
         "related": [
-            "emi-calculator",
-            "sip-calculator",
-            "retirement-calculator",
-            "cagr-calculator",
-            "safe-to-spend"
+            "compound-interest",
+            "percentage-calculator",
+            "age-calculator"
         ],
-        "subCategory": "Financial",
+        "subCategory": "Finance & Investment",
         "requiresNetwork": false
     },
     {
@@ -1589,7 +1637,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "gif creator",
             "media"
@@ -1636,7 +1684,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "glassmorphism generator",
             "developer"
@@ -1658,7 +1706,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "gradient generator",
             "developer"
@@ -1708,7 +1756,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "gratuity calculator",
             "calculators"
@@ -1722,7 +1770,7 @@ export const CORE_TOOLS = [
     {
         "id": "gst-calculator",
         "name": "GST Calculator",
-        "desc": "Calculate GST (Add/Remove) for Indian tax slabs (5%, 12%, 18%, 28%) with CGST, SGST, and IGST breakdown.",
+        "desc": "Calculate GST (Add/Remove) for Indian tax slabs (3%, 5%, 12%, 18%, 28%) with CGST, SGST, and IGST breakdown.",
         "href": "/calculators/gst-calculator/",
         "category": "calculators",
         "icon": null,
@@ -1732,6 +1780,7 @@ export const CORE_TOOLS = [
         "status": "stable",
         "lastAdded": null,
         "keywords": [
+            "gst",
             "gst calculator",
             "calculate gst india",
             "gst tax calculator",
@@ -1739,11 +1788,18 @@ export const CORE_TOOLS = [
             "reverse gst calculator",
             "cgst sgst igst calculator",
             "online gst calculator",
-            "gst amount calculator"
+            "gst amount calculator",
+            "inclusive gst",
+            "exclusive gst"
         ],
         "input": null,
         "output": null,
-        "related": [],
+        "related": [
+            "percentage-calculator",
+            "discount-calculator",
+            "income-tax",
+            "tds-calculator"
+        ],
         "subCategory": "Financial",
         "requiresNetwork": false
     },
@@ -1782,7 +1838,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "hash map visualizer",
             "developer"
@@ -1835,7 +1891,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "hkdf generator",
             "security"
@@ -1857,7 +1913,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "hmac generator",
             "security"
@@ -1879,7 +1935,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "hra calculator",
             "calculators"
@@ -1955,7 +2011,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "iban validator",
             "security"
@@ -2202,7 +2258,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "image seo",
             "seo"
@@ -2274,7 +2330,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "income tax",
             "calculators"
@@ -2373,7 +2429,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "invoice generator",
             "calculators"
@@ -2395,7 +2451,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "iso8583 bitmap decoder",
             "security"
@@ -2417,7 +2473,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "iso8583 message parser",
             "security"
@@ -2529,7 +2585,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "json to xml",
             "xml to json",
@@ -2632,7 +2688,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "log analyzer",
             "developer"
@@ -2654,7 +2710,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "lorem ipsum",
             "developer"
@@ -2676,7 +2732,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "luhn validator",
             "developer"
@@ -2837,7 +2893,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "meta tags",
             "seo"
@@ -2962,7 +3018,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "nanoid generator",
             "developer"
@@ -2984,7 +3040,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "notes",
             "productivity"
@@ -3006,7 +3062,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "nps calculator",
             "calculators"
@@ -3079,7 +3135,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "oauth token decoder",
             "security"
@@ -3124,7 +3180,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "og preview",
             "seo"
@@ -3243,7 +3299,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "pbkdf2 generator",
             "security"
@@ -3450,7 +3506,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "pem viewer",
             "security"
@@ -3464,7 +3520,7 @@ export const CORE_TOOLS = [
     {
         "id": "percentage-calculator",
         "name": "Percentage Calculator",
-        "desc": "Find percentages and ratios",
+        "desc": "Calculate percentages, percentage increase/decrease, ratios, and reverse original values with precision math",
         "href": "/calculators/percentage-calculator/",
         "category": "calculators",
         "icon": null,
@@ -3476,11 +3532,21 @@ export const CORE_TOOLS = [
         "keywords": [
             "percent",
             "percentage",
+            "percentage calculator",
+            "percent change",
+            "percentage increase",
+            "percentage decrease",
+            "reverse percentage",
             "ratio"
         ],
         "input": null,
         "output": null,
-        "related": [],
+        "related": [
+            "discount-calculator",
+            "gst-calculator",
+            "cagr-calculator",
+            "calculator"
+        ],
         "subCategory": "Math & Units",
         "requiresNetwork": false
     },
@@ -3521,7 +3587,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "pomodoro timer",
             "productivity"
@@ -3568,7 +3634,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "private key checker",
             "security"
@@ -3590,7 +3656,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "public key inspector",
             "security"
@@ -3865,7 +3931,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "robots txt",
             "seo"
@@ -3934,7 +4000,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "rsa encrypt decrypt",
             "security"
@@ -3956,7 +4022,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "rsa key generator",
             "security"
@@ -3978,7 +4044,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "rsa sign verify",
             "security"
@@ -4014,8 +4080,8 @@ export const CORE_TOOLS = [
     },
     {
         "id": "salary-calculator",
-        "name": "Salary Calculator",
-        "desc": "Indian take-home salary breakdown",
+        "name": "Salary & Take-Home Pay Calculator",
+        "desc": "Calculate Indian take-home monthly salary, gross vs net CTC breakdown, EPF, professional tax, and income tax under Old vs New Regime",
         "href": "/calculators/salary-calculator/",
         "category": "calculators",
         "icon": null,
@@ -4025,16 +4091,28 @@ export const CORE_TOOLS = [
         "status": "stable",
         "lastAdded": null,
         "keywords": [
-            "salary",
-            "ctc",
-            "take home",
-            "tax",
-            "india"
+            "salary calculator",
+            "take home salary calculator",
+            "in hand salary calculator",
+            "ctc to in hand calculator",
+            "ctc calculator",
+            "salary breakdown india",
+            "income tax salary calculator",
+            "epf deduction calculator",
+            "new tax regime salary",
+            "old tax regime salary",
+            "gross to net salary"
         ],
         "input": null,
         "output": null,
-        "related": [],
-        "subCategory": "Financial",
+        "related": [
+            "income-tax",
+            "hra-calculator",
+            "gratuity-calculator",
+            "tds-calculator",
+            "financial-freedom-calculator"
+        ],
+        "subCategory": "Finance & Payroll",
         "requiresNetwork": false
     },
     {
@@ -4048,7 +4126,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "saml decoder",
             "security"
@@ -4070,7 +4148,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "seo title",
             "seo"
@@ -4092,7 +4170,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "seo tools",
             "developer"
@@ -4106,7 +4184,7 @@ export const CORE_TOOLS = [
     {
         "id": "sip-calculator",
         "name": "SIP Calculator",
-        "desc": "Project mutual-fund SIP returns",
+        "desc": "Project mutual fund and equity SIP returns with step-up compounding, lumpsum deposits, tax deductions, and inflation adjustments",
         "href": "/calculators/sip-calculator/",
         "category": "calculators",
         "icon": null,
@@ -4117,17 +4195,25 @@ export const CORE_TOOLS = [
         "lastAdded": null,
         "keywords": [
             "sip",
-            "investment",
-            "mutual fund",
-            "returns"
+            "sip calculator",
+            "step up sip",
+            "mutual fund calculator",
+            "investment returns",
+            "wealth planner",
+            "systematic investment plan",
+            "inflation adjusted sip",
+            "compound growth"
         ],
         "input": null,
         "output": null,
         "related": [
             "compound-interest",
+            "cagr-calculator",
+            "swp-calculator",
+            "retirement-calculator",
             "emi-calculator"
         ],
-        "subCategory": "Financial",
+        "subCategory": "Finance & Investment",
         "requiresNetwork": false
     },
     {
@@ -4141,7 +4227,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "sitemap generator",
             "seo"
@@ -4163,7 +4249,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "slug generator",
             "seo"
@@ -4287,7 +4373,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "sql formatter",
             "developer"
@@ -4334,7 +4420,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "stopwatch",
             "productivity"
@@ -4438,7 +4524,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "swift mt mx",
             "banking"
@@ -4509,7 +4595,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "tds calculator",
             "calculators"
@@ -4531,7 +4617,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "text case converter",
             "productivity"
@@ -4649,7 +4735,7 @@ export const CORE_TOOLS = [
     {
         "id": "time-calculator",
         "name": "Time Calculator",
-        "desc": "Add or subtract hours and minutes",
+        "desc": "Calculate time intervals, sum durations, or add/subtract time with midnight rollover precision",
         "href": "/calculators/time-calculator/",
         "category": "calculators",
         "icon": null,
@@ -4662,11 +4748,20 @@ export const CORE_TOOLS = [
             "time",
             "duration",
             "hours",
-            "minutes"
+            "minutes",
+            "time difference",
+            "add time",
+            "timesheet",
+            "overnight shift"
         ],
         "input": null,
         "output": null,
-        "related": [],
+        "related": [
+            "date-calculator",
+            "age-calculator",
+            "work-hours",
+            "stopwatch"
+        ],
         "subCategory": "Date & Time",
         "requiresNetwork": false
     },
@@ -4715,7 +4810,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "tlv parser",
             "security"
@@ -4737,7 +4832,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "track 2 parser",
             "banking"
@@ -4801,23 +4896,34 @@ export const CORE_TOOLS = [
     },
     {
         "id": "unix-timestamp",
-        "name": "Unix Timestamp",
-        "desc": "Convert between epoch timestamps and human-readable dates.",
+        "name": "Unix Timestamp Converter",
+        "desc": "Convert between Unix epoch timestamps (seconds, ms, μs, ns) and human-readable dates with timezones, batch conversion, and code snippets.",
         "href": "/developer-tools/unix-timestamp/",
         "category": "developer",
-        "icon": null,
+        "icon": "Clock",
         "color": null,
-        "featured": false,
-        "popular": false,
-        "status": "new",
-        "lastAdded": "2026-08-22",
+        "featured": true,
+        "popular": true,
+        "status": "stable",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "unix timestamp",
-            "developer"
+            "epoch converter",
+            "timestamp to date",
+            "date to epoch",
+            "epoch math",
+            "batch timestamp converter",
+            "iso 8601",
+            "utc converter"
         ],
-        "input": null,
-        "output": null,
-        "related": [],
+        "input": "text",
+        "output": "json",
+        "related": [
+            "utc-ist-converter",
+            "date-calculator",
+            "time-calculator",
+            "crontab-editor"
+        ],
         "subCategory": "Converters",
         "requiresNetwork": false
     },
@@ -4904,7 +5010,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "uuid generator",
             "developer"
@@ -4950,7 +5056,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "video metadata viewer",
             "media"
@@ -4972,7 +5078,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "video trim",
             "media"
@@ -5068,7 +5174,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "word counter",
             "productivity"
@@ -5122,7 +5228,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "word to pdf",
             "pdf"
@@ -5195,7 +5301,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "x509 viewer",
             "security"
@@ -5217,7 +5323,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "xml formatter",
             "developer"
@@ -5239,7 +5345,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "yaml json converter",
             "developer"
@@ -5261,7 +5367,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-22",
+        "lastAdded": "2026-08-27",
         "keywords": [
             "yaml validator",
             "developer"

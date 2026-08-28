@@ -1160,7 +1160,7 @@ export function MarkdownEditor() {
                       {/* Spell Check Hover Tooltip */}
                       {hoveredSpellMarker && (
                         <div 
-                          className="absolute z-50 p-3 bg-surface-2 border border-border shadow-lg rounded-xl flex flex-col gap-2 min-w-[200px]"
+                          className="absolute z-dropdown p-3 bg-surface-2 border border-border shadow-lg rounded-xl flex flex-col gap-2 min-w-[200px]"
                           style={{ top: hoverPos.top, left: hoverPos.left }}
                         >
                           <div className="flex justify-between items-center mb-1">

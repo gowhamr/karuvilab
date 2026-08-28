@@ -135,10 +135,10 @@ export default function IbanClient() {
 
             {cleanIban.length > 0 && (
               <div className={`p-4 rounded-xl border flex items-center justify-between gap-4 ${
-                isIbanValid ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300' : 'bg-red-500/10 border-red-500/30 text-red-400'
+                isIbanValid ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-300' : 'bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400'
               }`}>
                 <div className="flex items-center gap-3">
-                  {isIbanValid ? <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" /> : <XCircle className="w-6 h-6 text-red-400 shrink-0" />}
+                  {isIbanValid ? <CheckCircle2 className="w-6 h-6 text-emerald-600 dark:text-emerald-400 shrink-0" /> : <XCircle className="w-6 h-6 text-red-600 dark:text-red-400 shrink-0" />}
                   <div>
                     <h4 className="font-bold text-sm font-sans">{isIbanValid ? 'VALID IBAN (ISO 13616 Mod-97 PASS)' : (validation.error || 'INVALID IBAN Checksum / Format')}</h4>
                     {ibanDetails && (
@@ -166,10 +166,10 @@ export default function IbanClient() {
 
             {cleanBic.length > 0 && (
               <div className={`p-4 rounded-xl border flex items-center justify-between gap-4 ${
-                isBicValid ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300' : 'bg-red-500/10 border-red-500/30 text-red-400'
+                isBicValid ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-300' : 'bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400'
               }`}>
                 <div className="flex items-center gap-3">
-                  {isBicValid ? <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" /> : <XCircle className="w-6 h-6 text-red-400 shrink-0" />}
+                  {isBicValid ? <CheckCircle2 className="w-6 h-6 text-emerald-600 dark:text-emerald-400 shrink-0" /> : <XCircle className="w-6 h-6 text-red-600 dark:text-red-400 shrink-0" />}
                   <div>
                     <h4 className="font-bold text-sm font-sans">{isBicValid ? 'VALID SWIFT/BIC Code Format' : 'INVALID SWIFT/BIC Code'}</h4>
                     {isBicValid && (

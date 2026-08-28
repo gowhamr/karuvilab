@@ -125,7 +125,7 @@ export function PrepaymentSection({ result }: PrepaymentSectionProps) {
           onChange={() => toggleSection('prepayment')}
         />
         {showPrepayment && savings && (savings.interest > 0 || savings.months > 0) && (
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-xs font-bold text-emerald-400">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-xs font-bold text-emerald-600 dark:text-emerald-400">
             <Zap className="w-3.5 h-3.5" />
             <span>Saves {formatCurrency(savings.interest)} & {formatDuration(savings.months)}</span>
           </div>
@@ -166,7 +166,7 @@ export function PrepaymentSection({ result }: PrepaymentSectionProps) {
             <div className="space-y-4 bg-surface-2/40 border border-border/80 rounded-2xl p-4 sm:p-5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-text">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                   <span className="text-xs font-bold uppercase tracking-wider">Early Payoff Impact Analysis</span>
                 </div>
                 <button
@@ -175,7 +175,7 @@ export function PrepaymentSection({ result }: PrepaymentSectionProps) {
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface border border-border hover:border-blue text-xs font-bold text-text-muted hover:text-text transition-colors cursor-pointer"
                   title="Copy full comparison report"
                 >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                   <span>{copied ? "Copied" : "Copy Report"}</span>
                 </button>
               </div>
@@ -207,7 +207,7 @@ export function PrepaymentSection({ result }: PrepaymentSectionProps) {
 
                 {/* With Extra Prepayment */}
                 <div className="p-3.5 bg-emerald-500/5 rounded-xl border border-emerald-500/20 space-y-2">
-                  <div className="flex items-center justify-between text-emerald-400 border-b border-emerald-500/20 pb-2">
+                  <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 border-b border-emerald-500/20 pb-2">
                     <span className="font-bold uppercase text-[10px]">With Extra {formatCurrency(extraAmount)}/mo</span>
                     <span className="font-mono font-bold">{formatDuration(effectiveMonths)}</span>
                   </div>
@@ -217,11 +217,11 @@ export function PrepaymentSection({ result }: PrepaymentSectionProps) {
                   </div>
                   <div className="flex justify-between text-text-muted">
                     <span>Interest Saved:</span>
-                    <strong className="text-emerald-400 font-mono font-bold">-{formatCurrency(savings.interest)}</strong>
+                    <strong className="text-emerald-600 dark:text-emerald-400 font-mono font-bold">-{formatCurrency(savings.interest)}</strong>
                   </div>
                   <div className="flex justify-between text-text-muted">
                     <span>Time Saved:</span>
-                    <strong className="text-emerald-400 font-mono font-bold">-{formatDuration(savings.months)} ({savings.months} mo)</strong>
+                    <strong className="text-emerald-600 dark:text-emerald-400 font-mono font-bold">-{formatDuration(savings.months)} ({savings.months} mo)</strong>
                   </div>
                 </div>
               </div>

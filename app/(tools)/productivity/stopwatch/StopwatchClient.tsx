@@ -503,7 +503,7 @@ export default function StopwatchClient() {
         className={cn(
           "w-16 h-16 sm:w-20 sm:h-20 rounded-full flex flex-col items-center justify-center border-2 sm:border-4 transition-all focus:outline-none focus:ring-4 focus:ring-red-500/30 active:scale-95 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed",
           elapsed > 0 && !isRunning
-            ? "border-red-500/40 text-red-400 hover:bg-red-500/10 shadow-lg shadow-red-500/10"
+            ? "border-red-500/40 text-red-600 dark:text-red-400 hover:bg-red-500/10 shadow-lg shadow-red-500/10"
             : "border-border text-text-muted hover:border-text-muted"
         )}
         title="Reset Stopwatch (R)"
@@ -614,19 +614,19 @@ export default function StopwatchClient() {
                   key={lap.id} 
                   className={cn(
                     "hover:bg-surface-2/40 transition-colors",
-                    lap.isFastest ? "bg-emerald-500/5 text-emerald-400 font-semibold" : "",
-                    lap.isSlowest ? "bg-red-500/5 text-red-400 font-semibold" : ""
+                    lap.isFastest ? "bg-emerald-500/5 text-emerald-600 dark:text-emerald-400 font-semibold" : "",
+                    lap.isSlowest ? "bg-red-500/5 text-red-600 dark:text-red-400 font-semibold" : ""
                   )}
                 >
                   <td className="py-2.5 px-3 whitespace-nowrap">
                     <span className="font-bold">Lap {String(lap.lapNumber).padStart(2, '0')}</span>
                     {lap.isFastest && (
-                      <span className="ml-1.5 inline-flex items-center text-[10px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded-full">
+                      <span className="ml-1.5 inline-flex items-center text-[10px] bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded-full">
                         ⭐ Best
                       </span>
                     )}
                     {lap.isSlowest && (
-                      <span className="ml-1.5 inline-flex items-center text-[10px] bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded-full">
+                      <span className="ml-1.5 inline-flex items-center text-[10px] bg-red-500/20 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded-full">
                         🐢 Slow
                       </span>
                     )}
@@ -752,7 +752,7 @@ export default function StopwatchClient() {
                       <button
                         type="button"
                         onClick={clearAllSessionsAction}
-                        className="text-xs text-red-400 hover:text-red-300 font-semibold flex items-center gap-1 cursor-pointer"
+                        className="text-xs text-red-600 dark:text-red-400 hover:text-red-300 font-semibold flex items-center gap-1 cursor-pointer"
                       >
                         <Trash2 className="w-3.5 h-3.5" /> Clear All History
                       </button>
@@ -897,11 +897,11 @@ export default function StopwatchClient() {
 
                     <div className="text-center font-bold text-sm">
                       {sessionComparison.totalDurationImprovementPct > 0 ? (
-                        <span className="text-emerald-400">
+                        <span className="text-emerald-600 dark:text-emerald-400">
                           🚀 Session B is {sessionComparison.totalDurationImprovementPct}% faster ({formatStopwatchTime(Math.abs(sessionComparison.totalDurationDiffMs), 'centiseconds')} lead)
                         </span>
                       ) : sessionComparison.totalDurationImprovementPct < 0 ? (
-                        <span className="text-amber-400">
+                        <span className="text-amber-600 dark:text-amber-400">
                           ⏱️ Session B is {Math.abs(sessionComparison.totalDurationImprovementPct)}% slower ({formatStopwatchTime(Math.abs(sessionComparison.totalDurationDiffMs), 'centiseconds')} gap)
                         </span>
                       ) : (
@@ -977,7 +977,7 @@ export default function StopwatchClient() {
             className="flex items-center gap-1.5 bg-surface hover:bg-surface-2 border border-border px-3 py-2 rounded-xl text-xs font-bold text-text-muted hover:text-text transition-colors cursor-pointer"
             title="Session History & Records"
           >
-            <Trophy className="w-4 h-4 text-amber-400" />
+            <Trophy className="w-4 h-4 text-amber-600 dark:text-amber-400" />
             <span className="hidden sm:inline">Records & History</span>
           </button>
 
@@ -1086,8 +1086,8 @@ export default function StopwatchClient() {
                     <span>Pace Progression</span>
                     <span className={cn(
                       "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase",
-                      paceTrend.trend === 'improving' ? "bg-emerald-500/20 text-emerald-400" :
-                      paceTrend.trend === 'slowing' ? "bg-amber-500/20 text-amber-400" :
+                      paceTrend.trend === 'improving' ? "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400" :
+                      paceTrend.trend === 'slowing' ? "bg-amber-500/20 text-amber-600 dark:text-amber-400" :
                       "bg-surface-2 text-text-muted"
                     )}>
                       {paceTrend.trend === 'improving' ? "🚀 Speeding Up" : paceTrend.trend === 'slowing' ? "🐢 Slowing Down" : "⚖️ Steady Pace"}
@@ -1314,10 +1314,10 @@ export default function StopwatchClient() {
             <div className="space-y-1">
               <span className={cn(
                 "px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest border",
-                intervalState === 'work' ? "bg-orange-500/20 text-orange-400 border-orange-500/40 animate-pulse" :
-                intervalState === 'rest' ? "bg-cyan-500/20 text-cyan-400 border-cyan-500/40" :
-                intervalState === 'prep' ? "bg-amber-500/20 text-amber-400 border-amber-500/40" :
-                intervalState === 'complete' ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/40" :
+                intervalState === 'work' ? "bg-orange-500/20 text-orange-600 dark:text-orange-400 border-orange-500/40 animate-pulse" :
+                intervalState === 'rest' ? "bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border-cyan-500/40" :
+                intervalState === 'prep' ? "bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/40" :
+                intervalState === 'complete' ? "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/40" :
                 "bg-surface-2 text-text-muted border-border"
               )}>
                 {intervalState === 'idle' ? 'Ready' : intervalState.toUpperCase()}
@@ -1459,7 +1459,7 @@ export default function StopwatchClient() {
               <div className="flex items-center justify-between text-xs">
                 <span className="font-bold text-text uppercase tracking-wider">Session Attempts ({reactionHistory.length})</span>
                 <span className="text-text-muted">
-                  False Starts: <strong className="text-amber-400">{reactionStats.falseStartsCount}</strong>
+                  False Starts: <strong className="text-amber-600 dark:text-amber-400">{reactionStats.falseStartsCount}</strong>
                 </span>
               </div>
               <div className="flex flex-wrap gap-2">

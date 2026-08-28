@@ -81,7 +81,7 @@ export default function Base64UrlClient() {
           value={result}
           error={error}
           downloadFilename={`base64url-result-${Date.now()}.txt`}
-          contentClassName="min-h-52 text-emerald-300"
+          contentClassName="min-h-52 text-emerald-700 dark:text-emerald-300"
         />
       }
     />

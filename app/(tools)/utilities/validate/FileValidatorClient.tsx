@@ -59,9 +59,9 @@ interface Check {
 }
 
 const STATUS_STYLES: Record<string, string> = {
-  valid: "text-green-600 bg-green-500/10 border-green-500/20",
-  warning: "text-yellow-600 bg-yellow-500/10 border-yellow-500/20",
-  error: "text-red-500 bg-red-500/10 border-red-500/20",
+  valid: "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+  warning: "text-amber-600 dark:text-amber-400 bg-amber-500/10 border-amber-500/20",
+  error: "text-red-600 dark:text-red-400 bg-red-500/10 border-red-500/20",
   info: "text-blue bg-blue/10 border-blue/20",
 };
 const STATUS_ICONS: Record<string, string> = {

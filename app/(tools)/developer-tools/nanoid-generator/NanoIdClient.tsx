@@ -118,7 +118,7 @@ export default function NanoIdClient() {
             <div className="space-y-2 overflow-auto flex-1">
               {generatedIds.map((id, index) => (
                 <div key={index} className="p-3 rounded-lg bg-bg border border-border flex items-center justify-between font-mono text-sm">
-                  <span className="text-emerald-300 font-bold">{id}</span>
+                  <span className="text-emerald-700 dark:text-emerald-300 font-bold">{id}</span>
                   <CopyButton text={id} />
                 </div>
               ))}

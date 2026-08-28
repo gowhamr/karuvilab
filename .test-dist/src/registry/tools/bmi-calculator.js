@@ -1,22 +1,31 @@
 export const bmiCalculator = {
     "id": "bmi-calculator",
     "name": "Bmi Calculator",
-    "desc": "Calculate your Body Mass Index (BMI) and health category to track fitness goals.",
+    "desc": "Calculate your Body Mass Index (BMI), BMI Prime, Ponderal Index, and healthy weight category",
     "href": "/calculators/bmi-calculator/",
     "category": "calculators",
-    "icon": null,
-    "color": null,
-    "featured": false,
-    "popular": false,
-    "status": "new",
-    "lastAdded": new Date().toISOString().split('T')[0],
+    "subCategory": "Health & Fitness",
     "keywords": [
+        "bmi",
         "bmi calculator",
-        "calculators"
+        "body mass index",
+        "bmi prime",
+        "ponderal index",
+        "healthy weight",
+        "overweight",
+        "underweight",
+        "fitness",
+        "weight loss"
     ],
-    "input": null,
-    "output": null,
-    "related": [],
-    "subCategory": null,
-    "requiresNetwork": false
+    "difficulty": "beginner",
+    "searchIntent": "transactional",
+    "priority": 0.8,
+    "schemaType": "WebApplication",
+    "related": [
+        "percentage-calculator",
+        "date-calculator",
+        "age-calculator"
+    ],
+    "status": "stable",
+    "lastUpdated": "2026-08-26"
 };

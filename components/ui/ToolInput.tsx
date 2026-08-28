@@ -18,8 +18,9 @@ interface ToolInputProps {
   id?: string;
   readOnly?: boolean;
   className?: string;
-  loading?: boolean;
-  style?: React.CSSProperties;
+  loading?: boolean | undefined;
+  style?: React.CSSProperties | undefined;
+  step?: string | number | undefined;
 }
 
 export function ToolInput({ 
@@ -38,7 +39,8 @@ export function ToolInput({
   readOnly,
   className,
   loading,
-  style
+  style,
+  step
 }: ToolInputProps) {
   const generatedId = useId();
   const id = providedId || generatedId;
@@ -93,6 +95,7 @@ export function ToolInput({
         <input
           id={id}
           type={type}
+          step={step}
           inputMode={inputMode}
           autoComplete={autoComplete}
           className={baseClasses}

@@ -232,10 +232,10 @@ export default function BarcodeScannerClient() {
       {/* Browser compatibility notice */}
       {usingFallback && !fallbackUnavailable && (
         <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex items-start gap-3" role="alert">
-          <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+          <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
           <div className="text-sm">
-            <p className="font-bold text-amber-400">Fallback mode — QR codes only</p>
-            <p className="text-amber-400/80 mt-0.5">
+            <p className="font-bold text-amber-600 dark:text-amber-400">Fallback mode — QR codes only</p>
+            <p className="text-amber-600 dark:text-amber-400/80 mt-0.5">
               Your browser doesn&apos;t support the native Barcode Detection API (Firefox/Safari/iOS). 
               A JS fallback is active and can detect <strong>QR codes</strong> only. 
               For full barcode format support (EAN, Code128, etc.), use Chrome or Edge on desktop.

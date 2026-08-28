@@ -106,7 +106,7 @@ export default function LogAnalyzerClient() {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <label className="text-sm font-semibold text-text flex items-center gap-2">
-              <FileSearch className="w-4 h-4 text-sky-400" />
+              <FileSearch className="w-4 h-4 text-sky-600 dark:text-sky-400" />
               Paste Server / Application Log Stream:
             </label>
             {isProcessing && (
@@ -135,20 +135,20 @@ export default function LogAnalyzerClient() {
               <span className="text-lg font-bold font-mono text-text">{parsedLogs.length}</span>
             </div>
             <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-center">
-              <span className="text-xs font-sans text-emerald-400 block">INFO</span>
-              <span className="text-lg font-bold font-mono text-emerald-300">{metrics.INFO}</span>
+              <span className="text-xs font-sans text-emerald-600 dark:text-emerald-400 block">INFO</span>
+              <span className="text-lg font-bold font-mono text-emerald-700 dark:text-emerald-300">{metrics.INFO}</span>
             </div>
             <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-center">
-              <span className="text-xs font-sans text-amber-400 block">WARN</span>
-              <span className="text-lg font-bold font-mono text-amber-300">{metrics.WARN}</span>
+              <span className="text-xs font-sans text-amber-600 dark:text-amber-400 block">WARN</span>
+              <span className="text-lg font-bold font-mono text-amber-700 dark:text-amber-300">{metrics.WARN}</span>
             </div>
             <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-center">
-              <span className="text-xs font-sans text-red-400 block">ERROR / FATAL</span>
-              <span className="text-lg font-bold font-mono text-red-300">{metrics.ERROR + metrics.FATAL}</span>
+              <span className="text-xs font-sans text-red-600 dark:text-red-400 block">ERROR / FATAL</span>
+              <span className="text-lg font-bold font-mono text-red-700 dark:text-red-300">{metrics.ERROR + metrics.FATAL}</span>
             </div>
             <div className="p-3 rounded-xl bg-sky-500/10 border border-sky-500/20 text-center">
-              <span className="text-xs font-sans text-sky-400 block">DEBUG</span>
-              <span className="text-lg font-bold font-mono text-sky-300">{metrics.DEBUG}</span>
+              <span className="text-xs font-sans text-sky-600 dark:text-sky-400 block">DEBUG</span>
+              <span className="text-lg font-bold font-mono text-sky-700 dark:text-sky-300">{metrics.DEBUG}</span>
             </div>
           </div>
 
@@ -197,13 +197,13 @@ export default function LogAnalyzerClient() {
         {filteredLogs.map((entry) => {
           const levelColor =
             entry.level === "ERROR" || entry.level === "FATAL"
-              ? "text-red-400 bg-red-500/10 border-red-500/20"
+              ? "text-red-600 dark:text-red-400 bg-red-500/10 border-red-500/20"
               : entry.level === "WARN"
-              ? "text-amber-400 bg-amber-500/10 border-amber-500/20"
+              ? "text-amber-600 dark:text-amber-400 bg-amber-500/10 border-amber-500/20"
               : entry.level === "INFO"
-              ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+              ? "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
               : entry.level === "DEBUG"
-              ? "text-sky-400 bg-sky-500/10 border-sky-500/20"
+              ? "text-sky-600 dark:text-sky-400 bg-sky-500/10 border-sky-500/20"
               : "text-text-muted bg-surface-2 border-border";
 
           return (
@@ -239,7 +239,7 @@ export default function LogAnalyzerClient() {
                     {Object.entries(entry.keyValues).map(([k, v], i) => (
                       <span key={i} className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-surface border border-border text-[10px]">
                         <span className="text-text-muted">{k}=</span>
-                        <span className="text-sky-300 font-semibold max-w-[200px] truncate" title={v}>{v}</span>
+                        <span className="text-sky-700 dark:text-sky-300 font-semibold max-w-[200px] truncate" title={v}>{v}</span>
                       </span>
                     ))}
                   </div>
@@ -249,7 +249,7 @@ export default function LogAnalyzerClient() {
                 {entry.exceptions && entry.exceptions.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-1">
                     {entry.exceptions.map((exc, i) => (
-                      <span key={i} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-red-500/10 border border-red-500/30 text-red-400 text-[10px] font-bold shadow-sm">
+                      <span key={i} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-[10px] font-bold shadow-sm">
                         <AlertTriangle className="w-3 h-3" />
                         {exc}
                       </span>
@@ -263,8 +263,8 @@ export default function LogAnalyzerClient() {
                     <summary className="text-[10px] text-blue hover:text-blue/80 cursor-pointer list-none select-none font-sans font-semibold inline-flex items-center gap-1 bg-blue/10 px-2 py-1 rounded-md transition-colors">
                       View Structured Data
                     </summary>
-                    <div className="mt-2 p-3 bg-[#0d1117] border border-border/50 rounded-lg overflow-x-auto">
-                      <pre className="text-[11px] text-emerald-300 leading-relaxed">
+                    <div className="mt-2 p-3 bg-surface-2 border border-border rounded-lg overflow-x-auto">
+                      <pre className="text-[11px] text-emerald-700 dark:text-emerald-300 leading-relaxed font-mono">
                         {JSON.stringify(entry.jsonData, null, 2)}
                       </pre>
                     </div>
