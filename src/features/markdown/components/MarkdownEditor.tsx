@@ -6,12 +6,13 @@ import {
   RefreshCw, CheckCircle2, X, ChevronRight,
   FileCode, FileEdit, Type, Eye, Columns,
   Settings2, Copy, AlignLeft, Hash, Sliders,
-  Sparkles, Trash2, Check, Sun, Moon, Monitor, SpellCheck
+  Sparkles, Trash2, Check, Sun, Moon, Monitor, SpellCheck, Loader2
 } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { cn } from "@/src/lib/utils";
 import { useFullscreenContext } from "@/src/contexts/FullscreenContext";
 import { useFocusModeIntegration } from '@/src/contexts/FocusModeControlsContext';
+import { useProgress } from "@/src/contexts/ProgressContext";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { DropZone } from "@/components/ui/DropZone";
 import { useToast } from "@/components/ui/Toast";
@@ -36,8 +37,18 @@ import { waitForDocumentReady } from "../mermaid/utils/export-barrier";
 
 type EditorTab = "split" | "write" | "visual" | "preview";
 
+async function yieldToMain(): Promise<void> {
+  if (typeof window !== "undefined" && "scheduler" in window && typeof (window as any).scheduler?.yield === "function") {
+    await (window as any).scheduler.yield();
+  } else {
+    await new Promise((resolve) => setTimeout(resolve, 30));
+  }
+}
+
 export function MarkdownEditor() {
   const { toast } = useToast();
+  const { startProcessing, setStage, setProgress, finishProcessing } = useProgress();
+  const [exportingFormat, setExportingFormat] = useState<"html" | "pdf" | "word" | null>(null);
   const [mode, setMode] = useState<"editor" | "upload">("editor");
   const [activeTab, setActiveTab] = useState<EditorTab>("write");
   const [md, setMd] = useState(SAMPLE_MARKDOWN);
@@ -646,12 +657,17 @@ export function MarkdownEditor() {
       blobManager.revoke(url);
       toast("HTML exported!");
     } else if (format === "pdf") {
-      let element: HTMLElement | null = mode === "editor" ? previewRef.current : uploadPreviewRef.current;
       let tempContainer: HTMLDivElement | null = null;
+      let exportContainer: HTMLDivElement | null = null;
 
-      toast("Preparing PDF export...", "info");
+      startProcessing("heavy");
+      setStage("Preparing document for PDF export...");
+      setProgress(15);
+      await yieldToMain();
 
       try {
+        let element: HTMLElement | null = mode === "editor" ? previewRef.current : uploadPreviewRef.current;
+
         if (!element) {
           // If the user is on the Write or Visual tab, previewRef.current is not mounted in the DOM.
           // Render the current parsed HTML into an off-screen container.
@@ -660,24 +676,34 @@ export function MarkdownEditor() {
           tempContainer.style.position = "fixed";
           tempContainer.style.left = "-9999px";
           tempContainer.style.top = "0";
-          tempContainer.style.width = "800px";
-          tempContainer.style.visibility = "hidden";
+          tempContainer.style.width = "794px";
+          tempContainer.style.visibility = "visible";
           tempContainer.innerHTML = html;
           document.body.appendChild(tempContainer);
           element = tempContainer;
         }
 
         if (!element) {
+          finishProcessing(false);
           toast("Preview not ready", "error");
           return;
         }
 
         // 1. Wait for document readiness: Mermaid rendering queue, web fonts, and images
+        setStage("Rendering Mermaid diagrams & typography...");
+        setProgress(35);
+        await yieldToMain();
+
         const readiness = await waitForDocumentReady(element, 8000);
         if (readiness.revisionChanged) {
+          finishProcessing(false);
           toast("Document modified during export preparation. Please retry.", "error");
           return;
         }
+
+        setStage("Rasterizing vector diagrams & structure...");
+        setProgress(55);
+        await yieldToMain();
 
         const rawContent = element.querySelector(".markdown-body") || element;
         const clone = rawContent.cloneNode(true) as HTMLElement;
@@ -717,6 +743,7 @@ export function MarkdownEditor() {
 
         // 2. Utilize specialized MermaidExporter to convert all complex SVG diagrams to high-DPI raster PNGs
         await MermaidExportBarrier.adaptForPdf(clone, 2);
+        await yieldToMain();
 
         const allElements = [clone, ...Array.from(clone.querySelectorAll("*"))];
         for (const el of allElements) {
@@ -727,13 +754,18 @@ export function MarkdownEditor() {
           }
         }
 
-        const container = document.createElement("div");
-        container.className = "markdown-body";
-        container.style.width = "180mm";
-        container.style.padding = "0";
-        container.style.backgroundColor = "#ffffff";
-        container.style.color = "#24292e";
-        container.style.fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif";
+        exportContainer = document.createElement("div");
+        exportContainer.className = "markdown-body";
+        exportContainer.style.position = "fixed";
+        exportContainer.style.left = "-9999px";
+        exportContainer.style.top = "0";
+        exportContainer.style.width = "794px"; // A4 pixel width at 96 DPI
+        exportContainer.style.padding = "20px";
+        exportContainer.style.backgroundColor = "#ffffff";
+        exportContainer.style.color = "#24292e";
+        exportContainer.style.fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif";
+        exportContainer.style.zIndex = "-1000";
+        exportContainer.style.visibility = "visible";
         
         const style = document.createElement("style");
         style.innerHTML = `
@@ -754,35 +786,52 @@ export function MarkdownEditor() {
           .markdown-body svg { max-width: 100% !important; height: auto !important; }
           .markdown-body ul, .markdown-body ol { padding-left: 2em !important; margin-bottom: 16px !important; }
         `;
-        container.appendChild(style);
-        container.appendChild(clone);
+        exportContainer.appendChild(style);
+        exportContainer.appendChild(clone);
+        document.body.appendChild(exportContainer);
+
+        setStage("Generating PDF layout & pages...");
+        setProgress(75);
+        await yieldToMain();
 
         const html2pdf = (await import("html2pdf.js")).default;
         
         const opt = {
-          margin: [15, 15] as [number, number],
+          margin: [10, 10, 10, 10] as [number, number, number, number],
           filename: `${name}.pdf`,
-          image: { type: "jpeg" as const, quality: 0.98 },
+          image: { type: "jpeg" as const, quality: 0.95 },
           html2canvas: { 
-            scale: 2, 
+            scale: 1.5, 
             useCORS: true, 
             letterRendering: true,
             logging: false,
             scrollY: 0,
-            windowY: 0
+            windowWidth: 794
           },
           jsPDF: { unit: "mm" as const, format: "a4" as const, orientation: "portrait" as const },
           pagebreak: { mode: ["avoid-all", "css", "legacy"] }
         };
 
-        await html2pdf().set(opt).from(container).save();
+        setStage("Compiling PDF binary file...");
+        setProgress(90);
+        await yieldToMain();
+
+        await html2pdf().set(opt).from(exportContainer).save();
+        
+        setProgress(100);
+        finishProcessing(true);
         toast("PDF exported successfully!");
       } catch (err) {
+        finishProcessing(false);
         toast("PDF export failed", "error");
       } finally {
+        if (exportContainer && exportContainer.parentNode) {
+          exportContainer.parentNode.removeChild(exportContainer);
+        }
         if (tempContainer && tempContainer.parentNode) {
           tempContainer.parentNode.removeChild(tempContainer);
         }
+        setExportingFormat(null);
       }
     } else if (format === "word") {
       try {
@@ -920,24 +969,27 @@ export function MarkdownEditor() {
           <div className="flex bg-surface border border-border rounded-xl overflow-hidden shadow-xs shrink-0">
             <button
               onClick={() => handleExport("html")}
-              className="flex items-center gap-1 px-2 sm:px-2.5 py-2 text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:bg-blue/10 hover:text-blue transition-all border-r border-border cursor-pointer"
+              disabled={exportingFormat !== null}
+              className="flex items-center gap-1 px-2 sm:px-2.5 py-2 text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:bg-blue/10 hover:text-blue transition-all border-r border-border cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               title="Export HTML"
             >
-              <Code2 className="w-3.5 h-3.5" /> HTML
+              {exportingFormat === "html" ? <Loader2 className="w-3.5 h-3.5 animate-spin text-blue" /> : <Code2 className="w-3.5 h-3.5" />} HTML
             </button>
             <button
               onClick={() => handleExport("pdf")}
-              className="flex items-center gap-1 px-2 sm:px-2.5 py-2 text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:bg-blue/10 hover:text-blue transition-all border-r border-border cursor-pointer"
+              disabled={exportingFormat !== null}
+              className="flex items-center gap-1 px-2 sm:px-2.5 py-2 text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:bg-blue/10 hover:text-blue transition-all border-r border-border cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               title="Export PDF"
             >
-              <FileText className="w-3.5 h-3.5" /> PDF
+              {exportingFormat === "pdf" ? <Loader2 className="w-3.5 h-3.5 animate-spin text-blue" /> : <FileText className="w-3.5 h-3.5" />} PDF
             </button>
             <button
               onClick={() => handleExport("word")}
-              className="flex items-center gap-1 px-2 sm:px-2.5 py-2 text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:bg-blue/10 hover:text-blue transition-all cursor-pointer"
+              disabled={exportingFormat !== null}
+              className="flex items-center gap-1 px-2 sm:px-2.5 py-2 text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:bg-blue/10 hover:text-blue transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               title="Export Word Document (.docx)"
             >
-              <FileCode className="w-3.5 h-3.5" /> Word
+              {exportingFormat === "word" ? <Loader2 className="w-3.5 h-3.5 animate-spin text-blue" /> : <FileCode className="w-3.5 h-3.5" />} Word
             </button>
           </div>
         </div>
