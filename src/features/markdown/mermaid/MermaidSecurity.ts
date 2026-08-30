@@ -113,8 +113,12 @@ export class MermaidSecurity {
       flowchart: {
         htmlLabels: false,
         useMaxWidth: true,
+        curve: 'basis',
+        nodeSpacing: 60,
+        rankSpacing: 60,
+        padding: 16,
       },
-      theme: isDark ? 'dark' : 'default',
+      theme: 'base' as const,
     };
   }
 }

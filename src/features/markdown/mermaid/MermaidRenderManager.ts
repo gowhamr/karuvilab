@@ -97,24 +97,24 @@ export class MermaidRenderManager {
     const themeVariables = isDark
       ? {
           darkMode: true,
-          background: '#101626',
+          background: '#0f172a',
           primaryColor: '#1e293b',
           primaryTextColor: '#f8fafc',
           primaryBorderColor: '#3b82f6',
-          lineColor: '#94a3b8',
-          secondaryColor: '#171f33',
-          tertiaryColor: '#101626',
+          lineColor: '#60a5fa',
+          secondaryColor: '#1e293b',
+          tertiaryColor: '#0f172a',
           textColor: '#f8fafc',
           nodeTextColor: '#f8fafc',
           mainBkg: '#1e293b',
           nodeBorder: '#3b82f6',
-          clusterBkg: '#070b14',
+          clusterBkg: '#0b0f19',
           clusterBorder: '#334155',
           titleColor: '#f8fafc',
-          edgeLabelBackground: '#101626',
+          edgeLabelBackground: '#1e293b',
           actorTextColor: '#f8fafc',
-          actorLineColor: '#94a3b8',
-          signalColor: '#f8fafc',
+          actorLineColor: '#60a5fa',
+          signalColor: '#60a5fa',
           signalTextColor: '#f8fafc',
           labelTextColor: '#f8fafc',
           loopTextColor: '#f8fafc',
@@ -127,37 +127,128 @@ export class MermaidRenderManager {
       : {
           darkMode: false,
           background: '#ffffff',
-          primaryColor: '#eff6ff',
+          primaryColor: '#f8fafc',
           primaryTextColor: '#0f172a',
           primaryBorderColor: '#3b82f6',
-          lineColor: '#475569',
+          lineColor: '#2563eb',
           secondaryColor: '#f1f5f9',
           tertiaryColor: '#ffffff',
           textColor: '#0f172a',
           nodeTextColor: '#0f172a',
-          mainBkg: '#eff6ff',
+          mainBkg: '#f8fafc',
           nodeBorder: '#3b82f6',
           clusterBkg: '#f8fafc',
           clusterBorder: '#cbd5e1',
           titleColor: '#0f172a',
           edgeLabelBackground: '#ffffff',
           actorTextColor: '#0f172a',
-          actorLineColor: '#475569',
-          signalColor: '#0f172a',
+          actorLineColor: '#2563eb',
+          signalColor: '#2563eb',
           signalTextColor: '#0f172a',
           labelTextColor: '#0f172a',
           loopTextColor: '#0f172a',
           noteBorderColor: '#3b82f6',
-          noteBkgColor: '#eff6ff',
+          noteBkgColor: '#f8fafc',
           noteTextColor: '#0f172a',
           fontFamily: 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
           fontSize: '14px',
         };
 
+    const themeCSS = isDark
+      ? `
+        .node rect, .node circle, .node ellipse, .node polygon, .node path {
+          fill: #1e293b !important;
+          stroke: #3b82f6 !important;
+          stroke-width: 1.5px !important;
+        }
+        .node .label, .node text, .node tspan {
+          fill: #f8fafc !important;
+          color: #f8fafc !important;
+          font-weight: 600 !important;
+          font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        }
+        .edgeLabel, .edgeLabel rect, .edgeLabel .label-container {
+          fill: #1e293b !important;
+          background-color: #1e293b !important;
+          stroke: #3b82f6 !important;
+          stroke-width: 1px !important;
+          rx: 6px !important;
+          ry: 6px !important;
+        }
+        .edgeLabel text, .edgeLabel tspan {
+          fill: #f8fafc !important;
+          color: #f8fafc !important;
+          font-weight: 700 !important;
+          font-size: 12px !important;
+        }
+        .flowchart-link, path.flowchart-link, .edge-thickness-normal, path.edge-thickness-normal {
+          stroke: #60a5fa !important;
+          stroke-width: 2px !important;
+        }
+        .marker, marker path {
+          fill: #60a5fa !important;
+          stroke: #60a5fa !important;
+        }
+        .cluster rect {
+          fill: #0b0f19 !important;
+          stroke: #334155 !important;
+          stroke-width: 1.5px !important;
+        }
+        .cluster text {
+          fill: #f8fafc !important;
+          font-weight: 700 !important;
+        }
+      `
+      : `
+        .node rect, .node circle, .node ellipse, .node polygon, .node path {
+          fill: #f8fafc !important;
+          stroke: #3b82f6 !important;
+          stroke-width: 1.5px !important;
+        }
+        .node .label, .node text, .node tspan {
+          fill: #0f172a !important;
+          color: #0f172a !important;
+          font-weight: 600 !important;
+          font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        }
+        .edgeLabel, .edgeLabel rect, .edgeLabel .label-container {
+          fill: #ffffff !important;
+          background-color: #ffffff !important;
+          stroke: #cbd5e1 !important;
+          stroke-width: 1px !important;
+          rx: 6px !important;
+          ry: 6px !important;
+        }
+        .edgeLabel text, .edgeLabel tspan {
+          fill: #0f172a !important;
+          color: #0f172a !important;
+          font-weight: 700 !important;
+          font-size: 12px !important;
+        }
+        .flowchart-link, path.flowchart-link, .edge-thickness-normal, path.edge-thickness-normal {
+          stroke: #2563eb !important;
+          stroke-width: 2px !important;
+        }
+        .marker, marker path {
+          fill: #2563eb !important;
+          stroke: #2563eb !important;
+        }
+        .cluster rect {
+          fill: #f8fafc !important;
+          stroke: #cbd5e1 !important;
+          stroke-width: 1.5px !important;
+        }
+        .cluster text {
+          fill: #0f172a !important;
+          font-weight: 700 !important;
+        }
+      `;
+
     try {
       mermaid.initialize({
         ...secureConfig,
         themeVariables,
+        themeCSS,
       });
       this.currentTheme = targetTheme;
       this.isInitialized = true;
