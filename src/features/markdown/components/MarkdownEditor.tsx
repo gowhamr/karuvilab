@@ -1319,6 +1319,7 @@ export function MarkdownEditor() {
                     hideHeader={activeTab === "split"}
                     onScroll={handlePreviewScroll}
                     onCopyRaw={handleCopyMd} 
+                    theme={activeEditorTheme === "karuvi-dark" ? "dark" : "light"}
                   />
                 </div>
               )}
@@ -1383,6 +1384,7 @@ export function MarkdownEditor() {
                 <MarkdownPreview 
                   html={html} 
                   ref={uploadPreviewRef}
+                  theme={activeEditorTheme === "karuvi-dark" ? "dark" : "light"}
                   onCopyRaw={() => {
                     navigator.clipboard.writeText(uploadMd);
                     toast("Markdown copied!");

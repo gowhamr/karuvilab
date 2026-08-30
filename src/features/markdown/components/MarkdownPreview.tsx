@@ -13,10 +13,11 @@ interface MarkdownPreviewProps {
   hideHeader?: boolean;
   onScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
   className?: string;
+  theme?: "dark" | "light";
 }
 
 export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewProps>(
-  ({ html, onCopyRaw, hideHeader = false, onScroll, className }, ref) => {
+  ({ html, onCopyRaw, hideHeader = false, onScroll, className, theme: propTheme }, ref) => {
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -37,17 +38,19 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
         });
       }
 
+      // Determine active diagram theme
+      const isDark =
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.documentElement.classList.contains('dark') ||
+        (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches);
+      const activeTheme = propTheme || (isDark ? 'dark' : 'light');
+
       // 2. Handle Mermaid Diagrams through isolated MermaidDiagramBlock lifecycle
       const placeholders = containerRef.current.querySelectorAll('.mermaid-placeholder');
       placeholders.forEach((ph, idx) => {
         const src = decodeURIComponent(ph.getAttribute('data-src') || '');
         const lang = ph.getAttribute('data-lang') || 'mermaid';
-        const isDark =
-          document.documentElement.getAttribute('data-theme') === 'dark' ||
-          document.documentElement.classList.contains('dark') ||
-          (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches);
-        const theme = isDark ? 'dark' : 'light';
-        const hash = MermaidPreflightAnalyzer.computeHash(src, theme);
+        const hash = MermaidPreflightAnalyzer.computeHash(src, activeTheme);
 
         const block: MermaidBlock = {
           id: `mmd-${hash.substring(0, 8)}-${idx}`,
@@ -62,7 +65,7 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
         ph.replaceWith(mountPoint);
 
         const root = createRoot(mountPoint);
-        root.render(<MermaidDiagramBlock block={block} />);
+        root.render(<MermaidDiagramBlock block={block} theme={activeTheme} />);
         mountedRoots.push(root);
       });
 
@@ -101,7 +104,7 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
       return () => {
         cleanups.forEach(fn => fn());
       };
-    }, [html]);
+    }, [html, propTheme]);
 
   return (
     <div className={`flex flex-col h-full bg-bg border border-border rounded-xl overflow-hidden shadow-sm ${className || ''}`}>

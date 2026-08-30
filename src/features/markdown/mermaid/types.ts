@@ -117,13 +117,13 @@ export interface MermaidRenderResult {
 }
 
 export interface MermaidRenderOptions {
-  theme?: MermaidThemeMode;
-  forceRerender?: boolean;
-  generationId?: number;
+  theme?: MermaidThemeMode | undefined;
+  forceRerender?: boolean | undefined;
+  generationId?: number | undefined;
   /** Universal document revision for stale-result protection */
   documentRevision?: number | undefined;
-  signal?: AbortSignal;
-  priority?: 'immediate' | 'queue' | 'lazy';
+  signal?: AbortSignal | undefined;
+  priority?: 'immediate' | 'queue' | 'lazy' | undefined;
 }
 
 export interface MermaidMetrics {

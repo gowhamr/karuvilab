@@ -10,9 +10,10 @@ import { MermaidErrorCard } from "./MermaidErrorCard";
 
 interface MermaidDiagramBlockProps {
   block: MermaidBlock;
+  theme?: "dark" | "light";
 }
 
-export function MermaidDiagramBlock({ block }: MermaidDiagramBlockProps) {
+export function MermaidDiagramBlock({ block, theme }: MermaidDiagramBlockProps) {
   const [result, setResult] = useState<MermaidRenderResult | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isInViewport, setIsInViewport] = useState<boolean>(false);
@@ -71,6 +72,7 @@ export function MermaidDiagramBlock({ block }: MermaidDiagramBlockProps) {
         forceRerender: force,
         generationId: currentGen,
         priority: isInViewport ? "immediate" : "queue",
+        theme,
       });
 
       if (!ac.signal.aborted && currentGen === generationRef.current) {
@@ -92,7 +94,7 @@ export function MermaidDiagramBlock({ block }: MermaidDiagramBlockProps) {
         setIsLoading(false);
       }
     }
-  }, [block, isInViewport]);
+  }, [block, isInViewport, theme]);
 
   useEffect(() => {
     if (isInViewport) {

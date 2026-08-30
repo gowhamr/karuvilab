@@ -129,33 +129,10 @@
   padding: 0 !important;
 }
 
-/* Node text styling for high contrast in both themes */
-.markdown-body .mermaid-container .nodeLabel,
-.markdown-body .mermaid-container .label,
-.markdown-body .mermaid-container .labelText,
-.markdown-body .mermaid-container .cluster-label,
-.markdown-body .mermaid-container .edgeLabel,
-.markdown-body .mermaid-container text,
-.markdown-body .mermaid-container tspan {
+/* Ensure Mermaid text inherits UI font family while letting Mermaid theme engine control contrast fills */
+.markdown-body .mermaid-container svg text,
+.markdown-body .mermaid-container svg tspan {
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  fill: var(--text) !important;
-  color: var(--text) !important;
 }
 
-/* Ensure SVG text elements have clear readable color */
-.markdown-body .mermaid-container svg text {
-  fill: var(--text) !important;
-}
-
-/* Edge labels background styling */
-.markdown-body .mermaid-container .edgeLabel rect,
-.markdown-body .mermaid-container .edgeLabel span {
-  background-color: var(--surface) !important;
-  fill: var(--surface) !important;
-  color: var(--text) !important;
-  padding: 2px 4px;
-  border-radius: 4px;
-}
 
