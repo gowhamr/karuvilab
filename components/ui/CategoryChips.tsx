@@ -41,16 +41,20 @@ export const CategoryChips = memo(function CategoryChips({ activeCategory, onCat
     [containerRef]
   );
 
-  // Center active category chip on load or state change
+  // Center active category chip when activeCategory changes
   useEffect(() => {
-    const targetId = activeCategory ? `tab-${activeCategory}` : "tab-all";
+    if (!activeCategory) return;
+    const targetId = `tab-${activeCategory}`;
     const activeEl = containerRef.current?.querySelector(`[id="${targetId}"]`);
     if (activeEl) {
-      // Use scrollTo for more reliable centering than scrollIntoView which can sometimes trigger vertical scroll
-      const container = containerRef.current!;
-      const target = activeEl as HTMLElement;
-      const scrollLeft = target.offsetLeft - (container.clientWidth / 2) + (target.clientWidth / 2);
-      container.scrollTo({ left: scrollLeft, behavior: "smooth" });
+      const raf = requestAnimationFrame(() => {
+        const container = containerRef.current;
+        if (!container) return;
+        const target = activeEl as HTMLElement;
+        const scrollLeft = target.offsetLeft - (container.clientWidth / 2) + (target.clientWidth / 2);
+        container.scrollTo({ left: scrollLeft, behavior: "smooth" });
+      });
+      return () => cancelAnimationFrame(raf);
     }
   }, [activeCategory, containerRef]);
 

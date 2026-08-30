@@ -69,10 +69,32 @@ function sync() {
           }
           fs.mkdirSync(path.dirname(destPath), { recursive: true });
           fs.cpSync(srcPath, destPath, { recursive: true });
+          
+          // Clean sourceMappingURL from copied scripts to prevent 404 HTML map fetches
+          const cleanMaps = (dir) => {
+            const entries = fs.readdirSync(dir, { withFileTypes: true });
+            for (const entry of entries) {
+              const full = path.join(dir, entry.name);
+              if (entry.isDirectory()) cleanMaps(full);
+              else if (entry.name.endsWith('.js')) {
+                const content = fs.readFileSync(full, 'utf8');
+                if (content.includes('sourceMappingURL=')) {
+                  fs.writeFileSync(full, content.replace(/\/\/#\s*sourceMappingURL=[^\r\n]+/g, ''), 'utf8');
+                }
+              }
+            }
+          };
+          cleanMaps(destPath);
           console.log(`✅ Synced Directory: ${worker.src} -> ${worker.dest}`);
         } else {
           fs.mkdirSync(path.dirname(destPath), { recursive: true });
           fs.copyFileSync(srcPath, destPath);
+          if (destPath.endsWith('.js') || destPath.endsWith('.mjs')) {
+            const content = fs.readFileSync(destPath, 'utf8');
+            if (content.includes('sourceMappingURL=')) {
+              fs.writeFileSync(destPath, content.replace(/\/\/#\s*sourceMappingURL=[^\r\n]+/g, ''), 'utf8');
+            }
+          }
           console.log(`✅ Synced: ${worker.src} -> ${worker.dest}`);
         }
       } catch (err) {

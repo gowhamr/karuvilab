@@ -6,7 +6,7 @@ export type AgeCalculatorErrorCode =
 
 export interface AgeCalculatorInput {
   dateOfBirth: string; // ISO format: YYYY-MM-DD
-  asOfDate?: string;   // ISO format: YYYY-MM-DD (defaults to today in UI)
+  asOfDate?: string | undefined;   // ISO format: YYYY-MM-DD (defaults to today in UI)
 }
 
 export interface AgeCalculatorCoreResult {
