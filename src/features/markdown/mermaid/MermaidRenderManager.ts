@@ -341,12 +341,116 @@ export class MermaidRenderManager {
 
         const { svg } = await mermaid.render(renderSeedId, block.source);
 
-        if (signal.aborted) {
-          throw new DOMException('Render aborted after layout', 'AbortError');
-        }
+        // Inject high-specificity, theme-enforcing styles directly into the SVG
+        const isDarkTheme = theme === 'dark';
+        const themeScopedStyles = isDarkTheme
+          ? `<style>
+              .node rect, .node circle, .node ellipse, .node polygon, .node path,
+              g[class*="node"] rect, g[class*="node"] circle, g[class*="node"] polygon, g[class*="node"] path,
+              .label-container {
+                fill: #1e293b !important;
+                stroke: #3b82f6 !important;
+                stroke-width: 2px !important;
+              }
+              .node .label, .node text, .node tspan, g[class*="node"] text, g[class*="node"] tspan, .labelText {
+                fill: #f8fafc !important;
+                color: #f8fafc !important;
+                font-weight: 700 !important;
+                font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+              }
+              .edgeLabel rect, .edgeLabel .background, .edgeLabel .label-container,
+              g.edgeLabel rect, g.edgeLabel .label-container {
+                fill: #1e293b !important;
+                background-color: #1e293b !important;
+                opacity: 1 !important;
+                fill-opacity: 1 !important;
+                stroke: #3b82f6 !important;
+                stroke-width: 1.5px !important;
+                rx: 6px !important;
+                ry: 6px !important;
+              }
+              .edgeLabel text, .edgeLabel tspan, .edgeLabel span, .edgeLabel p,
+              g.edgeLabel text, g.edgeLabel tspan {
+                fill: #f8fafc !important;
+                color: #f8fafc !important;
+                font-weight: 700 !important;
+                font-size: 13px !important;
+                opacity: 1 !important;
+              }
+              .flowchart-link, path.flowchart-link, .edge-thickness-normal, path.edge-thickness-normal, path.path {
+                stroke: #60a5fa !important;
+                stroke-width: 2px !important;
+              }
+              .marker, marker path, #flowchart-pointEnd, #flowchart-pointStart {
+                fill: #60a5fa !important;
+                stroke: #60a5fa !important;
+              }
+              .cluster rect {
+                fill: #0b0f19 !important;
+                stroke: #334155 !important;
+                stroke-width: 1.5px !important;
+              }
+              .cluster text {
+                fill: #f8fafc !important;
+                font-weight: 700 !important;
+              }
+            </style>`
+          : `<style>
+              .node rect, .node circle, .node ellipse, .node polygon, .node path,
+              g[class*="node"] rect, g[class*="node"] circle, g[class*="node"] polygon, g[class*="node"] path,
+              .label-container {
+                fill: #ffffff !important;
+                stroke: #2563eb !important;
+                stroke-width: 2px !important;
+              }
+              .node .label, .node text, .node tspan, g[class*="node"] text, g[class*="node"] tspan, .labelText {
+                fill: #0f172a !important;
+                color: #0f172a !important;
+                font-weight: 700 !important;
+                font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+              }
+              .edgeLabel rect, .edgeLabel .background, .edgeLabel .label-container,
+              g.edgeLabel rect, g.edgeLabel .label-container {
+                fill: #ffffff !important;
+                background-color: #ffffff !important;
+                opacity: 1 !important;
+                fill-opacity: 1 !important;
+                stroke: #94a3b8 !important;
+                stroke-width: 1.5px !important;
+                rx: 6px !important;
+                ry: 6px !important;
+              }
+              .edgeLabel text, .edgeLabel tspan, .edgeLabel span, .edgeLabel p,
+              g.edgeLabel text, g.edgeLabel tspan {
+                fill: #0f172a !important;
+                color: #0f172a !important;
+                font-weight: 700 !important;
+                font-size: 13px !important;
+                opacity: 1 !important;
+              }
+              .flowchart-link, path.flowchart-link, .edge-thickness-normal, path.edge-thickness-normal, path.path {
+                stroke: #2563eb !important;
+                stroke-width: 2px !important;
+              }
+              .marker, marker path, #flowchart-pointEnd, #flowchart-pointStart {
+                fill: #2563eb !important;
+                stroke: #2563eb !important;
+              }
+              .cluster rect {
+                fill: #f8fafc !important;
+                stroke: #cbd5e1 !important;
+                stroke-width: 1.5px !important;
+              }
+              .cluster text {
+                fill: #0f172a !important;
+                font-weight: 700 !important;
+              }
+            </style>`;
+
+        const styledSvg = svg.replace(/(<svg[^>]*>)/i, `$1${themeScopedStyles}`);
 
         // Sanitize generated SVG (KL-09)
-        const sanitizedSvg = sanitizeHtml(svg, {
+        const sanitizedSvg = sanitizeHtml(styledSvg, {
           USE_PROFILES: { svg: true, svgFilters: true, html: true },
           ADD_TAGS: [
             'foreignObject', 'foreignobject', 'style', 'text', 'tspan',

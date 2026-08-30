@@ -114,9 +114,10 @@ export class MermaidSecurity {
         htmlLabels: false,
         useMaxWidth: true,
         curve: 'basis',
-        nodeSpacing: 60,
-        rankSpacing: 60,
-        padding: 16,
+        nodeSpacing: 80,
+        rankSpacing: 80,
+        padding: 20,
+        defaultRenderer: 'dagre-wrapper',
       },
       theme: 'base' as const,
     };
