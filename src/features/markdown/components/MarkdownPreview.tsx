@@ -130,6 +130,7 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
         onScroll={onScroll}
       >
         <div 
+          key={`md-preview-${propTheme || 'auto'}`}
           ref={containerRef}
           dangerouslySetInnerHTML={{ __html: html }}
         />

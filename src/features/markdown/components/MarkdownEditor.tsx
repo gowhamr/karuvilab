@@ -895,7 +895,17 @@ export function MarkdownEditor() {
         <div className="flex items-center justify-start xl:justify-end w-full xl:w-auto gap-1.5 sm:gap-2 flex-wrap shrink-0">
           {/* Quick Theme Toggle */}
           <button
-            onClick={() => setEditorThemeMode(m => m === "dark" ? "light" : m === "light" ? "auto" : "dark")}
+            onClick={() => {
+              setEditorThemeMode(m => {
+                const next = m === "dark" ? "light" : m === "light" ? "auto" : "dark";
+                const target = next === "auto" 
+                  ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+                  : next;
+                document.documentElement.setAttribute("data-theme", target);
+                document.documentElement.classList.toggle("dark", target === "dark");
+                return next;
+              });
+            }}
             className={cn(
               "p-2 rounded-xl border transition-all cursor-pointer",
               editorThemeMode !== "auto" 

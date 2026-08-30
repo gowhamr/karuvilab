@@ -11,6 +11,15 @@ export function ThemeToggle() {
   const theme = useSettingsStore(state => state.appearance.theme);
   const updateAppearance = useSettingsStore(state => state.updateAppearance);
 
+  useEffect(() => {
+    if (!isHydrated) return;
+    const resolved = theme === "system"
+      ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+      : theme;
+    document.documentElement.setAttribute("data-theme", resolved);
+    document.documentElement.classList.toggle("dark", resolved === "dark");
+  }, [theme, isHydrated]);
+
   const toggleTheme = () => {
     const resolvedTheme = theme === "system" 
       ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
@@ -18,6 +27,7 @@ export function ThemeToggle() {
     const nextTheme = resolvedTheme === "light" ? "dark" : "light";
     updateAppearance({ theme: nextTheme });
     document.documentElement.setAttribute("data-theme", nextTheme);
+    document.documentElement.classList.toggle("dark", nextTheme === "dark");
   };
 
   if (!isHydrated) {

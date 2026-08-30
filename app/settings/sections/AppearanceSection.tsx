@@ -15,6 +15,7 @@ export const AppearanceSection = memo(function AppearanceSection() {
       ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
       : theme;
     document.documentElement.setAttribute("data-theme", resolved);
+    document.documentElement.classList.toggle("dark", resolved === "dark");
   }, [updateAppearance]);
 
   const handleQuickActionsToggle = useCallback((val: boolean) => {
