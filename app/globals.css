@@ -2,7 +2,7 @@
 @import "../src/theme/tokens.css";
 @config "../tailwind.config.ts";
 
-@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *, html.dark, html.dark *));
 
 @custom-variant hov {
   @media (hover: hover) {
@@ -212,7 +212,7 @@ html.preload *:after {
   transition: none !important;
 }
 
-:root {
+:root, :root[data-theme="light"], html[data-theme="light"], html:not(.dark) {
   --text-6xl: 3.75rem; /* 60px */
   color-scheme: light;
   --blue:         #4F46E5;
@@ -280,7 +280,7 @@ html.preload *:after {
   --kv-trust-text:       #475569;
 }
 
-[data-theme="dark"] {
+:root[data-theme="dark"], html[data-theme="dark"], html.dark, .dark, [data-theme="dark"] {
   --success:      #28C76F;
   --error:        #FF5C8A;
   --warn:         #FFB020;

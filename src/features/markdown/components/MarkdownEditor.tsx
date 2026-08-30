@@ -898,11 +898,20 @@ export function MarkdownEditor() {
             onClick={() => {
               setEditorThemeMode(m => {
                 const next = m === "dark" ? "light" : m === "light" ? "auto" : "dark";
-                const target = next === "auto" 
-                  ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
-                  : next;
+                let target = next;
+                if (next === "auto") {
+                  try {
+                    target = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+                  } catch {
+                    const attr = document.documentElement.getAttribute("data-theme");
+                    target = (attr === "dark" || attr === "light") ? attr : "light";
+                  }
+                }
                 document.documentElement.setAttribute("data-theme", target);
                 document.documentElement.classList.toggle("dark", target === "dark");
+                try {
+                  document.cookie = `kv-theme=${encodeURIComponent(target)}; path=/; max-age=31536000; SameSite=Lax`;
+                } catch {}
                 return next;
               });
             }}

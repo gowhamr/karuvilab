@@ -69,10 +69,12 @@ export const HomeHero = memo(function HomeHero({ isReturning = false }: HomeHero
       </div>
 
       {/* ── Headline (LCP Element) ── */}
-      <h1 className="font-black tracking-tighter text-text mx-auto text-balance text-4xl md:text-5xl lg:text-6xl leading-[1.1] max-w-xl mb-4 font-poppins">
-        Tools that help you understand,{" "}
-        <span className="bg-gradient-to-r from-primary via-indigo-500 to-purple-500 bg-clip-text text-transparent">
-          not just use.
+      <h1 className="font-black tracking-tighter text-text mx-auto text-balance text-4xl md:text-5xl lg:text-6xl leading-[1.1] max-w-xl mb-4 font-poppins min-h-[80px] md:min-h-[120px] flex flex-col justify-center">
+        <span>
+          Tools that help you understand,{" "}
+          <span className="bg-gradient-to-r from-primary via-indigo-500 to-purple-500 bg-clip-text text-transparent">
+            not just use.
+          </span>
         </span>
       </h1>
 

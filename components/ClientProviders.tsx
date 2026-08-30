@@ -27,6 +27,15 @@ function GlobalSettingsEffects() {
   const accessibility = useSettingsStore(s => s.accessibility);
 
   useEffect(() => {
+    const root = document.documentElement;
+    // Always remove preload class to restore normal paint/transitions
+    const timer = setTimeout(() => {
+      root.classList.remove('preload');
+    }, 50);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
     if (!isHydrated) return;
     
     const root = document.documentElement;
@@ -34,9 +43,15 @@ function GlobalSettingsEffects() {
     // Theme
     let resolved = theme;
     if (theme === 'system') {
-      resolved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      try {
+        resolved = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+      } catch {
+        const attr = root.getAttribute('data-theme');
+        resolved = (attr === 'dark' || attr === 'light') ? attr : 'light';
+      }
     }
     root.setAttribute('data-theme', resolved);
+    root.classList.toggle('dark', resolved === 'dark');
     
     // Accessibility
     root.setAttribute('data-font-size', String(accessibility.fontScaling || '1.0'));
@@ -49,13 +64,6 @@ function GlobalSettingsEffects() {
     
     if (accessibility.keyboardShortcutsOverlay) root.classList.add('show-shortcuts');
     else root.classList.remove('show-shortcuts');
-    
-    // Prevent transition flash by removing preload after setting attributes
-    const timer = setTimeout(() => {
-      root.classList.remove('preload');
-    }, 50);
-    
-    return () => clearTimeout(timer);
   }, [isHydrated, theme, accessibility]);
 
   return null;

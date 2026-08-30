@@ -78,17 +78,32 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `(function(){
               try {
-                var s = JSON.parse(localStorage.getItem('karuvi-settings') || '{}');
+                var s = {};
+                try {
+                  s = JSON.parse(localStorage.getItem('karuvi-settings') || '{}');
+                } catch(e) {}
                 var state = s.state || {};
                 var app = state.appearance || {};
                 var acc = state.accessibility || {};
                 
-                var t = app.theme || 'system';
+                var cookieMatch = document.cookie.match(/(?:^|; )kv-theme=([^;]*)/);
+                var cookieTheme = cookieMatch ? decodeURIComponent(cookieMatch[1]) : null;
+
+                var t = app.theme || cookieTheme || 'system';
                 var r = t;
                 if (t === 'system') {
-                  r = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  try {
+                    r = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+                  } catch (me) {
+                    r = 'light';
+                  }
                 }
                 document.documentElement.setAttribute('data-theme', r);
+                if (r === 'dark') {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
                 
                 var f = acc.fontScaling || app.fontSize || '1.0';
                 document.documentElement.setAttribute('data-font-size', f);

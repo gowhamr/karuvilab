@@ -11,11 +11,20 @@ export const AppearanceSection = memo(function AppearanceSection() {
 
   const handleThemeChange = useCallback((theme: any) => {
     updateAppearance({ theme });
-    const resolved = theme === "system"
-      ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
-      : theme;
+    let resolved = theme;
+    if (theme === "system") {
+      try {
+        resolved = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+      } catch {
+        const attr = document.documentElement.getAttribute("data-theme");
+        resolved = (attr === "dark" || attr === "light") ? attr : "light";
+      }
+    }
     document.documentElement.setAttribute("data-theme", resolved);
     document.documentElement.classList.toggle("dark", resolved === "dark");
+    try {
+      document.cookie = `kv-theme=${encodeURIComponent(theme)}; path=/; max-age=31536000; SameSite=Lax`;
+    } catch {}
   }, [updateAppearance]);
 
   const handleQuickActionsToggle = useCallback((val: boolean) => {

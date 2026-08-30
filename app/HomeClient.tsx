@@ -150,6 +150,14 @@ const SectionHeader = memo(function SectionHeader({
   );
 });
 
+// Module-level static precomputations for zero main-thread render overhead
+const STATIC_CATEGORY_COUNTS: Record<string, number> = {};
+ALL_TOOLS.forEach(tool => {
+  STATIC_CATEGORY_COUNTS[tool.category] = (STATIC_CATEGORY_COUNTS[tool.category] || 0) + 1;
+});
+const STATIC_RECOMMENDED_TOOLS = ALL_TOOLS.filter(t => CURATED_SUGGESTIONS.includes(t.id));
+const STATIC_POPULAR_DEFAULT = (ALL_TOOLS as ToolEntry[]).filter(t => t.popular).slice(0, 10);
+
 export default function HomeClient() {
   const router = useRouter();
   const activeCategory   = useSearchStore(state => state.activeCategory);
@@ -179,23 +187,21 @@ export default function HomeClient() {
 
   const popularToolsMap = useSearchStore(state => state.popularTools);
   const popularTools = useMemo(() => {
-    const usageBased = Object.entries(popularToolsMap)
+    const entries = Object.entries(popularToolsMap);
+    if (entries.length === 0) return STATIC_POPULAR_DEFAULT;
+
+    const usageBased = entries
       .filter(([, count]) => count > 0)
       .sort((a, b) => b[1] - a[1])
       .map(([id]) => ALL_TOOLS.find(t => t.id === id))
       .filter(Boolean) as ToolEntry[];
 
-    const hardcoded = (ALL_TOOLS as ToolEntry[]).filter(t => t.popular);
-    if (usageBased.length < 4) return hardcoded.slice(0, 10);
+    if (usageBased.length < 4) return STATIC_POPULAR_DEFAULT;
 
     const merged = new Set<ToolEntry>();
     usageBased.forEach(t => merged.add(t));
-    hardcoded.forEach(t => merged.add(t));
-    return Array.from(merged).slice(0, MERGED_POPULAR_LIMIT());
-    
-    function MERGED_POPULAR_LIMIT() {
-      return 10;
-    }
+    STATIC_POPULAR_DEFAULT.forEach(t => merged.add(t));
+    return Array.from(merged).slice(0, 10);
   }, [popularToolsMap]);
 
   const deferredActiveCategory = useDeferredValue(activeCategory);
@@ -247,17 +253,8 @@ export default function HomeClient() {
     return ALL_TOOLS.filter(t => ids.includes(t.id));
   }, [continueWorkingTool, getSuggestions]);
 
-  const categoryCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    ALL_TOOLS.forEach(tool => {
-      counts[tool.category] = (counts[tool.category] || 0) + 1;
-    });
-    return counts;
-  }, []);
-
-  const recommendedTools = useMemo(() => {
-    return ALL_TOOLS.filter(t => CURATED_SUGGESTIONS.includes(t.id));
-  }, []);
+  const categoryCounts = STATIC_CATEGORY_COUNTS;
+  const recommendedTools = STATIC_RECOMMENDED_TOOLS;
 
   const isReturning = hydrated && (recentTools.length > 0 || favoriteTools.length > 0);
 
@@ -615,34 +612,29 @@ export default function HomeClient() {
                       </m.div>
                     </section>
 
-                    {/* 4. Personal Section or Promo */}
-                    {hydrated && isReturning ? (
-                      renderPersonalSection()
-                    ) : (
-                      <m.div
-                        initial={false}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ type: "spring", stiffness: 260, damping: 24 }}
-                        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue/10 via-indigo-500/8 to-purple-500/10 border border-blue/15 p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-4"
-                      >
-                        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue/5 to-transparent" />
-                        <div className="relative flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-2xl bg-blue/15 border border-blue/20 flex items-center justify-center text-blue shrink-0">
-                            <Sparkles className="w-6 h-6" aria-hidden="true" />
-                          </div>
-                          <div>
-                            <p className="font-black text-text text-base leading-tight">Discover 150+ free tools</p>
-                            <p className="text-sm text-text-muted mt-0.5">All local. No sign-up. No data sent to servers.</p>
-                          </div>
+                    {/* 4. Personal or Recommended Tools */}
+                    {renderPersonalSection()}
+
+                    {/* 5. Discover More Promo Banner */}
+                    <div
+                      className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue/10 via-indigo-500/8 to-purple-500/10 border border-blue/15 p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-4"
+                    >
+                      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue/5 to-transparent" />
+                      <div className="relative flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-blue/15 border border-blue/20 flex items-center justify-center text-blue shrink-0">
+                          <Sparkles className="w-6 h-6" aria-hidden="true" />
                         </div>
-                        <Link href="/all-tools" passHref legacyBehavior>
-                          <Button variant="primary" size="md" className="min-w-[160px] cursor-pointer min-h-11 flex items-center justify-center">
-                            Browse All Tools
-                          </Button>
-                        </Link>
-                      </m.div>
-                    )}
+                        <div>
+                          <p className="font-black text-text text-base leading-tight">Discover 150+ free tools</p>
+                          <p className="text-sm text-text-muted mt-0.5">All local. No sign-up. No data sent to servers.</p>
+                        </div>
+                      </div>
+                      <Link href="/all-tools" passHref legacyBehavior>
+                        <Button variant="primary" size="md" className="min-w-[160px] cursor-pointer min-h-11 flex items-center justify-center">
+                          Browse All Tools
+                        </Button>
+                      </Link>
+                    </div>
                   </m.div>
                 )}
               </AnimatePresence>

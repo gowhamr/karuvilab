@@ -6,6 +6,19 @@ import { m, AnimatePresence } from "framer-motion";
 
 import { useSettingsStore, useIsHydrated } from "@/src/store/settings/store";
 
+function resolveThemeMode(theme: string): "dark" | "light" {
+  if (theme === "dark" || theme === "light") return theme;
+  if (typeof window === "undefined") return "dark";
+  try {
+    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "dark";
+    }
+  } catch {}
+  const attr = document.documentElement.getAttribute("data-theme");
+  if (attr === "dark" || attr === "light") return attr;
+  return "light";
+}
+
 export function ThemeToggle() {
   const isHydrated = useIsHydrated();
   const theme = useSettingsStore(state => state.appearance.theme);
@@ -13,30 +26,27 @@ export function ThemeToggle() {
 
   useEffect(() => {
     if (!isHydrated) return;
-    const resolved = theme === "system"
-      ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
-      : theme;
+    const resolved = resolveThemeMode(theme);
     document.documentElement.setAttribute("data-theme", resolved);
     document.documentElement.classList.toggle("dark", resolved === "dark");
   }, [theme, isHydrated]);
 
   const toggleTheme = () => {
-    const resolvedTheme = theme === "system" 
-      ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
-      : theme;
-    const nextTheme = resolvedTheme === "light" ? "dark" : "light";
+    const currentResolved = resolveThemeMode(theme);
+    const nextTheme = currentResolved === "light" ? "dark" : "light";
     updateAppearance({ theme: nextTheme });
     document.documentElement.setAttribute("data-theme", nextTheme);
     document.documentElement.classList.toggle("dark", nextTheme === "dark");
+    try {
+      document.cookie = `kv-theme=${encodeURIComponent(nextTheme)}; path=/; max-age=31536000; SameSite=Lax`;
+    } catch {}
   };
 
   if (!isHydrated) {
     return <div className="w-11 h-11 md:w-10 md:h-10 rounded-xl bg-surface border border-border shimmer-wrapper opacity-50" />;
   }
 
-  const resolvedTheme = theme === "system" 
-    ? (typeof window !== 'undefined' && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
-    : theme;
+  const resolvedTheme = resolveThemeMode(theme);
 
   return (
     <m.button
