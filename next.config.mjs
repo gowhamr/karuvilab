@@ -37,6 +37,7 @@ const nextConfig = {
     minimumCacheTTL: 31536000,
   },
   compress: true,
+  productionBrowserSourceMaps: true,
   poweredByHeader: false,
   reactStrictMode: true,
   trailingSlash: true,
@@ -48,6 +49,7 @@ const nextConfig = {
         script-src 'self' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com;
         style-src 'self' 'unsafe-inline';
         img-src 'self' data: blob:;
+        font-src 'self' data:;
         worker-src 'self' blob: https://unpkg.com;
         connect-src 'self' https://cdn.jsdelivr.net https://unpkg.com https://open.er-api.com https://api.frankfurter.dev https://speed.cloudflare.com https://www.google.com;
         object-src 'none';

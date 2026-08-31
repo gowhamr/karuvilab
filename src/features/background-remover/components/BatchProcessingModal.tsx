@@ -26,7 +26,7 @@ export function BatchProcessingModal({ isOpen, onClose, initialFiles = [] }: Bat
     return initialFiles.map(file => ({
       id: Math.random().toString(36).substring(2, 9),
       file,
-      originalUrl: URL.createObjectURL(file),
+      originalUrl: createUrl(file),
       status: 'idle',
       progress: 0
     }));

@@ -1,3 +1,4 @@
+import { blobManager } from "@/src/lib/blob-manager";
 'use client';
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
@@ -159,24 +160,14 @@ export default function UnixTimestampClient() {
   const handleDownloadCsv = () => {
     const csvContent = exportBatchToCsv(batchRows);
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `unix_timestamps_export_${Date.now()}.csv`;
-    link.click();
-    URL.revokeObjectURL(url);
+    blobManager.download(blob, `unix_timestamps_export_${Date.now()}.csv`);
   };
 
   // Export Batch JSON
   const handleDownloadJson = () => {
     const jsonContent = JSON.stringify(batchRows, null, 2);
     const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `unix_timestamps_export_${Date.now()}.json`;
-    link.click();
-    URL.revokeObjectURL(url);
+    blobManager.download(blob, `unix_timestamps_export_${Date.now()}.json`);
   };
 
   return (
