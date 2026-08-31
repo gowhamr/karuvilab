@@ -36,7 +36,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "aes encrypt decrypt",
             "security"
@@ -148,7 +148,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "audio converter",
             "media"
@@ -196,7 +196,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "banking tools",
             "iso 8583",
@@ -274,7 +274,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "base64url converter",
             "security"
@@ -435,7 +435,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "box shadow generator",
             "developer"
@@ -585,7 +585,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "card masker",
             "security"
@@ -633,7 +633,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "cipher tools",
             "security"
@@ -679,7 +679,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "color converter",
             "developer"
@@ -730,7 +730,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "color palette extractor",
             "image"
@@ -752,7 +752,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "command cheat sheet",
             "developer"
@@ -836,7 +836,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "compress",
             "image"
@@ -858,7 +858,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "contrast checker",
             "developer"
@@ -880,7 +880,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "finacle tools",
             "banking"
@@ -902,7 +902,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "countdown timer",
             "productivity"
@@ -924,7 +924,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "crontab editor",
             "developer"
@@ -970,7 +970,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "csp builder",
             "security"
@@ -992,7 +992,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "csr generator",
             "security"
@@ -1014,7 +1014,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "csv to json",
             "developer"
@@ -1172,7 +1172,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "directory manifest",
             "security"
@@ -1249,7 +1249,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "ecdh key exchange",
             "security"
@@ -1271,7 +1271,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "ecdsa sign",
             "security"
@@ -1353,7 +1353,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "emv tlv tree",
             "banking"
@@ -1491,26 +1491,40 @@ export const CORE_TOOLS = [
     },
     {
         "id": "fd-calculator",
-        "name": "Fixed Deposit (FD)",
-        "desc": "FD maturity amount and interest earned",
+        "name": "Fixed Deposit (FD) Calculator",
+        "desc": "Calculate FD maturity value, interest payouts, senior citizen rates, APY, TDS deductions, and amortization schedule",
         "href": "/calculators/fd-calculator/",
         "category": "calculators",
         "icon": null,
         "color": null,
         "featured": false,
         "popular": false,
-        "status": "new",
+        "status": "stable",
         "lastAdded": null,
         "keywords": [
-            "fd",
-            "fixed deposit",
-            "interest",
-            "savings"
+            "fd calculator",
+            "fixed deposit calculator",
+            "fd interest calculator",
+            "fd maturity calculator",
+            "senior citizen fd",
+            "cumulative fd",
+            "non-cumulative fd",
+            "fd interest rate",
+            "tds on fd",
+            "effective annual yield",
+            "apy calculator"
         ],
         "input": null,
         "output": null,
-        "related": [],
-        "subCategory": "Financial",
+        "related": [
+            "compound-interest",
+            "rd-calculator",
+            "ppf-calculator",
+            "interest-calculator",
+            "sip-calculator",
+            "emi-calculator"
+        ],
+        "subCategory": "Finance & Investment",
         "requiresNetwork": false
     },
     {
@@ -1637,7 +1651,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "gif creator",
             "media"
@@ -1684,7 +1698,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "glassmorphism generator",
             "developer"
@@ -1706,7 +1720,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "gradient generator",
             "developer"
@@ -1756,7 +1770,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "gratuity calculator",
             "calculators"
@@ -1838,7 +1852,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "hash map visualizer",
             "developer"
@@ -1891,7 +1905,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "hkdf generator",
             "security"
@@ -1913,7 +1927,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "hmac generator",
             "security"
@@ -1935,7 +1949,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "hra calculator",
             "calculators"
@@ -2011,7 +2025,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "iban validator",
             "security"
@@ -2258,7 +2272,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "image seo",
             "seo"
@@ -2330,7 +2344,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "income tax",
             "calculators"
@@ -2344,25 +2358,37 @@ export const CORE_TOOLS = [
     {
         "id": "inflation-calculator",
         "name": "Inflation Calculator",
-        "desc": "Purchasing power over time",
+        "desc": "Calculate compound price escalation, future purchasing power erosion, loss percentage, and Rule of 70 halving time",
         "href": "/calculators/inflation-calculator/",
         "category": "calculators",
         "icon": null,
         "color": null,
         "featured": false,
         "popular": false,
-        "status": "new",
+        "status": "stable",
         "lastAdded": null,
         "keywords": [
-            "inflation",
-            "purchasing power",
-            "money",
-            "value"
+            "inflation calculator",
+            "purchasing power calculator",
+            "cpi inflation",
+            "future value of money",
+            "cost of living calculator",
+            "loss of purchasing power",
+            "rule of 70",
+            "real vs nominal value",
+            "education inflation",
+            "medical inflation"
         ],
         "input": null,
         "output": null,
-        "related": [],
-        "subCategory": "Financial",
+        "related": [
+            "compound-interest",
+            "sip-calculator",
+            "cagr-calculator",
+            "percentage-calculator",
+            "financial-freedom-calculator"
+        ],
+        "subCategory": "Finance & Investment",
         "requiresNetwork": false
     },
     {
@@ -2429,7 +2455,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "invoice generator",
             "calculators"
@@ -2451,7 +2477,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "iso8583 bitmap decoder",
             "security"
@@ -2473,7 +2499,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "iso8583 message parser",
             "security"
@@ -2585,7 +2611,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "json to xml",
             "xml to json",
@@ -2688,7 +2714,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "log analyzer",
             "developer"
@@ -2710,7 +2736,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "lorem ipsum",
             "developer"
@@ -2732,7 +2758,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "luhn validator",
             "developer"
@@ -2893,7 +2919,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "meta tags",
             "seo"
@@ -3018,7 +3044,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "nanoid generator",
             "developer"
@@ -3040,7 +3066,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "notes",
             "productivity"
@@ -3062,7 +3088,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "nps calculator",
             "calculators"
@@ -3135,7 +3161,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "oauth token decoder",
             "security"
@@ -3180,7 +3206,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "og preview",
             "seo"
@@ -3299,7 +3325,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "pbkdf2 generator",
             "security"
@@ -3506,7 +3532,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "pem viewer",
             "security"
@@ -3587,7 +3613,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "pomodoro timer",
             "productivity"
@@ -3634,7 +3660,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "private key checker",
             "security"
@@ -3656,7 +3682,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "public key inspector",
             "security"
@@ -3725,26 +3751,37 @@ export const CORE_TOOLS = [
     },
     {
         "id": "rd-calculator",
-        "name": "Recurring Deposit (RD)",
-        "desc": "RD maturity and interest calculation",
+        "name": "Recurring Deposit (RD) Calculator",
+        "desc": "Calculate RD maturity amount, quarterly compound interest, senior citizen rate boost, and Section 194A TDS deductions",
         "href": "/calculators/rd-calculator/",
         "category": "calculators",
         "icon": null,
         "color": null,
         "featured": false,
         "popular": false,
-        "status": "new",
+        "status": "stable",
         "lastAdded": null,
         "keywords": [
-            "rd",
-            "recurring deposit",
-            "savings",
-            "interest"
+            "rd calculator",
+            "recurring deposit calculator",
+            "rd interest calculator",
+            "rd maturity calculator",
+            "post office rd",
+            "sbi rd calculator",
+            "quarterly compounding rd",
+            "senior citizen rd",
+            "rd tds calculation"
         ],
         "input": null,
         "output": null,
-        "related": [],
-        "subCategory": "Financial",
+        "related": [
+            "fd-calculator",
+            "sip-calculator",
+            "ppf-calculator",
+            "compound-interest",
+            "interest-calculator"
+        ],
+        "subCategory": "Finance & Investment",
         "requiresNetwork": false
     },
     {
@@ -3931,7 +3968,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "robots txt",
             "seo"
@@ -4000,7 +4037,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "rsa encrypt decrypt",
             "security"
@@ -4022,7 +4059,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "rsa key generator",
             "security"
@@ -4044,7 +4081,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "rsa sign verify",
             "security"
@@ -4126,7 +4163,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "saml decoder",
             "security"
@@ -4148,7 +4185,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "seo title",
             "seo"
@@ -4170,7 +4207,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "seo tools",
             "developer"
@@ -4227,7 +4264,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "sitemap generator",
             "seo"
@@ -4249,7 +4286,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "slug generator",
             "seo"
@@ -4373,7 +4410,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "sql formatter",
             "developer"
@@ -4420,7 +4457,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "stopwatch",
             "productivity"
@@ -4524,7 +4561,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "swift mt mx",
             "banking"
@@ -4595,7 +4632,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "tds calculator",
             "calculators"
@@ -4617,7 +4654,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "text case converter",
             "productivity"
@@ -4810,7 +4847,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "tlv parser",
             "security"
@@ -4832,7 +4869,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "track 2 parser",
             "banking"
@@ -5010,7 +5047,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "uuid generator",
             "developer"
@@ -5056,7 +5093,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "video metadata viewer",
             "media"
@@ -5078,7 +5115,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "video trim",
             "media"
@@ -5174,7 +5211,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "word counter",
             "productivity"
@@ -5228,7 +5265,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "word to pdf",
             "pdf"
@@ -5301,7 +5338,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "x509 viewer",
             "security"
@@ -5323,7 +5360,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "xml formatter",
             "developer"
@@ -5345,7 +5382,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "yaml json converter",
             "developer"
@@ -5367,7 +5404,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-27",
+        "lastAdded": "2026-08-30",
         "keywords": [
             "yaml validator",
             "developer"

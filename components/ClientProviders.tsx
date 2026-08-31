@@ -15,6 +15,7 @@ import { FullscreenProvider } from "@/src/contexts/FullscreenContext";
 import { FocusModeControlsProvider } from "@/src/contexts/FocusModeControlsContext";
 import { HtmlPrecacher } from "@/components/system/HtmlPrecacher";
 import { MonacoProvider } from "@/src/core/monaco";
+import { WebMCPInitializer } from "@/src/webmcp/initializer";
 
 function StorageMonitor() {
   useStorageMonitor();
@@ -85,6 +86,7 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
               <SearchManager />
               <DeveloperPanel />
               <HtmlPrecacher />
+              <WebMCPInitializer />
               <MonacoProvider>
                 {children}
               </MonacoProvider>

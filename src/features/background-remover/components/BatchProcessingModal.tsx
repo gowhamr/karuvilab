@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { BatchItem } from "../types";
-import { zipSync } from "fflate";
+import { zip } from "fflate";
 import { 
   Layers, Play, X, RefreshCw, Trash2, Download, 
   CheckCircle, AlertCircle, Sparkles, Image as ImageIcon 
@@ -140,8 +140,13 @@ export function BatchProcessingModal({ isOpen, onClose, initialFiles = [] }: Bat
         zipData[`${baseName}-no-bg.png`] = new Uint8Array(buffer);
       }
 
-      const zipped = zipSync(zipData);
-      const zipBlob = new Blob([zipped], { type: 'application/zip' });
+      const zipped = await new Promise<Uint8Array>((resolve, reject) => {
+        zip(zipData, (err, data) => {
+          if (err) reject(err);
+          else resolve(data);
+        });
+      });
+      const zipBlob = new Blob([zipped.buffer as ArrayBuffer], { type: 'application/zip' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(zipBlob);
       a.download = `karuvilab-batch-bg-removed-${Date.now()}.zip`;

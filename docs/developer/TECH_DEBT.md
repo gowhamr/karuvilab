@@ -59,3 +59,11 @@ Format: `[Date] [Severity] Description — context and resolution path`
 - **Issue:** `src/workers/types.ts` defines `checkGrammar` stats with 5 fields, but `engine.ts` returns 9 fields.
 - **Resolution:** Update `types.ts` to include `paragraphs`, `readabilityGrade`, `avgSentenceLength`, and `uniqueWords`.
 - **Status:** Needs fixing.
+
+### TD-047 · Incomplete Accessibility (WCAG 2.2 AA) Audit Remediation
+- **Date logged:** 2026-08-30
+- **Severity:** Medium
+- **Source:** Automated Accessibility Auditor Subagent
+- **Description:** A sweep of `components/ui` and `components/system` identified 50 component files lacking `focus-visible:ring-2` on interactive elements, `aria-hidden="true"` on decorative icons, or proper ARIA roles/labels on custom modals/progress bars.
+- **Resolution path:** Wrote an automated AST/Node script to safely inject `aria-hidden="true"` onto imported `<LucideIcon>` elements and `focus-visible:ring-2` onto `<button>`/`<Link>` elements, or phase the fixes. The most critical items (DeveloperPanel and ModelManagerDialog) have been patched manually.
+- **Blocked by:** Mass AST rewriting in a single pass is unsafe without a tailored ESLint plugin/AST script and thorough visual QA testing.

@@ -6,7 +6,7 @@ import { MermaidPreflightAnalyzer } from "../MermaidPreflight";
 import { MermaidPlaceholder } from "./MermaidPlaceholder";
 import { MermaidContainer } from "./MermaidContainer";
 import { MermaidErrorCard } from "./MermaidErrorCard";
-export function MermaidDiagramBlock({ block }) {
+export function MermaidDiagramBlock({ block, theme }) {
     const [result, setResult] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isInViewport, setIsInViewport] = useState(false);
@@ -54,6 +54,7 @@ export function MermaidDiagramBlock({ block }) {
                 forceRerender: force,
                 generationId: currentGen,
                 priority: isInViewport ? "immediate" : "queue",
+                theme,
             });
             if (!ac.signal.aborted && currentGen === generationRef.current) {
                 setResult(renderRes);
@@ -75,7 +76,7 @@ export function MermaidDiagramBlock({ block }) {
                 setIsLoading(false);
             }
         }
-    }, [block, isInViewport]);
+    }, [block, isInViewport, theme]);
     useEffect(() => {
         if (isInViewport) {
             renderDiagram();

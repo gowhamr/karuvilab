@@ -119,12 +119,17 @@ export function DeveloperPanel() {
 
   useEffect(() => {
     const handleToggle = () => setIsOpen(prev => !prev);
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
     if (typeof window !== "undefined") {
       window.addEventListener("toggle-developer-panel", handleToggle);
+      window.addEventListener("keydown", handleEscape);
     }
     return () => {
       if (typeof window !== "undefined") {
         window.removeEventListener("toggle-developer-panel", handleToggle);
+        window.removeEventListener("keydown", handleEscape);
       }
     };
   }, []);
@@ -253,7 +258,8 @@ export function DeveloperPanel() {
   return (
     <div className="fixed top-16 right-4 sm:right-6 lg:right-8 z-modal font-sans select-none animate-in fade-in zoom-in-95 duration-200">
       <div 
-        role="region" 
+        role="dialog" 
+        aria-modal="true" 
         aria-label="Performance Inspector Panel"
         className="max-w-[calc(100vw-2rem)] w-84 sm:w-96 bg-surface/95 backdrop-blur-md border border-blue/30 shadow-2xl rounded-3xl p-5 space-y-4 text-text"
       >

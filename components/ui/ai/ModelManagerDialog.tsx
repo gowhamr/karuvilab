@@ -31,8 +31,13 @@ export function ModelManagerDialog({ isOpen, onClose }: ModelManagerDialogProps)
   useEffect(() => {
     if (isOpen) {
       refreshMetrics();
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') onClose();
+      };
+      window.addEventListener('keydown', handleEscape);
+      return () => window.removeEventListener('keydown', handleEscape);
     }
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -87,7 +92,12 @@ export function ModelManagerDialog({ isOpen, onClose }: ModelManagerDialogProps)
 
   return (
     <div className="fixed inset-0 z-modal bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-surface border border-border rounded-3xl w-full max-w-xl p-6 space-y-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+      <div 
+        role="dialog"
+        aria-modal="true"
+        aria-label="AI Model Manager"
+        className="bg-surface border border-border rounded-3xl w-full max-w-xl p-6 space-y-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+      >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border/60 pb-4">
           <div className="flex items-center gap-2">
@@ -102,9 +112,10 @@ export function ModelManagerDialog({ isOpen, onClose }: ModelManagerDialogProps)
 
           <button
             onClick={onClose}
-            className="p-1.5 hover:bg-surface-elevated rounded-xl text-text-muted hover:text-text transition-colors cursor-pointer"
+            aria-label="Close AI Model Manager"
+            className="p-1.5 hover:bg-surface-elevated rounded-xl text-text-muted hover:text-text transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
           >
-            <X className="w-4 h-4" />
+            <X className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
 

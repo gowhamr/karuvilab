@@ -87,7 +87,7 @@ const settingsIdbStorage = {
             return;
         // 1. Save unified settings to IndexedDB
         await idbStorage.setItem('karuvi-settings-db', value);
-        // 2. Mirror appearance settings to localStorage for the head theme script (try/catch wrapped)
+        // 2. Mirror appearance settings to localStorage & cookies for the head theme script
         try {
             const obj = JSON.parse(value);
             const mirrorValue = JSON.stringify({
@@ -98,6 +98,9 @@ const settingsIdbStorage = {
                 version: obj.version,
             });
             localStorage.setItem('karuvi-settings', mirrorValue);
+            if (obj.state.appearance?.theme) {
+                document.cookie = `kv-theme=${encodeURIComponent(obj.state.appearance.theme)}; path=/; max-age=31536000; SameSite=Lax`;
+            }
         }
         catch (e) {
             logger.warn("[settingsIdbStorage] Failed to mirror appearance to localStorage", { error: e });
@@ -109,6 +112,7 @@ const settingsIdbStorage = {
         await idbStorage.removeItem('karuvi-settings-db');
         try {
             localStorage.removeItem('karuvi-settings');
+            document.cookie = "kv-theme=; path=/; max-age=0; SameSite=Lax";
         }
         catch (e) {
             logger.warn("[settingsIdbStorage] Failed to remove localStorage settings", { error: e });
@@ -131,10 +135,21 @@ export const useSettingsStore = create()(persist((...a) => ({
 // SSR Hydration Guard Hook
 import { useState, useEffect } from 'react';
 export function useIsHydrated() {
-    const [hydrated, setHydrated] = useState(false);
+    const [hydrated, setHydrated] = useState(() => {
+        return useSettingsStore.persist?.hasHydrated?.() ?? false;
+    });
     useEffect(() => {
-        const handle = setTimeout(() => setHydrated(true), 0);
-        return () => clearTimeout(handle);
+        if (useSettingsStore.persist?.hasHydrated?.()) {
+            setHydrated(true);
+            return;
+        }
+        const unsub = useSettingsStore.persist?.onFinishHydration?.(() => {
+            setHydrated(true);
+        });
+        return () => {
+            if (typeof unsub === 'function')
+                unsub();
+        };
     }, []);
     return hydrated;
 }
