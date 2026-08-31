@@ -6,7 +6,7 @@ import { describe, it, expect } from 'vitest';
 import { STUDIO_PRESETS, autoDetectBackgroundColor } from '@/src/features/background-remover/backdrop-compositor';
 import { analyzeImageForRemoval } from '@/src/features/background-remover/engine-selector';
 import { BrushStudioEngine } from '@/src/features/background-remover/brush-engine';
-import { zipSync } from 'fflate';
+import { zip } from 'fflate';
 describe('Background Remover Extended Suite', () => {
     it('should validate all 7 studio backdrop presets and drawing routines', () => {
         expect(STUDIO_PRESETS.length).toBe(7);
@@ -42,15 +42,19 @@ describe('Background Remover Extended Suite', () => {
             expect(engine.canRedo()).toBe(false);
         }
     });
-    it('should support zipSync archiving for batch export', () => {
-        const dummyImage1 = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]);
-        const dummyImage2 = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]);
+    it('should support async zip archiving for batch export', async () => {
         const zipData = {
-            'photo1-no-bg.png': dummyImage1,
-            'photo2-no-bg.png': dummyImage2
+            'image1.png': new Uint8Array([1, 2, 3]),
+            'image2.png': new Uint8Array([4, 5, 6])
         };
-        const zipped = zipSync(zipData);
-        expect(zipped).toBeInstanceOf(Uint8Array);
+        const zipped = await new Promise((resolve, reject) => {
+            zip(zipData, (err, data) => {
+                if (err)
+                    reject(err);
+                else
+                    resolve(data);
+            });
+        });
         expect(zipped.length).toBeGreaterThan(0);
     });
     it('should verify autoDetectBackgroundColor returns a valid hex color string', () => {

@@ -48,7 +48,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         <Header />
         <main
           id="main-content"
-          className="flex-1 outline-none relative overflow-x-hidden"
+          className="flex-1 min-h-[100dvh] outline-none relative overflow-x-hidden"
           tabIndex={-1}
         >
           <Suspense fallback={null}>

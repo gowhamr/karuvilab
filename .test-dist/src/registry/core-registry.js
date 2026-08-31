@@ -36,7 +36,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "aes encrypt decrypt",
             "security"
@@ -148,7 +148,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "audio converter",
             "media"
@@ -196,7 +196,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "banking tools",
             "iso 8583",
@@ -274,7 +274,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "base64url converter",
             "security"
@@ -435,7 +435,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "box shadow generator",
             "developer"
@@ -585,7 +585,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "card masker",
             "security"
@@ -633,7 +633,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "cipher tools",
             "security"
@@ -679,7 +679,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "color converter",
             "developer"
@@ -730,7 +730,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "color palette extractor",
             "image"
@@ -752,7 +752,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "command cheat sheet",
             "developer"
@@ -836,7 +836,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "compress",
             "image"
@@ -858,7 +858,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "contrast checker",
             "developer"
@@ -880,7 +880,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "finacle tools",
             "banking"
@@ -902,7 +902,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "countdown timer",
             "productivity"
@@ -924,7 +924,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "crontab editor",
             "developer"
@@ -970,7 +970,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "csp builder",
             "security"
@@ -992,7 +992,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "csr generator",
             "security"
@@ -1014,7 +1014,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "csv to json",
             "developer"
@@ -1172,7 +1172,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "directory manifest",
             "security"
@@ -1249,7 +1249,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "ecdh key exchange",
             "security"
@@ -1271,7 +1271,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "ecdsa sign",
             "security"
@@ -1353,7 +1353,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "emv tlv tree",
             "banking"
@@ -1651,7 +1651,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "gif creator",
             "media"
@@ -1698,7 +1698,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "glassmorphism generator",
             "developer"
@@ -1720,7 +1720,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "gradient generator",
             "developer"
@@ -1770,7 +1770,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "gratuity calculator",
             "calculators"
@@ -1852,7 +1852,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "hash map visualizer",
             "developer"
@@ -1905,7 +1905,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "hkdf generator",
             "security"
@@ -1927,7 +1927,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "hmac generator",
             "security"
@@ -1949,7 +1949,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "hra calculator",
             "calculators"
@@ -2025,7 +2025,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "iban validator",
             "security"
@@ -2272,7 +2272,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "image seo",
             "seo"
@@ -2344,7 +2344,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "income tax",
             "calculators"
@@ -2455,7 +2455,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "invoice generator",
             "calculators"
@@ -2477,7 +2477,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "iso8583 bitmap decoder",
             "security"
@@ -2499,7 +2499,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "iso8583 message parser",
             "security"
@@ -2611,7 +2611,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "json to xml",
             "xml to json",
@@ -2714,7 +2714,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "log analyzer",
             "developer"
@@ -2736,7 +2736,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "lorem ipsum",
             "developer"
@@ -2758,7 +2758,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "luhn validator",
             "developer"
@@ -2919,7 +2919,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "meta tags",
             "seo"
@@ -3044,7 +3044,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "nanoid generator",
             "developer"
@@ -3066,7 +3066,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "notes",
             "productivity"
@@ -3088,7 +3088,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "nps calculator",
             "calculators"
@@ -3161,7 +3161,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "oauth token decoder",
             "security"
@@ -3206,7 +3206,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "og preview",
             "seo"
@@ -3325,7 +3325,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "pbkdf2 generator",
             "security"
@@ -3532,7 +3532,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "pem viewer",
             "security"
@@ -3613,7 +3613,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "pomodoro timer",
             "productivity"
@@ -3660,7 +3660,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "private key checker",
             "security"
@@ -3682,7 +3682,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "public key inspector",
             "security"
@@ -3968,7 +3968,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "robots txt",
             "seo"
@@ -4037,7 +4037,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "rsa encrypt decrypt",
             "security"
@@ -4059,7 +4059,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "rsa key generator",
             "security"
@@ -4081,7 +4081,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "rsa sign verify",
             "security"
@@ -4163,7 +4163,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "saml decoder",
             "security"
@@ -4185,7 +4185,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "seo title",
             "seo"
@@ -4207,7 +4207,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "seo tools",
             "developer"
@@ -4264,7 +4264,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "sitemap generator",
             "seo"
@@ -4286,7 +4286,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "slug generator",
             "seo"
@@ -4410,7 +4410,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "sql formatter",
             "developer"
@@ -4457,7 +4457,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "stopwatch",
             "productivity"
@@ -4561,7 +4561,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "swift mt mx",
             "banking"
@@ -4632,7 +4632,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "tds calculator",
             "calculators"
@@ -4654,7 +4654,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "text case converter",
             "productivity"
@@ -4847,7 +4847,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "tlv parser",
             "security"
@@ -4869,7 +4869,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "track 2 parser",
             "banking"
@@ -5047,7 +5047,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "uuid generator",
             "developer"
@@ -5093,7 +5093,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "video metadata viewer",
             "media"
@@ -5115,7 +5115,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "video trim",
             "media"
@@ -5211,7 +5211,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "word counter",
             "productivity"
@@ -5265,7 +5265,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "word to pdf",
             "pdf"
@@ -5338,7 +5338,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "x509 viewer",
             "security"
@@ -5360,7 +5360,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "xml formatter",
             "developer"
@@ -5382,7 +5382,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "yaml json converter",
             "developer"
@@ -5404,7 +5404,7 @@ export const CORE_TOOLS = [
         "featured": false,
         "popular": false,
         "status": "new",
-        "lastAdded": "2026-08-30",
+        "lastAdded": "2026-08-31",
         "keywords": [
             "yaml validator",
             "developer"
