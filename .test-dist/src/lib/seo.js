@@ -1,5 +1,4 @@
 import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
-import Script from "next/script";
 import { ALL_TOOLS } from "@/src/tool-registry";
 const BASE_URL = "https://karuvilab.com";
 /**
@@ -213,6 +212,6 @@ export function StructuredData({ tool, category, content: propsContent, isHead }
             if (isHead) {
                 return (_jsx("script", { type: "application/ld+json", dangerouslySetInnerHTML: { __html: content } }, i));
             }
-            return (_jsx(Script, { id: `json-ld-${tool?.id || "site"}-${i}`, type: "application/ld+json", dangerouslySetInnerHTML: { __html: content } }, i));
+            return (_jsx("script", { id: `json-ld-${tool?.id || "site"}-${i}`, type: "application/ld+json", dangerouslySetInnerHTML: { __html: content } }, i));
         }) }));
 }

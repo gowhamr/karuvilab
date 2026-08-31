@@ -1,4 +1,5 @@
 "use client";
+import { blobManager } from "@/src/lib/blob-manager";
 
 import React, { useState, useRef } from "react";
 import { BatchItem } from "../types";
@@ -147,13 +148,7 @@ export function BatchProcessingModal({ isOpen, onClose, initialFiles = [] }: Bat
         });
       });
       const zipBlob = new Blob([zipped.buffer as ArrayBuffer], { type: 'application/zip' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(zipBlob);
-      a.download = `karuvilab-batch-bg-removed-${Date.now()}.zip`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(a.href);
+      blobManager.download(zipBlob, `karuvilab-batch-bg-removed-${Date.now()}.zip`);
       toast(`Downloaded ${completed.length} images in ZIP archive`, 'success');
     } catch (err: any) {
       toast('Failed to create ZIP file', 'error');

@@ -1,5 +1,5 @@
+"use client";
 import { blobManager } from "@/src/lib/blob-manager";
-'use client';
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { 
