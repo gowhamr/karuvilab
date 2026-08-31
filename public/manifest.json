@@ -1,7 +1,7 @@
 {
   "id": "./",
   "name": "KaruviLab",
-  "short_name": "KV",
+  "short_name": "KaruviLab",
   "description": "Fast, Private Browser-Side Toolkit",
   "start_url": "./",
   "scope": "./",
@@ -9,7 +9,10 @@
   "orientation": "portrait-primary",
   "background_color": "#020617",
   "theme_color": "#4F46E5",
-  "categories": ["utilities", "productivity"],
+  "categories": [
+    "utilities",
+    "productivity"
+  ],
   "lang": "en",
   "dir": "ltr",
   "icons": [
@@ -60,21 +63,45 @@
       "short_name": "Compressor",
       "description": "Compress images directly in your browser",
       "url": "./image-tools/image-compressor/",
-      "icons": [{ "src": "./icons/shortcut-image-compressor.png", "sizes": "96x96", "type": "image/png" }]
+      "icons": [
+        {
+          "src": "./icons/shortcut-image-compressor.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
     },
     {
       "name": "PDF Merger",
       "short_name": "Merge PDF",
       "description": "Combine multiple PDF files locally",
       "url": "./pdf-tools/merge-pdf/",
-      "icons": [{ "src": "./icons/shortcut-pdf-merger.png", "sizes": "96x96", "type": "image/png" }]
+      "icons": [
+        {
+          "src": "./icons/shortcut-pdf-merger.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
     },
     {
       "name": "Markdown Editor",
       "short_name": "Markdown",
       "description": "Write and preview Markdown offline",
       "url": "./utilities/markdown/",
-      "icons": [{ "src": "./icons/shortcut-markdown.png", "sizes": "96x96", "type": "image/png" }]
+      "icons": [
+        {
+          "src": "./icons/shortcut-markdown.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
     }
-  ]
+  ],
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "edge_side_panel": {
+    "preferred_width": 400
+  }
 }

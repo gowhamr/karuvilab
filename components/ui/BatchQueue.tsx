@@ -233,17 +233,7 @@ export function BatchQueue({ toolId, onDownload, onDownloadAll, onProcess, isPro
     hideBar
   ]);
 
-  if (items.length === 0) return (
-    <EmptyState
-      icon={Inbox}
-      headline="Queue is empty"
-      toolType="batch"
-      toolId={toolId as any}
-      onDrop={() => {}}
-      dragState="idle"
-      subAction={{ label: "Upload files to begin batch processing", onClick: () => {} }}
-    />
-  );
+  if (items.length === 0) return null;
 
   return (
     <div className="space-y-6" role="region" aria-label="Processing Queue">
