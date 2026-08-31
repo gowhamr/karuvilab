@@ -264,7 +264,7 @@ export function StructuredData({ tool, category, content: propsContent, isHead }
           );
         }
         return (
-          <Script
+          <script
             key={i}
             id={`json-ld-${tool?.id || "site"}-${i}`}
             type="application/ld+json"

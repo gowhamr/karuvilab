@@ -1,3 +1,4 @@
+import { blobManager } from "@/src/lib/blob-manager";
 "use client";
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
@@ -295,24 +296,14 @@ export default function UtcIstConverterClient() {
     if (!batchResult) return;
     const csvContent = exportBatchToCsv(batchResult);
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `utc-ist-batch-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+    blobManager.download(blob, `utc-ist-batch-${new Date().toISOString().slice(0, 10)}.csv`);
   };
 
   const handleDownloadJson = () => {
     if (!batchResult) return;
     const jsonContent = exportBatchToJson(batchResult);
     const blob = new Blob([jsonContent], { type: "application/json;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `utc-ist-batch-${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    blobManager.download(blob, `utc-ist-batch-${new Date().toISOString().slice(0, 10)}.json`);
   };
 
   const loadSampleBatch = () => {

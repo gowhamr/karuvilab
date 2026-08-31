@@ -1,3 +1,4 @@
+import { blobManager } from "@/src/lib/blob-manager";
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useEditor, EditorContent, Extension } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -198,14 +199,7 @@ export default function GrammarCheckerClient() {
   const handleDownload = () => {
     if (editor) {
       const blob = new Blob([editor.getText()], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'grammar-checked.txt';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      blobManager.download(blob, 'grammar-checked.txt');
     }
   };
 
