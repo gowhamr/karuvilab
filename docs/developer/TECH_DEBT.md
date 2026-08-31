@@ -19,8 +19,8 @@ Format: `[Date] [Severity] Description — context and resolution path`
 - **Date logged:** 2026-08-12
 - **Severity:** P0 (Feature Availability)
 - **Source:** v1.3 QA Audit — AI/ONNX Phase
-- **Description:** `modnet.onnx`, `paddle-ocr.onnx`, `realesrgan-4x.onnx`, and `yolov8-face.onnx` in `public/models/` are placeholder binaries and guarded as `available: false` in `src/ai/registry.ts`. Note: Primary RMBG 2.0 (`rmbg-2.0.onnx`) is fully active and functional.
-- **Tools affected:** `face-blur`, `super-resolution`, `ocr-scanner`.
+- **Description:** `modnet.onnx`, `realesrgan-4x.onnx`, and `yolov8-face.onnx` in `public/models/` are placeholder binaries and guarded as `available: false` in `src/ai/registry.ts`. Note: Primary RMBG 2.0 (`rmbg-2.0.onnx`) and `paddle-ocr.onnx` are fully active and functional.
+- **Tools affected:** `face-blur`, `super-resolution`.
 - **Resolution path:** Source real quantized ONNX weight files (<25MB each), place in `public/models/`, verify SHA-256 hashes, and set `available: true` in `src/ai/registry.ts`.
 - **Blocked by:** Real quantized model weight files must be sourced from trusted model hubs.
 
