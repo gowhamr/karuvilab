@@ -5,13 +5,8 @@ import { generateToolMetadata } from '@/src/lib/seo';
 import { LearningHub, LearningSection } from '@/src/components/els/LearningHub';
 import { QuizWidget } from '@/src/components/els/QuizWidget';
 
-import dynamic from 'next/dynamic';
-import { ToolSkeleton } from '@/components/ui/ToolSkeleton';
+import MarkdownEditorWrapper from '@/src/features/markdown/MarkdownEditorWrapper';
 
-const MarkdownEditorClient = dynamic(
-  () => import('@/src/features/markdown/MarkdownEditorWrapper.client'),
-  { ssr: false, loading: () => <ToolSkeleton /> }
-);
 const toolId = 'markdown';
 const cat = CATEGORIES.find(c => c.id === 'utilities');
 
@@ -26,7 +21,7 @@ export default function Page() {
       toolId={toolId}
       workspaceSize="wide"
     >
-      <MarkdownEditorClient />
+      <MarkdownEditorWrapper />
 
       <LearningHub title="Understanding Markdown and XSS Security">
         
