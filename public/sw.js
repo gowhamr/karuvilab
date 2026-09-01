@@ -1,10 +1,11 @@
 try {
-  importScripts('https://storage.googleapis.com/workbox-cdn/releases/7.4.1/workbox-sw.js');
+  importScripts('/lib/workbox/workbox-v7.4.1/workbox-sw.js');
 } catch (e) {
   console.error('Workbox SW failed to load:', e);
 }
 
 if (typeof workbox !== 'undefined') {
+  workbox.setConfig({ modulePathPrefix: '/lib/workbox/workbox-v7.4.1/' });
   console.log('Workbox is loaded');
   
   const basePath = self.location.pathname.replace('sw.js', '');

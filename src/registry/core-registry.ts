@@ -2934,6 +2934,33 @@ export const CORE_TOOLS: ToolEntry[] = [
     "requiresNetwork": false
   },
   {
+    "id": "metadata-viewer",
+    "name": "Metadata Viewer",
+    "desc": "Inspect file forensics, magic signatures, EXIF data, and privacy warnings entirely offline.",
+    "href": "/security-tools/metadata-viewer/",
+    "category": "security",
+    "icon": null,
+    "color": null,
+    "featured": false,
+    "popular": false,
+    "status": "new",
+    "lastAdded": null,
+    "keywords": [
+      "metadata",
+      "exif",
+      "forensics",
+      "privacy",
+      "file"
+    ],
+    "input": null,
+    "output": null,
+    "related": [
+      "hash-generator"
+    ],
+    "subCategory": null,
+    "requiresNetwork": false
+  },
+  {
     "id": "mic-camera-tester",
     "name": "Mic & Camera Tester",
     "desc": "Test your microphone and camera",

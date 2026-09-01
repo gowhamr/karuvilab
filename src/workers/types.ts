@@ -1,3 +1,4 @@
+import { MetadataDocument } from '../features/metadata-viewer/types';
 import * as Comlink from "comlink";
 import { EmiInputs, EmiResult } from "../lib/emi-calculations";
 
@@ -36,6 +37,13 @@ export interface HashOptions {
 }
 
 export interface WorkerAPI {
+  inspectMetadata(
+    fileData: ArrayBuffer, 
+    fileName: string, 
+    mimeClaimed: string, 
+    lastModified: number
+  ): Promise<MetadataDocument>;
+
   // Hash Tasks
   generateHashes(
     text: string, 

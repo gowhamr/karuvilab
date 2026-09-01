@@ -124,6 +124,7 @@
 - [Memory Match](https://karuvilab.com/break-time-tools/memory-match/): Flip cards and match pairs. A classic memory-training game with best-score tracking.
 - [Merge PDF](https://karuvilab.com/pdf-tools/merge-pdf/): Combine multiple PDFs into one
 - [Meta Tags](https://karuvilab.com/developer-tools/meta-tags/): Generate and preview HTML meta tags to optimize website social sharing.
+- [Metadata Viewer](https://karuvilab.com/security-tools/metadata-viewer/): Inspect file forensics, magic signatures, EXIF data, and privacy warnings entirely offline.
 - [Mic & Camera Tester](https://karuvilab.com/utilities/mic-camera-tester/): Test your microphone and camera
 - [Minesweeper](https://karuvilab.com/break-time-tools/minesweeper/): Classic Minesweeper puzzle. Clear the board without clicking on hidden mines. Multiple difficulties and mobile friendly controls.
 - [Move PDF Pages](https://karuvilab.com/pdf-tools/move-pages/): Drag and drop to move pages around in your PDF document.

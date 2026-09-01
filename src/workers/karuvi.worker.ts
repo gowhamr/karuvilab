@@ -1,4 +1,39 @@
 import * as Comlink from "comlink";
+import { MetadataDocument, PrivacyFinding } from '../features/metadata-viewer/types';
+
+const MAGIC_MAP: Record<string, { format: string; mime: string; ext: string[] }> = {
+  'FFD8FFE0': { format: 'JPEG', mime: 'image/jpeg', ext: ['jpg', 'jpeg'] },
+  'FFD8FFE1': { format: 'JPEG', mime: 'image/jpeg', ext: ['jpg', 'jpeg'] },
+  'FFD8FFE2': { format: 'JPEG', mime: 'image/jpeg', ext: ['jpg', 'jpeg'] },
+  '89504E47': { format: 'PNG', mime: 'image/png', ext: ['png'] },
+  '47494638': { format: 'GIF', mime: 'image/gif', ext: ['gif'] },
+  '25504446': { format: 'PDF', mime: 'application/pdf', ext: ['pdf'] },
+  '504B0304': { format: 'ZIP', mime: 'application/zip', ext: ['zip', 'docx', 'xlsx', 'pptx', 'epub'] },
+  '52494646': { format: 'RIFF', mime: 'image/webp', ext: ['webp', 'wav', 'avi'] },
+  '4D4D002A': { format: 'TIFF (Big Endian)', mime: 'image/tiff', ext: ['tif', 'tiff'] },
+  '49492A00': { format: 'TIFF (Little Endian)', mime: 'image/tiff', ext: ['tif', 'tiff'] },
+  '424D': { format: 'BMP', mime: 'image/bmp', ext: ['bmp'] },
+  '4D5A': { format: 'Windows Executable', mime: 'application/x-msdownload', ext: ['exe', 'dll'] },
+  '7F454C46': { format: 'ELF Executable', mime: 'application/x-executable', ext: ['elf', 'so'] },
+};
+
+function toHex(buffer: Uint8Array): string {
+  return Array.from(buffer).map(b => b.toString(16).padStart(2, '0').toUpperCase()).join('');
+}
+
+function identifyMagic(hex: string): { format: string; mime: string; ext: string[] } | null {
+  for (const [magic, info] of Object.entries(MAGIC_MAP)) {
+    if (hex.startsWith(magic)) {
+      if (magic === '52494646' && hex.length >= 24) {
+        const webpTag = hex.substring(16, 24);
+        if (webpTag === '57454250') return { format: 'WebP', mime: 'image/webp', ext: ['webp'] };
+      }
+      return info;
+    }
+  }
+  return null;
+}
+
 import { WorkerAPI, CompressionSettings, EmiInputs, EmiResult, DiffLine, ProgressCallback } from "./types";
 
 // MD5 implementation (from core.worker.ts)
