@@ -13,6 +13,7 @@ interface StatBarProps {
   };
   goal?: number;
   onGoalChange?: (newGoal: number) => void;
+  lastSaved?: number | null;
 }
 
 const PRESET_GOALS = [
@@ -24,7 +25,7 @@ const PRESET_GOALS = [
   { label: "5,000 (Chapter)", value: 5000 },
 ];
 
-export function StatBar({ stats, goal = 500, onGoalChange }: StatBarProps) {
+export function StatBar({ stats, goal = 500, onGoalChange, lastSaved }: StatBarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [customInput, setCustomInput] = useState("");
   const popoverRef = useRef<HTMLDivElement>(null);
@@ -79,6 +80,12 @@ export function StatBar({ stats, goal = 500, onGoalChange }: StatBarProps) {
       <div className="flex items-center gap-1">
         Reading Time: <span className="text-text">{stats.readMin} min</span>
       </div>
+      {lastSaved && (
+        <div className="hidden sm:flex items-center gap-1 text-tiny font-normal text-text-4 lowercase tracking-normal">
+          <span>•</span>
+          <span>Saved {new Date(lastSaved).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+        </div>
+      )}
       
       {/* Goal Tracker Container */}
       <div ref={popoverRef} className="relative flex-1 min-w-36 flex items-center gap-2 max-w-xs ml-auto">

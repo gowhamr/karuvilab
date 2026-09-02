@@ -6,7 +6,8 @@ import {
   RefreshCw, CheckCircle2, X, ChevronRight,
   FileCode, FileEdit, Type, Eye, Columns,
   Settings2, Copy, AlignLeft, Hash, Sliders,
-  Sparkles, Trash2, Check, Sun, Moon, Monitor, SpellCheck, Loader2
+  Sparkles, Trash2, Check, Sun, Moon, Monitor, SpellCheck, Loader2,
+  ListTree, Clock, History, Save
 } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { cn } from "@/src/lib/utils";
@@ -24,6 +25,7 @@ import { workerManager } from "@/src/workers/manager";
 import { useGrammarStore } from "@/src/features/grammar-checker/store";
 import { tokenizeMarkdownForSpellCheck } from "../utils/markdown-spell-tokenizer";
 import { applySpellMarkers, clearSpellMarkers, SpellMarker } from "../utils/markdown-spell-markers";
+import { extractTableOfContents, TocHeading } from "../utils/toc-extractor";
 import Editor from "@monaco-editor/react";
 import { configureMonacoLoader } from "@/src/core/monaco/MonacoLoader";
 import { defineMonacoThemes } from "@/src/core/monaco/MonacoTheme";
@@ -34,6 +36,7 @@ import { Toolbar } from "./Toolbar";
 import { FindBar } from "./FindBar";
 import { MarkdownPreview } from "./MarkdownPreview";
 import { MarkdownVisualEditor } from "./MarkdownVisualEditor";
+import { DocumentOutline } from "./DocumentOutline";
 import { SAMPLE_MARKDOWN } from "../constants";
 import { MermaidExportBarrier } from "../mermaid/export-barrier";
 import { waitForDocumentReady } from "../mermaid/utils/export-barrier";
@@ -245,6 +248,122 @@ export function MarkdownEditor() {
     setHoveredSpellMarker(null);
     setSpellMarkers(prev => prev.filter(m => m.errorId !== marker.errorId));
   }, [activeMd, addIgnoredWord]);
+
+  // Document Outline State
+  const [showOutline, setShowOutline] = useState(false);
+  const headings = useMemo(() => extractTableOfContents(activeMd), [activeMd]);
+
+  // Auto-Save & Draft Recovery State
+  const [recoverableDraft, setRecoverableDraft] = useState<{ text: string; timestamp: number; wordCount: number } | null>(null);
+  const [lastSavedTimestamp, setLastSavedTimestamp] = useState<number | null>(null);
+  const [snapshots, setSnapshots] = useState<{ id: string; timestamp: number; wordCount: number; text: string }[]>([]);
+
+  // Check for saved draft & snapshots on initial mount
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const savedDraft = localStorage.getItem("kv-markdown-draft");
+      if (savedDraft) {
+        const parsed = JSON.parse(savedDraft);
+        if (parsed && typeof parsed.text === "string" && parsed.text.trim().length > 0 && parsed.text !== SAMPLE_MARKDOWN) {
+          setRecoverableDraft(parsed);
+        }
+      }
+      const savedSnapshots = localStorage.getItem("kv-markdown-snapshots");
+      if (savedSnapshots) {
+        const parsedSnapshots = JSON.parse(savedSnapshots);
+        if (Array.isArray(parsedSnapshots)) setSnapshots(parsedSnapshots);
+      }
+    } catch {}
+  }, []);
+
+  // Debounced auto-save of current document
+  useEffect(() => {
+    if (mode !== "editor" || typeof window === "undefined") return;
+    if (!md.trim() || md === SAMPLE_MARKDOWN) return;
+
+    const timer = setTimeout(() => {
+      try {
+        const draftData = {
+          text: md,
+          timestamp: Date.now(),
+          wordCount: MarkdownService.getStats(md).words,
+        };
+        localStorage.setItem("kv-markdown-draft", JSON.stringify(draftData));
+        setLastSavedTimestamp(Date.now());
+      } catch {}
+    }, 1200);
+
+    return () => clearTimeout(timer);
+  }, [md, mode]);
+
+  const handleRestoreDraft = useCallback(() => {
+    if (recoverableDraft) {
+      setMd(recoverableDraft.text);
+      setRecoverableDraft(null);
+      toast(`Restored draft from ${new Date(recoverableDraft.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+    }
+  }, [recoverableDraft, toast]);
+
+  const handleDiscardDraft = useCallback(() => {
+    try {
+      localStorage.removeItem("kv-markdown-draft");
+    } catch {}
+    setRecoverableDraft(null);
+    toast("Draft discarded");
+  }, [toast]);
+
+  const handleCreateSnapshot = useCallback(() => {
+    if (!activeMd.trim()) {
+      toast("Cannot snapshot empty document", "error");
+      return;
+    }
+    const snapWordCount = MarkdownService.getStats(activeMd).words;
+    const newSnapshot = {
+      id: `snap-${Date.now()}`,
+      timestamp: Date.now(),
+      wordCount: snapWordCount,
+      text: activeMd,
+    };
+    const updated = [newSnapshot, ...snapshots.slice(0, 9)];
+    setSnapshots(updated);
+    try {
+      localStorage.setItem("kv-markdown-snapshots", JSON.stringify(updated));
+    } catch {}
+    toast("Version snapshot created!");
+  }, [activeMd, snapshots, toast]);
+
+  const handleRestoreSnapshot = useCallback((snap: { id: string; timestamp: number; wordCount: number; text: string }) => {
+    setMd(snap.text);
+    toast(`Restored snapshot from ${new Date(snap.timestamp).toLocaleTimeString()}`);
+  }, [toast]);
+
+  const handleDeleteSnapshot = useCallback((id: string) => {
+    const updated = snapshots.filter(s => s.id !== id);
+    setSnapshots(updated);
+    try {
+      localStorage.setItem("kv-markdown-snapshots", JSON.stringify(updated));
+    } catch {}
+    toast("Snapshot deleted");
+  }, [snapshots, toast]);
+
+  const handleSelectHeading = useCallback((heading: TocHeading) => {
+    if (editorRef.current) {
+      editorRef.current.revealLineInCenter(heading.lineNumber);
+      editorRef.current.setPosition({ lineNumber: heading.lineNumber, column: 1 });
+      editorRef.current.focus();
+    }
+    if (previewRef.current) {
+      const headingElements = Array.from(previewRef.current.querySelectorAll("h1, h2, h3, h4, h5, h6"));
+      const match = headingElements.find(el => {
+        const text = el.textContent?.trim() || "";
+        return text === heading.text || el.id === heading.slug;
+      });
+      if (match) {
+        match.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  }, []);
 
   const stats = useMemo(() => MarkdownService.getStats(activeMd), [activeMd]);
 
@@ -1048,6 +1167,31 @@ export function MarkdownEditor() {
             <Search className="w-4 h-4" />
           </button>
 
+          {/* Document Outline Toggle */}
+          <button
+            onClick={() => setShowOutline(!showOutline)}
+            className={cn(
+              "flex items-center gap-1.5 px-2.5 py-2 rounded-xl border transition-all cursor-pointer text-tiny font-bold uppercase tracking-widest-sm",
+              showOutline 
+                ? "bg-blue text-white border-blue shadow-xs" 
+                : "bg-surface border-border text-text-3 hover:border-blue hover:text-blue"
+            )}
+            title="Toggle Document Outline / Table of Contents"
+            aria-label="Document Outline"
+            aria-expanded={showOutline}
+          >
+            <ListTree className="w-4 h-4" />
+            <span className="hidden md:inline">Outline</span>
+            {headings.length > 0 && (
+              <span className={cn(
+                "px-1 py-0.2 rounded-full text-[9px] font-mono font-bold",
+                showOutline ? "bg-white/20 text-white" : "bg-blue/10 text-blue"
+              )}>
+                {headings.length}
+              </span>
+            )}
+          </button>
+
           {/* Editor Settings Toggle */}
           <button
             onClick={() => setShowSettings(!showSettings)}
@@ -1263,6 +1407,17 @@ export function MarkdownEditor() {
                 <span>Scroll Sync: {scrollSync ? "ON" : "OFF"}</span>
               </button>
 
+              {/* Version Snapshot CTA */}
+              <button
+                type="button"
+                onClick={handleCreateSnapshot}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-bg text-text-3 hover:border-blue hover:text-blue transition-all cursor-pointer"
+                title="Save current document version snapshot to local storage"
+              >
+                <Save className="w-3.5 h-3.5" />
+                <span>Save Snapshot</span>
+              </button>
+
               {/* Copy Rendered HTML */}
               <button
                 onClick={handleCopyHtml}
@@ -1271,6 +1426,83 @@ export function MarkdownEditor() {
               >
                 <Code2 className="w-3.5 h-3.5" />
                 <span>Copy HTML</span>
+              </button>
+
+              {/* Snapshot List if any */}
+              {snapshots.length > 0 && (
+                <div className="w-full pt-2 border-t border-border flex flex-wrap items-center gap-2">
+                  <span className="text-text-4 uppercase tracking-widest-sm text-[10px] flex items-center gap-1">
+                    <History className="w-3 h-3" /> Snapshots ({snapshots.length}):
+                  </span>
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {snapshots.map((snap) => (
+                      <div
+                        key={snap.id}
+                        className="flex items-center gap-1 px-2 py-0.5 bg-bg border border-border rounded-lg text-[11px]"
+                      >
+                        <span className="font-mono text-text-3">
+                          {new Date(snap.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ({snap.wordCount}w)
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleRestoreSnapshot(snap)}
+                          className="text-blue hover:underline font-semibold ml-1 cursor-pointer"
+                          title="Restore this version"
+                        >
+                          Restore
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteSnapshot(snap.id)}
+                          className="text-text-4 hover:text-error ml-0.5 cursor-pointer"
+                          title="Delete snapshot"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </m.div>
+        )}
+      </AnimatePresence>
+
+      {/* Draft Recovery Banner */}
+      <AnimatePresence>
+        {recoverableDraft && mode === "editor" && (
+          <m.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="flex items-center justify-between gap-3 px-4 py-2.5 bg-blue/10 border border-blue/20 rounded-2xl text-xs shrink-0"
+          >
+            <div className="flex items-center gap-2 min-w-0">
+              <Clock className="w-4 h-4 text-blue shrink-0" />
+              <span className="text-text font-medium truncate">
+                Found unsaved draft from{" "}
+                <span className="font-bold text-blue font-mono">
+                  {new Date(recoverableDraft.timestamp).toLocaleDateString()} {new Date(recoverableDraft.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </span>{" "}
+                ({recoverableDraft.wordCount.toLocaleString()} words)
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={handleRestoreDraft}
+                className="px-3 py-1 bg-blue text-white rounded-xl text-xs font-bold hover:bg-blue/90 transition-all cursor-pointer shadow-xs"
+              >
+                Restore Draft
+              </button>
+              <button
+                type="button"
+                onClick={handleDiscardDraft}
+                className="px-2.5 py-1 bg-surface hover:bg-hover border border-border rounded-xl text-xs font-medium text-text-4 hover:text-text transition-all cursor-pointer"
+              >
+                Discard
               </button>
             </div>
           </m.div>
@@ -1327,7 +1559,28 @@ export function MarkdownEditor() {
             )}
 
             {/* Split / Write / Visual / Preview Workspace */}
-            <div className="flex-1 flex flex-col md:flex-row min-h-0 min-w-0 max-w-full overflow-hidden">
+            <div className="flex-1 flex flex-col md:flex-row min-h-0 min-w-0 max-w-full overflow-hidden relative">
+              {/* Document Outline Side Panel (Collapsible) */}
+              <AnimatePresence>
+                {showOutline && (
+                  <m.div
+                    initial={{ width: 0, opacity: 0 }}
+                    animate={{ width: "auto", opacity: 1 }}
+                    exit={{ width: 0, opacity: 0 }}
+                    transition={{ duration: 0.15 }}
+                    className="overflow-hidden h-full shrink-0 border-b md:border-b-0 md:border-r border-border bg-surface z-content"
+                  >
+                    <DocumentOutline
+                      headings={headings}
+                      isOpen={showOutline}
+                      onClose={() => setShowOutline(false)}
+                      onSelectHeading={handleSelectHeading}
+                      onInsertTocText={(toc) => insertAtCursor(toc)}
+                    />
+                  </m.div>
+                )}
+              </AnimatePresence>
+
               {/* Left Column: Markdown Source Editor (Visible in Write and Split tabs) */}
               {(activeTab === "write" || activeTab === "split") && (
                 <div className={cn(
@@ -1458,7 +1711,7 @@ export function MarkdownEditor() {
 
             {/* StatBar Footer */}
             <div className="shrink-0">
-              <StatBar stats={stats} goal={wordGoal} onGoalChange={handleGoalChange} />
+              <StatBar stats={stats} goal={wordGoal} onGoalChange={handleGoalChange} lastSaved={lastSavedTimestamp} />
             </div>
           </div>
         </div>
