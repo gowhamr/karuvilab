@@ -46,7 +46,7 @@
     "picomatch": "^4.0.5",
     "postcss": "^8.5.14",
     "tailwindcss": "^4.2.4",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "typescript-eslint": "8.63.1-alpha.11",
     "vitest": "^4.1.10",
     "workbox-build": "7.4.1",
