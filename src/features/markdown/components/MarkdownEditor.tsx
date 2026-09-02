@@ -102,6 +102,35 @@ export function MarkdownEditor() {
   const previewRef = useRef<HTMLDivElement>(null);
   const uploadPreviewRef = useRef<HTMLDivElement>(null);
 
+  // Re-layout Monaco editor when fullscreen state, active tab, or mode changes
+  useEffect(() => {
+    const triggerLayout = () => {
+      if (editorRef.current) {
+        editorRef.current.layout();
+      }
+    };
+    triggerLayout();
+    const rafId = requestAnimationFrame(triggerLayout);
+    const timerId = setTimeout(triggerLayout, 200);
+
+    const handleFullscreenEvent = () => {
+      setTimeout(triggerLayout, 100);
+      setTimeout(triggerLayout, 300);
+    };
+
+    window.addEventListener('resize', triggerLayout);
+    window.addEventListener('kv-fullscreen-enter', handleFullscreenEvent);
+    window.addEventListener('kv-fullscreen-exit', handleFullscreenEvent);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      clearTimeout(timerId);
+      window.removeEventListener('resize', triggerLayout);
+      window.removeEventListener('kv-fullscreen-enter', handleFullscreenEvent);
+      window.removeEventListener('kv-fullscreen-exit', handleFullscreenEvent);
+    };
+  }, [isThisToolFullscreen, activeTab, mode]);
+
   const activeMd = mode === "editor" ? md : uploadMd;
   const [html, setHtml] = useState("");
   
@@ -856,7 +885,7 @@ export function MarkdownEditor() {
     <div className={cn(
       "w-full",
       isThisToolFullscreen 
-        ? "h-full flex flex-col flex-1 min-h-0 space-y-3" 
+        ? "h-full flex flex-col flex-1 min-h-0 gap-2 sm:gap-3" 
         : "space-y-3 sm:space-y-4"
     )}>
       {/* Header Controls */}
@@ -1179,7 +1208,7 @@ export function MarkdownEditor() {
               "flex flex-col bg-surface border rounded-2xl sm:rounded-3xl overflow-hidden shadow-xs w-full transition-colors",
               isDraggingOver ? "border-blue ring-2 ring-blue/30 bg-blue/5" : "border-border",
               isThisToolFullscreen 
-                ? "h-full flex-1 min-h-0" 
+                ? "h-full flex-1 min-h-[350px]" 
                 : "min-h-[380px] sm:min-h-[520px] md:min-h-[640px] h-[calc(100dvh-220px)] sm:h-[calc(100dvh-260px)]"
             )}
           >
@@ -1220,7 +1249,7 @@ export function MarkdownEditor() {
               {(activeTab === "write" || activeTab === "split") && (
                 <div className={cn(
                   "flex flex-col min-w-0 h-full overflow-hidden relative",
-                  activeTab === "split" ? "flex-1 border-b md:border-b-0 md:border-r border-border" : "w-full"
+                  activeTab === "split" ? "flex-1 border-b md:border-b-0 md:border-r border-border" : "w-full flex-1"
                 )}>
                   <div className="flex flex-1 min-h-0 overflow-hidden relative font-mono bg-bg">
                     {/* Monaco Editor */}
@@ -1330,7 +1359,7 @@ export function MarkdownEditor() {
               {(activeTab === "preview" || activeTab === "split") && (
                 <div className={cn(
                   "flex flex-col min-w-0 h-full overflow-hidden bg-bg/40",
-                  activeTab === "split" ? "hidden md:flex flex-1" : "w-full flex"
+                  activeTab === "split" ? "hidden md:flex flex-1" : "w-full flex flex-1"
                 )}>
                   <MarkdownPreview 
                     html={html} 
@@ -1352,7 +1381,7 @@ export function MarkdownEditor() {
         </div>
       ) : (
         /* Upload Mode */
-        <div className="space-y-6">
+        <div className={cn("space-y-6", isThisToolFullscreen ? "flex-1 flex flex-col min-h-0 h-full" : "")}>
           <DropZone
             onFilesSelected={handleFileUpload}
             accept=".md,.markdown,.txt"
@@ -1360,7 +1389,12 @@ export function MarkdownEditor() {
           />
 
           {fileName && (
-            <div className="flex flex-col h-[60vh] min-h-96 max-h-tool-viewport-lg bg-surface border border-border rounded-3xl overflow-hidden shadow-sm">
+            <div className={cn(
+              "flex flex-col bg-surface border border-border rounded-3xl overflow-hidden shadow-sm",
+              isThisToolFullscreen 
+                ? "flex-1 min-h-0 h-full" 
+                : "h-[60vh] min-h-96 max-h-tool-viewport-lg"
+            )}>
               <div className="px-6 py-4 border-b border-border bg-bg/50 flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-blue/10 rounded-2xl flex items-center justify-center shrink-0">

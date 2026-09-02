@@ -49,7 +49,7 @@ function updateCacheNames() {
   }
 }
 
-function sync() {
+async function sync() {
   console.log('🚀 Syncing KaruviLab worker assets...');
   
   const publicDir = path.join(process.cwd(), 'public');
@@ -103,6 +103,14 @@ function sync() {
     } else {
       console.warn(`⚠️ Warning: Source worker not found: ${srcPath}`);
     }
+  }
+
+  try {
+    const { copyWorkboxLibraries } = await import('workbox-build');
+    await copyWorkboxLibraries('public/lib/workbox');
+    console.log(`✅ Synced Workbox libraries to public/lib/workbox`);
+  } catch (err) {
+    console.error(`❌ Failed to sync Workbox libraries:`, err);
   }
 
   updateCacheNames();

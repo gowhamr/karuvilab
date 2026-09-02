@@ -11,7 +11,7 @@ import { ToolMoreMenu } from './ToolMoreMenu';
 import { ToolInfoSection } from './ToolInfoSection';
 import { ProgressOverlay, ProgressToast } from '@/components/ui/Progress';
 import { cn } from '@/src/lib/utils';
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { FocusModeWrapper } from './FocusModeWrapper';
 import { ProgressProvider } from '@/src/contexts/ProgressContext';
 
@@ -141,6 +141,10 @@ export function ClientToolShell({ title, description, category, children, toolId
   }, [finalToolId, recordTransition]);
 
 
+
+  const childrenArray = useMemo(() => React.Children.toArray(children), [children]);
+  const toolElement = childrenArray.length > 0 ? childrenArray[0] : children;
+  const educationalElements = childrenArray.length > 1 ? childrenArray.slice(1) : null;
 
   const [isEmbed, setIsEmbed] = useState(false);
 
@@ -357,11 +361,13 @@ export function ClientToolShell({ title, description, category, children, toolId
                   <ProgressProvider>
                     <ProgressOverlay />
                     <ProgressToast />
-                    {children}
+                    {toolElement}
                   </ProgressProvider>
                 </FocusModeWrapper>
               </ErrorBoundary>
             </section>
+
+            {educationalElements}
 
             {!isEmbed && (
               <>
