@@ -80,10 +80,13 @@ export function MarkdownEditor() {
   useEffect(() => {
     if (typeof document === 'undefined') return;
     const checkTheme = () => {
+      const dataTheme = document.documentElement.getAttribute('data-theme');
       const isDark =
-        document.documentElement.getAttribute('data-theme') === 'dark' ||
-        document.documentElement.classList.contains('dark') ||
-        (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches);
+        dataTheme === 'dark' ||
+        (dataTheme !== 'light' && (
+          document.documentElement.classList.contains('dark') ||
+          (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches)
+        ));
       setSystemIsDark(!!isDark);
     };
     checkTheme();
@@ -656,7 +659,8 @@ export function MarkdownEditor() {
 
       // Initialize Mermaid Diagrams
       if (typeof mermaid !== "undefined") {
-        var isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var exportTheme = "${activeEditorTheme === "karuvi-dark" ? "dark" : activeEditorTheme === "karuvi-light" ? "default" : "auto"}";
+        var isDark = exportTheme === "dark" || (exportTheme === "auto" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
         mermaid.initialize({
           startOnLoad: false,
           theme: isDark ? "dark" : "default",
@@ -748,7 +752,7 @@ export function MarkdownEditor() {
         if (unrenderedPlaceholders.length > 0) {
           const { mermaidManager } = await import('../mermaid/MermaidRenderManager');
           const { MermaidPreflightAnalyzer } = await import('../mermaid/MermaidPreflight');
-          const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+          const isDark = activeEditorTheme === "karuvi-dark";
           const theme = isDark ? 'dark' : 'light';
 
           await Promise.all(

@@ -39,10 +39,13 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
       }
 
       // Determine active diagram theme
+      const dataTheme = document.documentElement.getAttribute('data-theme');
       const isDark =
-        document.documentElement.getAttribute('data-theme') === 'dark' ||
-        document.documentElement.classList.contains('dark') ||
-        (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches);
+        dataTheme === 'dark' ||
+        (dataTheme !== 'light' && (
+          document.documentElement.classList.contains('dark') ||
+          (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches)
+        ));
       const activeTheme = propTheme || (isDark ? 'dark' : 'light');
 
       // 2. Handle Mermaid Diagrams through isolated MermaidDiagramBlock lifecycle
