@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { m, AnimatePresence } from "framer-motion";
 import { 
   Bold, Italic, Strikethrough, Code, Heading1, Heading2, 
   Quote, List, ListOrdered, Link, Image as ImageIcon, 
@@ -8,9 +9,26 @@ import {
   Share2, FileJson, Layout, RefreshCw,
   LucideIcon
 } from "lucide-react";
+import { cn } from "@/src/lib/utils";
 import { 
   DIAGRAM_SNIPPETS 
 } from "../constants";
+
+function generateMarkdownTable(rows: number, cols: number): string {
+  const r = Math.max(1, Math.min(rows, 10));
+  const c = Math.max(1, Math.min(cols, 8));
+  
+  let md = "\n";
+  // Header row
+  md += "| " + Array.from({ length: c }, (_, i) => `Header ${i + 1}`).join(" | ") + " |\n";
+  // Separator row
+  md += "| " + Array.from({ length: c }, () => "---").join(" | ") + " |\n";
+  // Data rows
+  for (let i = 0; i < r; i++) {
+    md += "| " + Array.from({ length: c }, () => "Cell").join(" | ") + " |\n";
+  }
+  return md + "\n";
+}
 
 interface ToolbarItem {
   icon: LucideIcon;
@@ -63,6 +81,27 @@ const TOOLBAR_GROUPS: ToolbarGroup[] = [
 export function Toolbar({ 
   onInsert, onClear, onLoadSample, scrollSync, onToggleScrollSync 
 }: ToolbarProps) {
+  const [isTablePickerOpen, setIsTablePickerOpen] = useState(false);
+  const [hoverGrid, setHoverGrid] = useState({ rows: 3, cols: 3 });
+  const tablePickerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isTablePickerOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (tablePickerRef.current && !tablePickerRef.current.contains(e.target as Node)) {
+        setIsTablePickerOpen(false);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsTablePickerOpen(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isTablePickerOpen]);
   return (
     <div className="flex items-center gap-1 p-1.5 sm:p-2 bg-bg border-b border-border overflow-x-auto no-scrollbar sm:flex-wrap min-w-0 max-w-full">
       {TOOLBAR_GROUPS.map((group, gIdx) => (
@@ -132,14 +171,88 @@ export function Toolbar({
 
       <div className="w-px h-4 bg-border mx-0.5 shrink-0" />
       
-      <button
-        title="Insert Table"
-        aria-label="Insert Table"
-        onClick={() => onInsert("\n| Col 1 | Col 2 |\n|-------|-------|\n| Cell  | Cell  |\n")}
-        className="w-8 h-8 min-w-8 flex items-center justify-center rounded-lg hover:bg-surface border border-transparent hover:border-border text-text-3 hover:text-blue transition-all cursor-pointer shrink-0"
-      >
-        <TableIcon className="w-4 h-4" />
-      </button>
+      {/* Table Generator Dropdown */}
+      <div ref={tablePickerRef} className="relative flex items-center shrink-0">
+        <button
+          type="button"
+          title="Insert Custom Table"
+          aria-label="Insert Table"
+          aria-expanded={isTablePickerOpen}
+          onClick={() => setIsTablePickerOpen(!isTablePickerOpen)}
+          className={cn(
+            "w-8 h-8 min-w-8 flex items-center justify-center rounded-lg border transition-all cursor-pointer shrink-0",
+            isTablePickerOpen 
+              ? "bg-blue/10 border-blue/20 text-blue" 
+              : "hover:bg-surface border-transparent hover:border-border text-text-3 hover:text-blue"
+          )}
+        >
+          <TableIcon className="w-4 h-4" />
+        </button>
+
+        <AnimatePresence>
+          {isTablePickerOpen && (
+            <m.div
+              initial={{ opacity: 0, y: 4, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 4, scale: 0.96 }}
+              transition={{ duration: 0.12 }}
+              className="absolute top-full left-0 mt-1.5 p-3 bg-surface border border-border rounded-2xl shadow-xl z-dropdown flex flex-col gap-2.5 min-w-44"
+            >
+              <div className="flex items-center justify-between text-xs font-bold px-0.5">
+                <span className="text-text-4 uppercase tracking-widest-sm text-[10px]">Table Grid</span>
+                <span className="text-blue font-mono">{hoverGrid.rows} × {hoverGrid.cols}</span>
+              </div>
+
+              {/* Grid matrix 6x6 */}
+              <div 
+                className="grid grid-cols-6 gap-1 p-1 bg-bg/80 border border-border rounded-xl"
+                onMouseLeave={() => setHoverGrid({ rows: 3, cols: 3 })}
+              >
+                {Array.from({ length: 6 }).map((_, rIdx) => (
+                  <React.Fragment key={rIdx}>
+                    {Array.from({ length: 6 }).map((_, cIdx) => {
+                      const isHighlighted = rIdx < hoverGrid.rows && cIdx < hoverGrid.cols;
+                      return (
+                        <button
+                          key={cIdx}
+                          type="button"
+                          onMouseEnter={() => setHoverGrid({ rows: rIdx + 1, cols: cIdx + 1 })}
+                          onClick={() => {
+                            onInsert(generateMarkdownTable(rIdx + 1, cIdx + 1));
+                            setIsTablePickerOpen(false);
+                          }}
+                          className={cn(
+                            "w-5 h-5 rounded-xs border transition-all cursor-pointer",
+                            isHighlighted 
+                              ? "bg-blue/30 border-blue text-blue" 
+                              : "bg-surface border-border hover:border-blue/50"
+                          )}
+                          title={`${rIdx + 1} rows × ${cIdx + 1} columns`}
+                          aria-label={`Create ${rIdx + 1} by ${cIdx + 1} table`}
+                        />
+                      );
+                    })}
+                  </React.Fragment>
+                ))}
+              </div>
+
+              <div className="flex items-center justify-between pt-1 border-t border-border">
+                <button
+                  type="button"
+                  onClick={() => {
+                    onInsert(generateMarkdownTable(3, 3));
+                    setIsTablePickerOpen(false);
+                  }}
+                  className="text-[11px] font-bold text-text-3 hover:text-blue transition-colors cursor-pointer"
+                >
+                  + Default (3×3)
+                </button>
+                <span className="text-[10px] text-text-4">Click to insert</span>
+              </div>
+            </m.div>
+          )}
+        </AnimatePresence>
+      </div>
 
       <div className="w-px h-4 bg-border mx-0.5 shrink-0" />
 

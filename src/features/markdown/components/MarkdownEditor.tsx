@@ -68,6 +68,27 @@ export function MarkdownEditor() {
   const [editorThemeMode, setEditorThemeMode] = useState<"auto" | "dark" | "light">("auto");
   const [systemIsDark, setSystemIsDark] = useState(true);
 
+  // Word Count Goal State
+  const [wordGoal, setWordGoal] = useState<number>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("kv-md-word-goal");
+        if (saved) {
+          const parsed = parseInt(saved, 10);
+          if (!isNaN(parsed) && parsed > 0) return parsed;
+        }
+      } catch {}
+    }
+    return 500;
+  });
+
+  const handleGoalChange = useCallback((newGoal: number) => {
+    setWordGoal(newGoal);
+    try {
+      localStorage.setItem("kv-md-word-goal", String(newGoal));
+    } catch {}
+  }, []);
+
   // Spell Check State
   const [spellCheckEnabled, setSpellCheckEnabled] = useState(false);
   const [spellMarkers, setSpellMarkers] = useState<SpellMarker[]>([]);
@@ -293,6 +314,51 @@ export function MarkdownEditor() {
     navigator.clipboard.writeText(html);
     toast("Rendered HTML copied to clipboard!");
   }, [html, toast]);
+
+  // Copy formatted Rich Text (HTML / WYSIWYG) to clipboard for Google Docs, Notion, Slack, Word
+  const handleCopyRichText = useCallback(async () => {
+    const content = mode === "editor" ? md : uploadMd;
+    if (!html.trim() || !content.trim()) {
+      toast("Nothing to copy", "error");
+      return;
+    }
+    try {
+      if (typeof ClipboardItem !== "undefined" && navigator.clipboard?.write) {
+        const blobHtml = new Blob([html], { type: "text/html" });
+        const blobText = new Blob([content], { type: "text/plain" });
+        const item = new ClipboardItem({
+          "text/html": blobHtml,
+          "text/plain": blobText,
+        });
+        await navigator.clipboard.write([item]);
+        toast("Rich text copied to clipboard!");
+        return;
+      }
+      throw new Error("ClipboardItem not supported");
+    } catch {
+      try {
+        const container = document.createElement("div");
+        container.innerHTML = html;
+        container.style.position = "fixed";
+        container.style.left = "-9999px";
+        container.style.opacity = "0";
+        document.body.appendChild(container);
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(container);
+        if (selection) {
+          selection.removeAllRanges();
+          selection.addRange(range);
+          document.execCommand("copy");
+          selection.removeAllRanges();
+          toast("Rich text copied to clipboard!");
+        }
+        document.body.removeChild(container);
+      } catch {
+        toast("Failed to copy rich text", "error");
+      }
+    }
+  }, [mode, md, uploadMd, html, toast]);
 
   // Monaco handles Tab / indentation natively. This registers Ctrl shortcuts via the editor's addAction API
   // and is wired via the onMount callback — no separate keydown handler needed on a DOM element.
@@ -1011,6 +1077,16 @@ export function MarkdownEditor() {
           </button>
 
           <button
+            onClick={handleCopyRichText}
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 bg-surface border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:border-blue hover:text-blue hover:bg-blue/5 transition-all cursor-pointer"
+            title="Copy Formatted Rich Text (for Google Docs, Notion, Slack, Word)"
+            aria-label="Copy Rich Text"
+          >
+            <FileText className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Rich Text</span>
+          </button>
+
+          <button
             onClick={handleDownloadMd}
             className="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 bg-surface border border-border rounded-xl text-tiny font-bold uppercase tracking-widest-sm text-text-3 hover:border-blue hover:text-blue hover:bg-blue/5 transition-all cursor-pointer"
             title="Download .md file (Ctrl+S)"
@@ -1382,7 +1458,7 @@ export function MarkdownEditor() {
 
             {/* StatBar Footer */}
             <div className="shrink-0">
-              <StatBar stats={stats} />
+              <StatBar stats={stats} goal={wordGoal} onGoalChange={handleGoalChange} />
             </div>
           </div>
         </div>
