@@ -30,7 +30,7 @@
     "@tailwindcss/postcss": "^4.2.4",
     "@tybys/wasm-util": "0.10.3",
     "@types/html2pdf.js": "^0.10.0",
-    "@types/marked": "^5.0.2",
+    "@types/marked": "^6.0.0",
     "@types/qrcode": "^1.5.5",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
