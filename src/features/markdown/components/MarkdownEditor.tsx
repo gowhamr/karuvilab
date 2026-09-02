@@ -25,7 +25,10 @@ import { useGrammarStore } from "@/src/features/grammar-checker/store";
 import { tokenizeMarkdownForSpellCheck } from "../utils/markdown-spell-tokenizer";
 import { applySpellMarkers, clearSpellMarkers, SpellMarker } from "../utils/markdown-spell-markers";
 import Editor from "@monaco-editor/react";
+import { configureMonacoLoader } from "@/src/core/monaco/MonacoLoader";
 import { defineMonacoThemes } from "@/src/core/monaco/MonacoTheme";
+
+configureMonacoLoader();
 import { StatBar } from "./StatBar";
 import { Toolbar } from "./Toolbar";
 import { FindBar } from "./FindBar";

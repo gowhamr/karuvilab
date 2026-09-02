@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef, useCallback, useId } from "react";
 import dynamic from "next/dynamic";
+import { configureMonacoLoader } from "@/src/core/monaco/MonacoLoader";
+configureMonacoLoader();
 const Editor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
 import LZString from "lz-string";
 import { 

@@ -9,10 +9,9 @@ import { configureJsonLanguageService } from "./schemas";
 import { configureLanguageDefaults } from "./MonacoLanguages";
 import { configureMermaidLanguage } from "./MonacoMermaid";
 
-// Configure the loader immediately so it applies to all Monaco instances
-// We pass empty string for basePath, but could be adjusted if deployed under subpath
-configureMonacoLoader("");
-configureMonacoWorkers("");
+// Configure the loader immediately with dynamic base path detection
+configureMonacoLoader();
+configureMonacoWorkers();
 
 export function MonacoProvider({ children }: { children: React.ReactNode }) {
   const monaco = useMonaco();

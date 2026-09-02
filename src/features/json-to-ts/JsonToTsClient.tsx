@@ -2,6 +2,8 @@
 
 import { useState, useMemo, useDeferredValue } from 'react';
 import Editor from '@monaco-editor/react';
+import { configureMonacoLoader } from "@/src/core/monaco/MonacoLoader";
+configureMonacoLoader();
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Code, FileJson } from "lucide-react";
 import { useToast } from "@/components/ui/Toast";

@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { Play, Loader2, AlertCircle } from "lucide-react";
 import Editor from "@monaco-editor/react";
+import { configureMonacoLoader } from "@/src/core/monaco/MonacoLoader";
+configureMonacoLoader();
 
 export function ApiTester() {
   const [url, setUrl] = useState("https://jsonplaceholder.typicode.com/todos/1");

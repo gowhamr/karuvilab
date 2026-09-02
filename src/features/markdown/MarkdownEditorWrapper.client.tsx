@@ -4,8 +4,11 @@ import React from "react";
 import Script from "next/script";
 import { EngineLoader } from "@/components/system/EngineLoader";
 import { MarkdownEditor } from "./components/MarkdownEditor";
+import { configureMonacoLoader } from "@/src/core/monaco/MonacoLoader";
 import { logger } from "@/src/lib/logger";
 import "./markdown.css";
+
+configureMonacoLoader();
 
 export default function MarkdownEditorWrapper() {
   const checkInit = () => {
