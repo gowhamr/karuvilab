@@ -38,6 +38,7 @@ import { FindBar } from "./FindBar";
 import { MarkdownPreview } from "./MarkdownPreview";
 import { MarkdownVisualEditor } from "./MarkdownVisualEditor";
 import { DocumentOutline } from "./DocumentOutline";
+import { DiagramTemplateGallery } from "./DiagramTemplateGallery";
 import { SAMPLE_MARKDOWN } from "../constants";
 import { MermaidExportBarrier } from "../mermaid/export-barrier";
 import { waitForDocumentReady } from "../mermaid/utils/export-barrier";
@@ -67,6 +68,7 @@ export function MarkdownEditor() {
   const [scrollSync, setScrollSync] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
   const [showFind, setShowFind] = useState(false);
+  const [showDiagramGallery, setShowDiagramGallery] = useState(false);
   const [findState, setFindState] = useState({ matches: [] as number[], index: 0, query: "" });
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [editorThemeMode, setEditorThemeMode] = useState<"auto" | "dark" | "light">("auto");
@@ -1573,6 +1575,7 @@ export function MarkdownEditor() {
                   onLoadSample={() => setMd(SAMPLE_MARKDOWN)}
                   scrollSync={scrollSync}
                   onToggleScrollSync={() => setScrollSync(!scrollSync)}
+                  onOpenDiagramGallery={() => setShowDiagramGallery(true)}
                 />
               </div>
             )}
@@ -1823,6 +1826,16 @@ export function MarkdownEditor() {
           )}
         </div>
       )}
+
+      {/* Diagram Template Gallery Modal */}
+      <DiagramTemplateGallery
+        isOpen={showDiagramGallery}
+        onClose={() => setShowDiagramGallery(false)}
+        onSelectTemplate={(snippet) => {
+          insertAtCursor("", "", snippet);
+          toast("Inserted diagram template");
+        }}
+      />
     </div>
   );
 }

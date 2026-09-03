@@ -49,6 +49,7 @@ interface ToolbarProps {
   onLoadSample: () => void;
   scrollSync: boolean;
   onToggleScrollSync: () => void;
+  onOpenDiagramGallery?: () => void;
 }
 
 const TOOLBAR_GROUPS: ToolbarGroup[] = [
@@ -79,7 +80,7 @@ const TOOLBAR_GROUPS: ToolbarGroup[] = [
 ];
 
 export function Toolbar({ 
-  onInsert, onClear, onLoadSample, scrollSync, onToggleScrollSync 
+  onInsert, onClear, onLoadSample, scrollSync, onToggleScrollSync, onOpenDiagramGallery
 }: ToolbarProps) {
   const [isTablePickerOpen, setIsTablePickerOpen] = useState(false);
   const [hoverGrid, setHoverGrid] = useState({ rows: 3, cols: 3 });
@@ -102,25 +103,25 @@ export function Toolbar({
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [isTablePickerOpen]);
+
   return (
-    <div className="flex items-center gap-1 p-1.5 sm:p-2 bg-bg border-b border-border overflow-x-auto no-scrollbar sm:flex-wrap min-w-0 max-w-full">
+    <div className="flex items-center gap-1.5 p-2 bg-surface/50 border-b border-border overflow-x-auto custom-scrollbar select-none">
       {TOOLBAR_GROUPS.map((group, gIdx) => (
         <React.Fragment key={group.label}>
           {gIdx > 0 && <div className="w-px h-4 bg-border mx-0.5 shrink-0" />}
-          <div className="flex items-center gap-1 shrink-0">
-            {group.items.map((item, iIdx) => (
+          <div className="flex items-center gap-0.5 shrink-0">
+            {group.items.map((item) => (
               <button
-                key={iIdx}
+                key={item.title}
                 title={item.title}
                 aria-label={item.title}
                 onClick={() => {
                   if (item.diagram) {
-                    const snippet = DIAGRAM_SNIPPETS[item.diagram];
-                    if (snippet) onInsert("", "", snippet);
-                  } else if (item.prefix) {
-                    onInsert(item.prefix, "");
+                    onInsert("", "", DIAGRAM_SNIPPETS[item.diagram]);
                   } else if (item.wrap) {
                     onInsert(item.wrap[0] || "", item.wrap[1] || "");
+                  } else if (item.prefix) {
+                    onInsert(item.prefix, "");
                   }
                 }}
                 className="w-8 h-8 min-w-8 flex items-center justify-center rounded-lg hover:bg-surface border border-transparent hover:border-border text-text-3 hover:text-blue transition-all cursor-pointer shrink-0"
@@ -133,6 +134,20 @@ export function Toolbar({
       ))}
 
       <div className="w-px h-4 bg-border mx-0.5 shrink-0" />
+
+      {/* Visual Diagram Gallery Button */}
+      {onOpenDiagramGallery && (
+        <button
+          type="button"
+          title="Open Visual Mermaid Diagram Template Gallery"
+          aria-label="Open Diagram Gallery"
+          onClick={onOpenDiagramGallery}
+          className="flex items-center gap-1.5 h-8 px-2.5 rounded-lg bg-surface hover:bg-surface-2 text-text-3 hover:text-blue border border-border transition-all text-xs font-semibold shrink-0 cursor-pointer"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-blue" />
+          <span className="hidden md:inline">Gallery</span>
+        </button>
+      )}
 
       {/* Diagrams Dropdown Selector */}
       <div className="flex items-center shrink-0">
