@@ -26,6 +26,7 @@ import { useGrammarStore } from "@/src/features/grammar-checker/store";
 import { tokenizeMarkdownForSpellCheck } from "../utils/markdown-spell-tokenizer";
 import { applySpellMarkers, clearSpellMarkers, SpellMarker } from "../utils/markdown-spell-markers";
 import { extractTableOfContents, TocHeading } from "../utils/toc-extractor";
+import { isImageFile, extractImagesFromDataTransfer, optimizeImageToDataUrl } from "../utils/image-paste-handler";
 import Editor from "@monaco-editor/react";
 import { configureMonacoLoader } from "@/src/core/monaco/MonacoLoader";
 import { defineMonacoThemes } from "@/src/core/monaco/MonacoTheme";
@@ -507,6 +508,27 @@ export function MarkdownEditor() {
       run: () => handleDownloadMd(),
     });
 
+    // Paste listener for clipboard images (Ctrl+V screenshot insertion)
+    const domNode = editor.getDomNode();
+    if (domNode) {
+      const pasteListener = async (ev: ClipboardEvent) => {
+        if (!ev.clipboardData) return;
+        const images = extractImagesFromDataTransfer(ev.clipboardData);
+        if (images.length > 0 && images[0]) {
+          ev.preventDefault();
+          ev.stopPropagation();
+          try {
+            const optimized = await optimizeImageToDataUrl(images[0]);
+            insertAtCursor(`\n![${optimized.fileName}](${optimized.dataUrl})\n`);
+            toast(`Pasted image (${optimized.fileName})`);
+          } catch {
+            toast("Failed to paste image", "error");
+          }
+        }
+      };
+      domNode.addEventListener("paste", pasteListener as any, true);
+    }
+
     // Scroll sync: editor → preview
     editor.onDidScrollChange((e: any) => {
       if (!scrollSync || activeTab !== "split" || isScrollingRef.current === "preview") return;
@@ -660,12 +682,27 @@ export function MarkdownEditor() {
     reader.readAsText(file);
   }, [toast]);
 
-  // Direct editor drag & drop
-  const handleEditorDrop = useCallback((e: React.DragEvent) => {
+  // Direct editor drag & drop (Markdown files and Images)
+  const handleEditorDrop = useCallback(async (e: React.DragEvent) => {
     e.preventDefault();
     setIsDraggingOver(false);
     const file = e.dataTransfer.files[0];
     if (!file) return;
+
+    // 1. If dropped file is an image, convert to optimized data URL and insert
+    if (isImageFile(file)) {
+      try {
+        const optimized = await optimizeImageToDataUrl(file);
+        insertAtCursor(`\n![${optimized.fileName}](${optimized.dataUrl})\n`);
+        toast(`Inserted image (${optimized.fileName})`);
+        return;
+      } catch {
+        toast("Failed to insert image", "error");
+        return;
+      }
+    }
+
+    // 2. If dropped file is a text/markdown document
     if (file.size > 5000000) {
       toast("File size exceeds 5MB limit", "error");
       return;
@@ -678,7 +715,7 @@ export function MarkdownEditor() {
       toast(`Loaded ${file.name}`);
     };
     reader.readAsText(file);
-  }, [toast]);
+  }, [insertAtCursor, toast]);
 
   // Export Logic (HTML, PDF, Word)
   const handleExport = async (format: "html" | "pdf" | "word") => {
@@ -1699,6 +1736,7 @@ export function MarkdownEditor() {
                 )}>
                   <MarkdownPreview 
                     html={html} 
+                    rawMarkdown={activeMd}
                     ref={previewRef}
                     hideHeader={activeTab === "split"}
                     onScroll={handlePreviewScroll}
@@ -1711,7 +1749,7 @@ export function MarkdownEditor() {
 
             {/* StatBar Footer */}
             <div className="shrink-0">
-              <StatBar stats={stats} goal={wordGoal} onGoalChange={handleGoalChange} lastSaved={lastSavedTimestamp} />
+              <StatBar stats={stats} rawText={activeMd} goal={wordGoal} onGoalChange={handleGoalChange} lastSaved={lastSavedTimestamp} />
             </div>
           </div>
         </div>
@@ -1772,6 +1810,7 @@ export function MarkdownEditor() {
               <div className="flex-1 min-h-0 overflow-hidden bg-bg/30">
                 <MarkdownPreview 
                   html={html} 
+                  rawMarkdown={uploadMd}
                   ref={uploadPreviewRef}
                   theme={activeEditorTheme === "karuvi-dark" ? "dark" : "light"}
                   onCopyRaw={() => {

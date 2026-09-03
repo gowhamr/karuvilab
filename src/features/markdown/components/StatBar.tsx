@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { m, AnimatePresence } from "framer-motion";
-import { Target, Check, ChevronUp } from "lucide-react";
+import { Target, Check, ChevronUp, Clock } from "lucide-react";
+import { calculateReadability } from "../utils/readability";
 
 interface StatBarProps {
   stats: {
@@ -11,6 +12,7 @@ interface StatBarProps {
     chars: number;
     readMin: number;
   };
+  rawText?: string;
   goal?: number;
   onGoalChange?: (newGoal: number) => void;
   lastSaved?: number | null;
@@ -25,22 +27,31 @@ const PRESET_GOALS = [
   { label: "5,000 (Chapter)", value: 5000 },
 ];
 
-export function StatBar({ stats, goal = 500, onGoalChange, lastSaved }: StatBarProps) {
+export function StatBar({ stats, rawText = "", goal = 500, onGoalChange, lastSaved }: StatBarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMetricsOpen, setIsMetricsOpen] = useState(false);
   const [customInput, setCustomInput] = useState("");
   const popoverRef = useRef<HTMLDivElement>(null);
+  const metricsRef = useRef<HTMLDivElement>(null);
 
   const progress = Math.min(100, Math.round((stats.words / goal) * 100));
+  const metrics = useMemo(() => calculateReadability(rawText), [rawText]);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen && !isMetricsOpen) return;
     const handleClickOutside = (e: MouseEvent) => {
       if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
+      if (metricsRef.current && !metricsRef.current.contains(e.target as Node)) {
+        setIsMetricsOpen(false);
+      }
     };
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setIsOpen(false);
+      if (e.key === "Escape") {
+        setIsOpen(false);
+        setIsMetricsOpen(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("keydown", handleKeyDown);
@@ -48,7 +59,7 @@ export function StatBar({ stats, goal = 500, onGoalChange, lastSaved }: StatBarP
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen]);
+  }, [isOpen, isMetricsOpen]);
 
   const handleSelectGoal = (val: number) => {
     if (val > 0 && onGoalChange) {
@@ -77,9 +88,69 @@ export function StatBar({ stats, goal = 500, onGoalChange, lastSaved }: StatBarP
       <div className="flex items-center gap-1">
         Chars: <span className="text-text">{stats.chars.toLocaleString()}</span>
       </div>
-      <div className="flex items-center gap-1">
-        Reading Time: <span className="text-text">{stats.readMin} min</span>
+      
+      {/* Readability & Time Insights Popover */}
+      <div ref={metricsRef} className="relative">
+        <button
+          type="button"
+          onClick={() => setIsMetricsOpen(!isMetricsOpen)}
+          className="flex items-center gap-1 px-1.5 py-0.5 rounded-lg hover:bg-surface border border-transparent hover:border-border text-text-4 hover:text-blue transition-all cursor-pointer"
+          title="Click to view Speaking Time & Readability Grade"
+          aria-label="View Readability and Timing Insights"
+          aria-expanded={isMetricsOpen}
+        >
+          <Clock className="w-3 h-3 text-blue shrink-0" />
+          <span>Read: <strong className="text-text">{stats.readMin}m</strong></span>
+          <span className="text-[10px] text-text-4 lowercase font-mono">/ speak {metrics.speakingTimeMin}m</span>
+          <ChevronUp className={`w-2.5 h-2.5 transition-transform duration-150 ${isMetricsOpen ? 'rotate-180' : ''}`} />
+        </button>
+
+        <AnimatePresence>
+          {isMetricsOpen && (
+            <m.div
+              initial={{ opacity: 0, y: 6, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 6, scale: 0.96 }}
+              transition={{ duration: 0.12 }}
+              className="absolute bottom-full left-0 mb-2 w-64 bg-surface border border-border rounded-2xl shadow-xl p-3 z-dropdown flex flex-col gap-2.5 normal-case"
+            >
+              <div className="flex items-center justify-between text-xs font-bold border-b border-border pb-1.5 uppercase tracking-wider text-text-4 text-[10px]">
+                <span>Document Insights</span>
+                <span className="text-blue font-mono">{metrics.words.toLocaleString()} words</span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="p-2 bg-bg/70 rounded-xl border border-border flex flex-col gap-0.5">
+                  <span className="text-[10px] text-text-4 uppercase font-bold tracking-wider">Reading Time</span>
+                  <span className="text-sm font-bold text-text font-mono">{metrics.readingTimeMin} min</span>
+                  <span className="text-[10px] text-text-4">~200 words/min</span>
+                </div>
+                <div className="p-2 bg-bg/70 rounded-xl border border-border flex flex-col gap-0.5">
+                  <span className="text-[10px] text-text-4 uppercase font-bold tracking-wider">Speaking Time</span>
+                  <span className="text-sm font-bold text-blue font-mono">{metrics.speakingTimeMin} min</span>
+                  <span className="text-[10px] text-text-4">~130 words/min</span>
+                </div>
+              </div>
+
+              {/* Readability Score */}
+              <div className="p-2 bg-bg/70 rounded-xl border border-border flex flex-col gap-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-text-4 uppercase font-bold tracking-wider">Readability Ease</span>
+                  <span className="text-xs font-bold font-mono text-text">{metrics.fleschScore}/100</span>
+                </div>
+                <div className="text-xs font-semibold text-blue">
+                  {metrics.fleschGrade}
+                </div>
+                <div className="text-[10px] text-text-4 flex items-center justify-between pt-1 border-t border-border/50">
+                  <span>Grade Level: {metrics.gradeLevel}</span>
+                  <span>Sentences: {metrics.sentences}</span>
+                </div>
+              </div>
+            </m.div>
+          )}
+        </AnimatePresence>
       </div>
+
       {lastSaved && (
         <div className="hidden sm:flex items-center gap-1 text-tiny font-normal text-text-4 lowercase tracking-normal">
           <span>•</span>

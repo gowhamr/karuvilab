@@ -1,14 +1,16 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import { createRoot, Root } from "react-dom/client";
 import { CopyButton } from "@/components/ui/CopyButton";
-import { Copy, Loader2 } from "lucide-react";
+import { Copy, Loader2, Tag, Calendar, User, ChevronDown, ChevronRight } from "lucide-react";
 import { sanitizeHtml } from "@/src/lib/security";
+import { parseFrontmatter } from "../utils/frontmatter-parser";
 import { MermaidDiagramBlock } from "../mermaid/components/MermaidDiagramBlock";
 import { MermaidPreflightAnalyzer } from "../mermaid/MermaidPreflight";
 import { MermaidBlock } from "../mermaid/types";
 
 interface MarkdownPreviewProps {
   html: string;
+  rawMarkdown?: string;
   onCopyRaw: () => void;
   hideHeader?: boolean;
   onScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
@@ -17,8 +19,13 @@ interface MarkdownPreviewProps {
 }
 
 export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewProps>(
-  ({ html, onCopyRaw, hideHeader = false, onScroll, className, theme: propTheme }, ref) => {
+  ({ html, rawMarkdown, onCopyRaw, hideHeader = false, onScroll, className, theme: propTheme }, ref) => {
     const containerRef = useRef<HTMLDivElement>(null);
+    const [showRawFrontmatter, setShowRawFrontmatter] = useState(false);
+
+    const frontmatterData = useMemo(() => {
+      return rawMarkdown ? parseFrontmatter(rawMarkdown) : null;
+    }, [rawMarkdown]);
 
     useEffect(() => {
       if (!containerRef.current) return;
@@ -132,6 +139,67 @@ export const MarkdownPreview = React.forwardRef<HTMLDivElement, MarkdownPreviewP
         ref={ref}
         onScroll={onScroll}
       >
+        {/* Frontmatter Metadata Card */}
+        {frontmatterData?.hasFrontmatter && (
+          <div className="mb-6 p-3.5 sm:p-4 bg-surface/90 border border-border rounded-2xl shadow-xs space-y-3 not-prose">
+            <div className="flex items-center justify-between border-b border-border pb-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="px-2 py-0.5 rounded-md bg-blue/15 text-blue text-[10px] font-mono font-bold uppercase tracking-wider shrink-0">
+                  {frontmatterData.type?.toUpperCase()} Metadata
+                </span>
+                {frontmatterData.attributes.title && (
+                  <h3 className="text-xs sm:text-sm font-bold text-text truncate">
+                    {String(frontmatterData.attributes.title)}
+                  </h3>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowRawFrontmatter(!showRawFrontmatter)}
+                className="text-[11px] text-text-4 hover:text-blue flex items-center gap-1 font-mono transition-colors cursor-pointer shrink-0 ml-2"
+                title="Toggle raw frontmatter view"
+              >
+                <span>{showRawFrontmatter ? "Hide" : "Raw"}</span>
+                {showRawFrontmatter ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
+              </button>
+            </div>
+
+            {/* Attributes Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              {Object.entries(frontmatterData.attributes).map(([key, val]) => {
+                if (key === "title" || (Array.isArray(val) && val.length === 0)) return null;
+                if (key === "tags" || key === "categories") {
+                  const tags = Array.isArray(val) ? val : [String(val)];
+                  return (
+                    <div key={key} className="sm:col-span-2 flex flex-wrap items-center gap-1.5 pt-0.5">
+                      <span className="text-[10px] text-text-4 font-mono uppercase font-bold mr-1">{key}:</span>
+                      {tags.map((t, i) => (
+                        <span key={i} className="px-2 py-0.5 rounded-lg bg-border text-text-3 text-[11px] font-medium font-mono">
+                          #{t}
+                        </span>
+                      ))}
+                    </div>
+                  );
+                }
+                return (
+                  <div key={key} className="flex items-center gap-1.5 min-w-0">
+                    <span className="text-[10px] text-text-4 font-mono uppercase font-bold shrink-0">{key}:</span>
+                    <span className="text-text font-mono truncate text-[11px]">
+                      {typeof val === "boolean" ? (val ? "true" : "false") : String(val)}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {showRawFrontmatter && (
+              <pre className="p-2.5 bg-bg border border-border rounded-xl text-[11px] font-mono text-text-3 overflow-x-auto custom-scrollbar">
+                <code>{frontmatterData.rawFrontmatter}</code>
+              </pre>
+            )}
+          </div>
+        )}
+
         <div 
           key={`md-preview-${propTheme || 'auto'}`}
           ref={containerRef}
