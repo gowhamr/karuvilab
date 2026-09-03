@@ -563,7 +563,7 @@ export function MarkdownEditor() {
         setHoveredSpellMarker(null);
       }
     });
-  }, [insertAtCursor, handleDownloadMd, scrollSync, activeTab]);
+  }, [insertAtCursor, handleDownloadMd, scrollSync, activeTab, toast]);
 
   // Find & Replace logic — uses Monaco model API
   const handleFind = useCallback((query: string, focusEditor = false) => {
