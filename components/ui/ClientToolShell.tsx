@@ -16,7 +16,6 @@ import { FocusModeWrapper } from './FocusModeWrapper';
 import { ProgressProvider } from '@/src/contexts/ProgressContext';
 
 import { useWorkflowIntegration } from '@/src/lib/workflow-hook';
-import { m } from 'framer-motion';
 
 import { useIntelligenceStore } from '@/src/store/useIntelligenceStore';
 
@@ -236,9 +235,7 @@ export function ClientToolShell({ title, description, category, children, toolId
         : "max-w-7xl px-4 md:px-8";
 
   return (
-    <m.div 
-      initial={false}
-      animate={{ opacity: 1, y: 0 }}
+    <div 
       className={cn(
         containerWidthClass,
         "mx-auto space-y-8 sm:space-y-10 lg:space-y-12",
@@ -527,6 +524,6 @@ export function ClientToolShell({ title, description, category, children, toolId
           )
         )}
       </div>
-    </m.div>
+    </div>
   );
 }

@@ -727,22 +727,24 @@ export function MarkdownEditor() {
       return;
     }
 
-    // Ensure all active Mermaid diagram rendering, fonts, and images are ready before exporting
+    setExportingFormat(format);
     try {
-      const { waitForDocumentReady } = await import("../mermaid/utils/export-barrier");
-      const targetElement = (mode === "editor" ? previewRef : uploadPreviewRef).current;
-      const readiness = await waitForDocumentReady(targetElement);
-      if (readiness.revisionChanged) {
-        toast("Document was modified during export preparation. Please try again.", "error");
-        return;
+      // Ensure all active Mermaid diagram rendering, fonts, and images are ready before exporting
+      try {
+        const { waitForDocumentReady } = await import("../mermaid/utils/export-barrier");
+        const targetElement = (mode === "editor" ? previewRef : uploadPreviewRef).current;
+        const readiness = await waitForDocumentReady(targetElement);
+        if (readiness.revisionChanged) {
+          toast("Document was modified during export preparation. Please try again.", "error");
+          return;
+        }
+      } catch {
+        // Non-blocking fallback
       }
-    } catch {
-      // Non-blocking fallback
-    }
 
-    const name = fileName ? fileName.replace(/\.md$/i, "") : "document";
+      const name = fileName ? fileName.replace(/\.md$/i, "") : "document";
 
-    if (format === "html") {
+      if (format === "html") {
       const fullHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1091,7 +1093,6 @@ export function MarkdownEditor() {
         if (tempContainer && tempContainer.parentNode) {
           tempContainer.parentNode.removeChild(tempContainer);
         }
-        setExportingFormat(null);
       }
     } else if (format === "word") {
       try {
@@ -1110,7 +1111,10 @@ export function MarkdownEditor() {
         toast("Word export failed", "error");
       }
     }
-  };
+  } finally {
+    setExportingFormat(null);
+  }
+};
 
   return (
     <div className={cn(
