@@ -104,10 +104,11 @@ export default function ToolClient() {
       setExtractedText(pipelineResult.extractedText);
       setIsCachedModel(true);
       toast('Successfully enhanced document with AI!', 'success');
-    } catch (err: any) {
-      if (err.name !== 'AbortError') {
-        console.error('Document AI failed:', err);
-        setError(err.message || 'Document AI failed');
+    } catch (err: unknown) {
+      const isAbort = err instanceof Error && err.name === 'AbortError';
+      if (!isAbort) {
+        const message = err instanceof Error ? err.message : 'Document AI failed';
+        setError(message);
       }
     } finally {
       setIsProcessing(false);
@@ -119,6 +120,9 @@ export default function ToolClient() {
     if (file && originalUrl && !resultUrl && !isProcessing && !error) {
       processDocumentAi();
     }
+    return () => {
+      abortControllerRef.current?.abort();
+    };
   }, [file, originalUrl, resultUrl, isProcessing, error, processDocumentAi]);
 
   const handleReset = () => {
@@ -160,7 +164,7 @@ export default function ToolClient() {
     <div className="space-y-4">
       {/* Error Banner */}
       {error && (
-        <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-red-500">
+        <div role="alert" className="p-4 bg-red-500/10 border border-red-500/30 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-red-500">
           <div className="flex items-center gap-2">
             <AlertCircle className="w-5 h-5 shrink-0" />
             <span className="text-xs font-semibold">{error}</span>
@@ -418,7 +422,7 @@ export default function ToolClient() {
   );
 }
 
-function BookOpen(props: any) {
+function BookOpen(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}

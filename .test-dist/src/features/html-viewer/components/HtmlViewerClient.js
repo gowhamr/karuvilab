@@ -2,6 +2,8 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect, useRef, useCallback, useId } from "react";
 import dynamic from "next/dynamic";
+import { configureMonacoLoader } from "@/src/core/monaco/MonacoLoader";
+configureMonacoLoader();
 const Editor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
 import LZString from "lz-string";
 import { Download, Share2, Plus, Laptop, Tablet, Smartphone, Terminal, Trash2, Copy, Check, Upload, ChevronDown, ChevronUp, Maximize2, Minimize2 } from "lucide-react";

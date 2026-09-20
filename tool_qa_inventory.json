@@ -1,0 +1,3674 @@
+[
+  {
+    "category": "break-time-tools",
+    "toolId": "color-match",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "break-time-tools",
+    "toolId": "game-2048",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "break-time-tools",
+    "toolId": "memory-match",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "break-time-tools",
+    "toolId": "minesweeper",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "break-time-tools",
+    "toolId": "reaction-time",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "break-time-tools",
+    "toolId": "snake-game",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "break-time-tools",
+    "toolId": "sudoku",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "break-time-tools",
+    "toolId": "tic-tac-toe",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "break-time-tools",
+    "toolId": "word-guess",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "age-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 8,
+      "inputs": 1,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "bmi-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 2,
+      "inputs": 7,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "cagr-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "calculator",
+    "hasPage": true,
+    "hasWrapper": false,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "compound-interest",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "currency-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 6,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "data-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "date-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 8,
+      "inputs": 1,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "discount-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 6,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "emi-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "fd-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 5,
+      "inputs": 2,
+      "selects": 2,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "financial-freedom-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 6,
+      "inputs": 3,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "gratuity-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 2,
+      "inputs": 3,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "gst-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 4,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "hra-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 4,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "income-tax",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 2,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "inflation-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 5,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "interest-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "invoice-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 2,
+      "inputs": 1,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "lumpsum-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "mutual-fund-returns",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "nps-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 6,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "numeral-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "percentage-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 10,
+      "inputs": 8,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "ppf-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "rd-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 5,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "retirement-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "safe-to-spend",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 1,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "salary-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 5,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "sip-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 2,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "smart-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "stock-average-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 2,
+      "inputs": 2,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "swp-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "tds-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 2,
+      "inputs": 2,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "time-calculator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 10,
+      "inputs": 7,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "unit-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 1,
+      "selects": 2,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "utc-ist-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 16,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 1
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "work-hours",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 5,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "calculators",
+    "toolId": "world-clock",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 8,
+      "inputs": 0,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "banking-tools",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "base64",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 2,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "box-shadow-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 10,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "code-minifier",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "color-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 2,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "command-cheat-sheet",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "contrast-checker",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 4,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "core-banking-parser",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "crontab-editor",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 2,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "csv-to-json",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 4,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "diff-checker",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "emv-tlv-tree",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "fake-data-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "format",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "glassmorphism-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 8,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "gradient-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 6,
+      "inputs": 3,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "hash-map-visualizer",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "html-viewer",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "image-seo",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 4,
+      "inputs": 3,
+      "selects": 1,
+      "textareas": 2
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "json-csv",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "json-formatter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "json-to-ts",
+    "hasPage": true,
+    "hasWrapper": false,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "json-to-xml",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 0,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "llms-txt-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 4,
+      "selects": 0,
+      "textareas": 2
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "log-analyzer",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 1,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "lorem-ipsum",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 6,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "luhn-validator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "meta-tags",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "nanoid-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 2,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "og-preview",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "qa-workbench",
+    "hasPage": true,
+    "hasWrapper": false,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "regex",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "robots-txt",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 3,
+      "selects": 0,
+      "textareas": 2
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "seo-title",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "seo-tools",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "sitemap-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 6,
+      "inputs": 1,
+      "selects": 4,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "slug-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "sql-formatter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "swift-mt-mx",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "track-2-parser",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "unix-timestamp",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 27,
+      "inputs": 3,
+      "selects": 4,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "url-encoder",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 1
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "uuid-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 4,
+      "inputs": 1,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "xml-formatter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 2
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "yaml-json-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "developer-tools",
+    "toolId": "yaml-validator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "file-tools",
+    "toolId": "file-viewer-diff",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "advanced-rotate",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 10,
+      "inputs": 1,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "aspect-ratio-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 7,
+      "inputs": 1,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "avif-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 2,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "batch-image-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "bg-remover",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 1,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "bmp-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "border-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 6,
+      "inputs": 2,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "bulk-resizer",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 1,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "canvas-resize",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 13,
+      "inputs": 2,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "color-palette-extractor",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "compress",
+    "hasPage": true,
+    "hasWrapper": false,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "face-blur",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 8,
+      "inputs": 2,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "gif-extractor",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 14,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "heic-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 7,
+      "inputs": 1,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "ico-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 5,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "image-base64",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 1,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "image-compressor",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "image-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "image-crop",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 4,
+      "inputs": 4,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "image-flip",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 4,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "image-mirror",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "image-padding",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 8,
+      "inputs": 9,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "image-resizer",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "image-watermark",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "phone-mockup-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 6,
+      "inputs": 1,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "super-resolution",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 7,
+      "inputs": 1,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "svg-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 6,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "tiff-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 1,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "image-tools",
+    "toolId": "webp-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 2,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "media-tools",
+    "toolId": "audio-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "media-tools",
+    "toolId": "gif-creator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "media-tools",
+    "toolId": "video-metadata-viewer",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "media-tools",
+    "toolId": "video-trim",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "ai-pdf-cleanup",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 6,
+      "inputs": 4,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "compress-pdf",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "crop-pdf",
+    "hasPage": true,
+    "hasWrapper": false,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "delete-blank-pages",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "duplicate-pages",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "edit-metadata",
+    "hasPage": true,
+    "hasWrapper": false,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "even-pages-extractor",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "extract-images",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "extract-pages",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "image-to-pdf",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "lock-unlock",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "margin-adjustment",
+    "hasPage": true,
+    "hasWrapper": false,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "merge-pdf",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "move-pages",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "odd-pages-extractor",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "organize-pdf",
+    "hasPage": true,
+    "hasWrapper": false,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "page-numbering",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "page-size-converter",
+    "hasPage": true,
+    "hasWrapper": false,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "pdf-attachments",
+    "hasPage": true,
+    "hasWrapper": false,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "pdf-bookmarks",
+    "hasPage": true,
+    "hasWrapper": false,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "pdf-compare",
+    "hasPage": true,
+    "hasWrapper": false,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "pdf-editor",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "pdf-preview",
+    "hasPage": true,
+    "hasWrapper": false,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "pdf-to-image",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "pdf-to-word",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "remove-metadata",
+    "hasPage": true,
+    "hasWrapper": false,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "remove-pages",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "reorder-pages",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "reverse-pages",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "rotate-pdf",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "rotate-selected-pages",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "split-pdf",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "watermark-pdf",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "pdf-tools",
+    "toolId": "word-to-pdf",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "productivity",
+    "toolId": "calendar",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "productivity",
+    "toolId": "chart-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "productivity",
+    "toolId": "countdown-timer",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 7,
+      "inputs": 7,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "productivity",
+    "toolId": "notes",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "productivity",
+    "toolId": "pomodoro-timer",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "productivity",
+    "toolId": "stopwatch",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 31,
+      "inputs": 4,
+      "selects": 3,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "productivity",
+    "toolId": "text-case-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "productivity",
+    "toolId": "text-sorter-deduper",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 8,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "productivity",
+    "toolId": "timezone-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 7,
+      "inputs": 2,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "productivity",
+    "toolId": "typing-speed-test",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 2,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 1
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "productivity",
+    "toolId": "wifi-qr-code",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "productivity",
+    "toolId": "word-counter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "aes-encrypt-decrypt",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 4,
+      "inputs": 0,
+      "selects": 3,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "base64url-converter",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "card-masker",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 2,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "cipher-tools",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 4,
+      "inputs": 3,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "csp-builder",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 7,
+      "inputs": 3,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "csr-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 0,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "directory-manifest",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 2,
+      "inputs": 1,
+      "selects": 2,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "ecdh-key-exchange",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 4,
+      "inputs": 0,
+      "selects": 1,
+      "textareas": 6
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "ecdsa-sign",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 0,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "hash-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 5,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "hkdf-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 0,
+      "selects": 2,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "hmac-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 2,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "html-entities",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "iban-validator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "iso8583-bitmap-decoder",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 7,
+      "inputs": 3,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "iso8583-message-parser",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 2,
+      "inputs": 1,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "jwt-decoder",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 1,
+      "selects": 0,
+      "textareas": 1
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "metadata-viewer",
+    "hasPage": true,
+    "hasWrapper": false,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "oauth-token-decoder",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "password-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "pbkdf2-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 0,
+      "selects": 2,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "pem-viewer",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 2,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "private-key-checker",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "public-key-inspector",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "rsa-encrypt-decrypt",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "rsa-key-generator",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 0,
+      "selects": 2,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "rsa-sign-verify",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 0,
+      "selects": 1,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "saml-decoder",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 1
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "tlv-parser",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "security-tools",
+    "toolId": "x509-viewer",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "text",
+    "toolId": "grammar-checker",
+    "hasPage": true,
+    "hasWrapper": false,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "utilities",
+    "toolId": "barcode-scanner",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 2,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "utilities",
+    "toolId": "grammar-checker",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "utilities",
+    "toolId": "internet-speed-test",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 2,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "utilities",
+    "toolId": "markdown",
+    "hasPage": true,
+    "hasWrapper": false,
+    "hasClient": false,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "utilities",
+    "toolId": "mic-camera-tester",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 3,
+      "inputs": 0,
+      "selects": 2,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "utilities",
+    "toolId": "qrcode",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 2,
+      "inputs": 12,
+      "selects": 1,
+      "textareas": 1
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "utilities",
+    "toolId": "split-copy",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "utilities",
+    "toolId": "task-reminder",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 5,
+      "inputs": 1,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "utilities",
+    "toolId": "text-utility",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 2,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "utilities",
+    "toolId": "url-cleaner",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 0,
+      "inputs": 0,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  },
+  {
+    "category": "utilities",
+    "toolId": "validate",
+    "hasPage": true,
+    "hasWrapper": true,
+    "hasClient": true,
+    "interactiveStats": {
+      "buttons": 1,
+      "inputs": 1,
+      "selects": 0,
+      "textareas": 0
+    },
+    "deadElementFlags": {
+      "emptyOnClick": 0,
+      "dummyHref": 0
+    }
+  }
+]

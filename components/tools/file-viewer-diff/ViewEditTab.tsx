@@ -1,14 +1,13 @@
 "use client";
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useFileViewerStore } from '@/src/features/file-viewer-diff/store';
 import { readFileAsText, detectLanguage, formatFileSize, isBinaryFile, EXTENSION_TO_LANG } from '@/src/lib/file-utils';
 import { DropZone } from '@/components/ui/DropZone';
 import { SyntaxEditor } from './SyntaxEditor';
-import { Download, FileText, Trash2, Copy, Sparkles, Hash } from 'lucide-react';
+import { Download, FileText, Trash2, Copy, Sparkles, Clipboard, FileCode } from 'lucide-react';
 
 const LANG_OPTIONS = Array.from(new Set(Object.values(EXTENSION_TO_LANG))).sort();
-import { MetricCard } from '@/components/ui/MetricCard';
 import { useToast } from '@/components/ui/Toast';
 import { useObjectUrlManager } from '@/src/lib/hooks';
 import { SliderField } from '@/components/ui/SliderField';
@@ -63,6 +62,59 @@ export function ViewEditTab() {
     }
   }, [setFileA, toast]);
 
+  const handlePasteFromClipboard = useCallback(async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (!text || !text.trim()) {
+        toast("Clipboard is empty", "info");
+        return;
+      }
+      setFileA({
+        content: text,
+        name: 'pasted.txt',
+        language: detectLanguage('pasted.txt'),
+        size: new Blob([text]).size,
+      });
+      toast("Pasted from clipboard", "success");
+    } catch {
+      setFileA({
+        content: '',
+        name: 'untitled.txt',
+        language: 'plaintext',
+        size: 0,
+      });
+      toast("Ready to paste into editor", "info");
+    }
+  }, [setFileA, toast]);
+
+  const handleNewBlankFile = useCallback(() => {
+    setFileA({
+      content: '',
+      name: 'untitled.txt',
+      language: 'plaintext',
+      size: 0,
+    });
+  }, [setFileA]);
+
+  useEffect(() => {
+    if (fileA) return;
+    const onPaste = (e: ClipboardEvent) => {
+      const text = e.clipboardData?.getData('text');
+      if (text) {
+        e.preventDefault();
+        setFileA({
+          content: text,
+          name: 'pasted.txt',
+          language: detectLanguage('pasted.txt'),
+          size: new Blob([text]).size,
+        });
+        toast("Pasted code from clipboard", "success");
+      }
+    };
+    window.addEventListener('paste', onPaste);
+    return () => window.removeEventListener('paste', onPaste);
+  }, [fileA, setFileA, toast]);
+
   const handleDownload = () => {
     if (!fileA) return;
     const blob = new Blob([fileA.content], { type: 'text/plain' });
@@ -83,13 +135,33 @@ export function ViewEditTab() {
   return (
     <div className="space-y-6">
       {!fileA ? (
-        <DropZone
-          onFilesSelected={handleFileSelect}
-          accept="*"
-          title="Drop any text or code file here"
-          description="Supports JSON, JS, TS, HTML, CSS, MD, and more. Max 10MB."
-          className="aspect-video"
-        />
+        <div className="space-y-4">
+          <DropZone
+            onFilesSelected={handleFileSelect}
+            accept="*"
+            title="Drop any text or code file here"
+            description="Supports JSON, JS, TS, HTML, CSS, MD, and more. Max 10MB."
+            className="aspect-video"
+          />
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <button
+              onClick={handlePasteFromClipboard}
+              className="w-full sm:w-auto px-6 py-3 bg-blue text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-blue/90 transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer active:scale-95"
+            >
+              <Clipboard className="w-4 h-4" />
+              <span>Paste from Clipboard</span>
+            </button>
+
+            <button
+              onClick={handleNewBlankFile}
+              className="w-full sm:w-auto px-6 py-3 bg-surface border border-border hover:border-blue/50 text-text rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+            >
+              <FileCode className="w-4 h-4 text-blue" />
+              <span>Start Blank Editor</span>
+            </button>
+          </div>
+        </div>
       ) : (
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
@@ -109,31 +181,43 @@ export function ViewEditTab() {
               {['json', 'html', 'xml', 'css', 'sql', 'markdown'].includes(fileA.language.toLowerCase()) && (
                 <button
                   onClick={handleBeautify}
-                  className="px-4 py-2.5 bg-blue/10 text-blue border border-blue/20 rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:bg-blue hover:text-white transition-all flex items-center gap-2"
+                  className="px-4 py-2.5 bg-blue/10 text-blue border border-blue/20 rounded-xl text-tiny font-bold uppercase tracking-widest-sm hover:bg-blue hover:text-white transition-all flex items-center gap-2 cursor-pointer"
                   title="Beautify / Format"
+                  aria-label="Beautify Content"
                 >
                   <Sparkles className="w-4 h-4" />
                   <span>Beautify</span>
                 </button>
               )}
               <button
+                onClick={handlePasteFromClipboard}
+                className="p-2.5 bg-surface border border-border rounded-xl text-text-3 hover:text-blue transition-all cursor-pointer"
+                title="Paste from Clipboard"
+                aria-label="Paste from Clipboard"
+              >
+                <Clipboard className="w-4 h-4" />
+              </button>
+              <button
                 onClick={handleCopy}
-                className="p-2.5 bg-surface border border-border rounded-xl text-text-3 hover:text-blue transition-all"
+                className="p-2.5 bg-surface border border-border rounded-xl text-text-3 hover:text-blue transition-all cursor-pointer"
                 title="Copy Content"
+                aria-label="Copy Content"
               >
                 <Copy className="w-4 h-4" />
               </button>
               <button
                 onClick={handleDownload}
-                className="p-2.5 bg-blue text-white rounded-xl hover:scale-105 transition-all shadow-md shadow-blue/10"
+                className="p-2.5 bg-blue text-white rounded-xl hover:scale-105 transition-all shadow-md shadow-blue/10 cursor-pointer"
                 title="Download File"
+                aria-label="Download File"
               >
                 <Download className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setFileA(null)}
-                className="p-2.5 bg-surface border border-border rounded-xl text-red-500 hover:bg-red-500/5 transition-all"
+                className="p-2.5 bg-surface border border-border rounded-xl text-red-500 hover:bg-red-500/5 transition-all cursor-pointer"
                 title="Clear File"
+                aria-label="Clear File"
               >
                 <Trash2 className="w-4 h-4" />
               </button>

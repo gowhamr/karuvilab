@@ -74,23 +74,7 @@ export function SyntaxEditor({
     setTimeout(() => setCopiedLine(null), 2000);
   }, []);
 
-  if (!value && !readOnly) {
-    return (
-      <m.div 
-        initial={{ opacity: 0, scale: 0.98 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="flex flex-col items-center justify-center h-full min-h-96 bg-surface border border-dashed border-border rounded-4xl text-center p-12"
-      >
-        <div className="w-16 h-16 bg-bg rounded-2xl flex items-center justify-center mb-6 shadow-sm">
-          <Copy className="w-8 h-8 text-text-4" />
-        </div>
-        <h3 className="text-xl font-black text-text mb-2 tracking-tight">Drop a file to begin</h3>
-        <p className="text-sm text-text-4 max-w-60 leading-relaxed">
-          Paste your code or drag a file here to view with syntax highlighting.
-        </p>
-      </m.div>
-    );
-  }
+  // Empty value is handled directly by textarea with placeholder
 
   return (
     <div className="flex flex-col h-full min-h-96 space-y-3 group/editor">
@@ -198,8 +182,9 @@ export function SyntaxEditor({
             onScroll={handleScroll}
             readOnly={readOnly}
             spellCheck={false}
+            placeholder={readOnly ? "" : "Type or paste your code here..."}
             className={cn(
-              "absolute inset-0 m-0 py-4 px-6 bg-transparent outline-none resize-none leading-7 w-full h-full font-mono overflow-auto custom-scrollbar-thin transition-colors",
+              "absolute inset-0 m-0 py-4 px-6 bg-transparent outline-none resize-none leading-7 w-full h-full font-mono overflow-auto custom-scrollbar-thin transition-colors placeholder:text-text-4/50",
               isTooLarge ? "text-text" : "text-transparent caret-blue",
               wordWrap ? "whitespace-pre-wrap break-all" : "whitespace-pre"
             )}

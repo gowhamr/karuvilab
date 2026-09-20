@@ -20,6 +20,7 @@ All entries reviewed and approved via PR.
 | E-010 | P-04/PERF-01 Main-thread Ops | pdfjs-dist requires HTMLCanvasElement | Virtualization, DPR capping, destroy-on-leave | Permanent | ACTIVE |
 | E-011 | GEMINI §13 / CSP style-src | 'unsafe-inline' in style-src  | Required by Framer Motion — inline style injection cannot be CSP-hashed | Permanent | ACTIVE |
 | E-012 | P-14 console.log in production | console.log/error in public/sw.js | SW context — structured logger unavailable; prefixed with descriptive labels | Permanent | ACTIVE |
+| E-013 | CI Build Environment | `next build` OOMs at default 2 GB Node.js heap (215 tools + Monaco/PDF.js assets) | `NODE_OPTIONS=--max-old-space-size=4096` required in CI build step | Permanent | ACTIVE |
 
 ---
 

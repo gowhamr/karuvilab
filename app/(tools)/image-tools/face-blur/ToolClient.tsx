@@ -101,15 +101,12 @@ export default function ToolClient() {
       });
       imageRef.current = img;
 
-      setProgress({ percent: 30, stage: 'Preprocessing Image Tensor' });
-
-      // Preprocess image to tensor
-      const { tensorData, originalWidth, originalHeight } = await preprocessDetectionImage(img, 640, 640);
-
-      setProgress({ percent: 50, stage: 'Running YOLOv8 Face Detection' });
+      setProgress({ percent: 30, stage: 'Preparing Image for Detection' });
 
       // Create ImageBitmap for zero-copy transfer
       const imageBitmap = await createImageBitmap(img);
+
+      setProgress({ percent: 50, stage: 'Running YOLOv8 Face Detection' });
 
       // Load model via KaruviLab AI SDK
       const { ai } = await import('@/src/ai/sdk');
@@ -147,10 +144,11 @@ export default function ToolClient() {
       setResultUrl(blurredUrl);
       setIsCachedModel(true);
       toast(`Found and blurred ${boxes.length} face(s)!`, 'success');
-    } catch (err: any) {
-      if (err.name !== 'AbortError') {
-        console.error('Face blur failed:', err);
-        setError(err.message || 'Face blur failed');
+    } catch (err: unknown) {
+      const isAbort = err instanceof Error && err.name === 'AbortError';
+      if (!isAbort) {
+        const message = err instanceof Error ? err.message : 'Face blur failed';
+        setError(message);
       }
     } finally {
       setIsProcessing(false);
@@ -162,6 +160,9 @@ export default function ToolClient() {
     if (file && originalUrl && !resultUrl && !isProcessing && !error) {
       processFaceBlur();
     }
+    return () => {
+      abortControllerRef.current?.abort();
+    };
   }, [file, originalUrl, resultUrl, isProcessing, error, processFaceBlur]);
 
   const reRenderFaceBlur = useCallback(async () => {
@@ -311,7 +312,7 @@ export default function ToolClient() {
           file ? (
             <div className="space-y-6">
               {error && (
-                <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-red-500">
+                <div role="alert" className="p-4 bg-red-500/10 border border-red-500/30 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-red-500">
                   <div className="flex items-center gap-2">
                     <AlertCircle className="w-5 h-5 shrink-0" />
                     <span className="text-xs font-semibold">{error}</span>

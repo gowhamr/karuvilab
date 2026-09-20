@@ -135,7 +135,7 @@ export function LapPaceChart({ laps, precision = 'centiseconds', className }: La
             const color = isBest ? '#10b981' : isWorst ? '#ef4444' : '#3b82f6';
 
             return (
-              <g key={p.lap.id} className="cursor-pointer group">
+              <g key={p.lap.id}>
                 <circle
                   cx={p.x}
                   cy={p.y}

@@ -81,10 +81,11 @@ const StockAverageCalculatorClient = memo(function StockAverageCalculatorClient(
           <div className="col-span-1 flex justify-end">
             <button
               onClick={() => removeOrder(order.id)}
-              className="p-2 text-text-muted hover:text-error hover:bg-error/10 rounded-lg transition-colors"
-              title="Remove"
+              className="p-2 min-w-10 min-h-10 flex items-center justify-center text-text-muted hover:text-error hover:bg-error/10 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-error/20 outline-none"
+              title={`Remove Order ${idx + 1}`}
+              aria-label={`Remove buy order ${idx + 1}`}
             >
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className="w-4 h-4" aria-hidden="true" />
             </button>
           </div>
         </div>

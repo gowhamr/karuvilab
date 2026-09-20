@@ -329,7 +329,7 @@ export default function GrammarCheckerClient() {
                 <select
                   value={tone}
                   onChange={(e) => setTone(e.target.value as ToneSetting)}
-                  className="bg-transparent border-none text-xs font-bold text-text outline-none cursor-pointer pr-1"
+                  className="bg-transparent border-none text-xs font-bold text-text outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:rounded-md cursor-pointer pr-1"
                   aria-label="Writing Tone"
                 >
                   <option value="standard" className="bg-surface text-text">Standard</option>
@@ -585,11 +585,12 @@ export default function GrammarCheckerClient() {
                 const isSelected = selectedErrorId === err.id;
 
                 return (
-                  <div 
+                  <button 
+                    type="button"
                     key={err.id || i}
                     onClick={() => setSelectedErrorId(err.id)}
                     className={cn(
-                      "p-4 bg-surface border rounded-2xl transition-all shadow-xs space-y-3",
+                      "w-full text-left p-4 bg-surface border rounded-2xl transition-all shadow-xs space-y-3 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue focus-visible:outline-none",
                       isSelected ? "border-blue ring-2 ring-blue/20 bg-blue/[0.02]" : "border-border hover:border-blue/40"
                     )}
                   >
@@ -650,7 +651,7 @@ export default function GrammarCheckerClient() {
                         </button>
                       )}
                     </div>
-                  </div>
+                  </button>
                 );
               })
             )}

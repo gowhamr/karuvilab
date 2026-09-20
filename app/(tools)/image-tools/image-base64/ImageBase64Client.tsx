@@ -58,11 +58,12 @@ export default function ImageBase64Client() {
   };
 
   const encodeInput = (
-    <div
-      className="bg-surface border-2 border-dashed border-border rounded-2xl p-10 text-center cursor-pointer hover:border-blue transition-colors flex flex-col items-center justify-center min-h-[200px]"
+    <label
+      className="bg-surface border-2 border-dashed border-border rounded-2xl p-10 text-center cursor-pointer hover:border-blue transition-colors flex flex-col items-center justify-center min-h-[200px] relative group"
       onDragOver={e => e.preventDefault()}
       onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) handleFile(f); }}
     >
+      <input type="file" accept="image/*" className="sr-only" onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
       {previewUrl ? (
         <img src={previewUrl} alt="Preview" className="mx-auto max-h-48 rounded-xl object-contain" />
       ) : (
@@ -71,11 +72,10 @@ export default function ImageBase64Client() {
           <p className="font-semibold text-text-2">Drop image here</p>
         </>
       )}
-      <label className="block mt-3 cursor-pointer text-sm font-medium text-blue hover:underline">
+      <span className="block mt-3 text-sm font-medium text-blue group-hover:underline">
         Select file
-        <input type="file" accept="image/*" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
-      </label>
-    </div>
+      </span>
+    </label>
   );
 
   const encodeOutput = dataUri ? (

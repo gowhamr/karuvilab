@@ -246,11 +246,11 @@ export default function TimeCalculatorClient() {
                         <button
                           type="button"
                           onClick={() => removeDurationRow(idx)}
-                          className="p-2.5 rounded-xl border border-border text-text-muted hover:text-red-500 hover:border-red-500/30 transition-colors cursor-pointer"
-                          title="Remove row"
-                          aria-label={`Remove row ${idx + 1}`}
+                          className="p-2.5 rounded-xl border border-border text-text-muted hover:text-error hover:border-error/30 hover:bg-error/10 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-error/20 outline-none"
+                          title={`Remove duration row ${idx + 1}`}
+                          aria-label={`Remove duration row ${idx + 1}`}
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-4 h-4" aria-hidden="true" />
                         </button>
                       )}
                     </div>

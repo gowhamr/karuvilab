@@ -340,6 +340,8 @@ function ScreenHome({ light = false }: { light?: boolean }) {
 }
 
 function ScreenTools({ light = false }: { light?: boolean }) {
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [activeFilter, setActiveFilter] = useState(0);
   const t = light ? '#111827' : '#F8FAFC';
   const m = light ? '#64748B' : '#94A3B8';
   const card = light
@@ -353,8 +355,30 @@ function ScreenTools({ light = false }: { light?: boolean }) {
       <div className="px-4 pt-2 pb-2 flex justify-between items-center">
         <p className="text-[16px] font-extrabold" style={{ color: t }}>All Tools</p>
         <div className="flex gap-1">
-          <button className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px]" style={{ background: '#4F46E5', color: '#fff' }} aria-label="Grid view">⊞</button>
-          <button className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px]" style={{ background: card.bg, border: `1px solid ${card.border}`, color: m }} aria-label="List view">≡</button>
+          <button 
+            onClick={() => setViewMode('grid')}
+            className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] transition-colors" 
+            style={{ 
+              background: viewMode === 'grid' ? '#4F46E5' : card.bg, 
+              border: `1px solid ${viewMode === 'grid' ? '#4F46E5' : card.border}`,
+              color: viewMode === 'grid' ? '#fff' : m 
+            }} 
+            aria-label="Grid view"
+          >
+            ⊞
+          </button>
+          <button 
+            onClick={() => setViewMode('list')}
+            className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] transition-colors" 
+            style={{ 
+              background: viewMode === 'list' ? '#4F46E5' : card.bg, 
+              border: `1px solid ${viewMode === 'list' ? '#4F46E5' : card.border}`,
+              color: viewMode === 'list' ? '#fff' : m 
+            }} 
+            aria-label="List view"
+          >
+            ≡
+          </button>
         </div>
       </div>
       {/* Search */}
@@ -367,15 +391,18 @@ function ScreenTools({ light = false }: { light?: boolean }) {
       {/* Filters */}
       <div className="px-4 mb-3 flex gap-1.5 overflow-x-auto scrollbar-none">
         {filters.map((f, i) => (
-          <span key={f} className="px-2.5 py-1 rounded-full text-[8px] font-semibold whitespace-nowrap flex-shrink-0"
+          <button 
+            key={f} 
+            onClick={() => setActiveFilter(i)}
+            className="px-2.5 py-1 rounded-full text-[8px] font-semibold whitespace-nowrap flex-shrink-0 transition-colors"
             style={{
-              background: i === 0 ? '#4F46E5' : card.bg,
-              border: `1px solid ${i === 0 ? '#4F46E5' : card.border}`,
-              color: i === 0 ? '#fff' : m,
+              background: activeFilter === i ? '#4F46E5' : card.bg,
+              border: `1px solid ${activeFilter === i ? '#4F46E5' : card.border}`,
+              color: activeFilter === i ? '#fff' : m,
               boxShadow: card.shadow,
             }}>
             {f}
-          </span>
+          </button>
         ))}
       </div>
       {/* Tool Cards Grid */}
@@ -455,6 +482,7 @@ function ScreenCategories({ light = false }: { light?: boolean }) {
 
 function ScreenToolDetail({ light = false }: { light?: boolean }) {
   const [activeTab, setActiveTab] = useState(0);
+  const [activeAction, setActiveAction] = useState('Format');
   const t = light ? '#111827' : '#F8FAFC';
   const m = light ? '#64748B' : '#94A3B8';
   const card = light
@@ -464,6 +492,7 @@ function ScreenToolDetail({ light = false }: { light?: boolean }) {
   const tabs = ['Tool', 'Examples', 'Docs', 'Related'];
 
   const handleTabClick = useCallback((i: number) => setActiveTab(i), []);
+  const handleActionClick = useCallback((label: string) => setActiveAction(label), []);
 
   return (
     <div className="flex flex-col h-full" style={{ color: t }}>
@@ -485,7 +514,7 @@ function ScreenToolDetail({ light = false }: { light?: boolean }) {
           <p className="text-[12px] font-bold text-white">JSON Formatter</p>
           <p className="text-[9px] text-white/70">Format, validate & minify JSON</p>
           <div className="flex gap-1 mt-1">
-            {['Offline', 'Worker', 'Free'].map((b, i) => (
+            {['Offline', 'Worker', 'Free'].map((b) => (
               <span key={b} className="text-[7px] px-1.5 py-0.5 rounded-full font-medium"
                 style={{ background: 'rgba(255,255,255,0.18)', color: '#fff' }}>{b}</span>
             ))}
@@ -554,13 +583,19 @@ function ScreenToolDetail({ light = false }: { light?: boolean }) {
         {/* Action Buttons */}
         <div className="flex gap-1.5 mt-2">
           {[
-            { label: 'Format', style: { background: '#4F46E5', color: '#fff', border: 'none' } },
-            { label: 'Minify', style: { background: card.bg, color: m, border: `1px solid ${card.border}` } },
-            { label: 'Validate', style: { background: card.bg, color: m, border: `1px solid ${card.border}` } },
-            { label: 'Clear', style: { background: light ? '#FFF1F2' : 'rgba(244,63,94,0.12)', color: '#F43F5E', border: 'none' } },
+            { label: 'Format', activeStyle: { background: '#4F46E5', color: '#fff', border: 'none' }, inactiveStyle: { background: card.bg, color: m, border: `1px solid ${card.border}` } },
+            { label: 'Minify', activeStyle: { background: '#4F46E5', color: '#fff', border: 'none' }, inactiveStyle: { background: card.bg, color: m, border: `1px solid ${card.border}` } },
+            { label: 'Validate', activeStyle: { background: '#4F46E5', color: '#fff', border: 'none' }, inactiveStyle: { background: card.bg, color: m, border: `1px solid ${card.border}` } },
+            { label: 'Clear', activeStyle: { background: '#F43F5E', color: '#fff', border: 'none' }, inactiveStyle: { background: light ? '#FFF1F2' : 'rgba(244,63,94,0.12)', color: '#F43F5E', border: 'none' } },
           ].map(btn => (
-            <button key={btn.label} className="flex-1 py-1.5 rounded-lg text-[8px] font-semibold" style={btn.style}
-              aria-label={btn.label}>
+            <button
+              key={btn.label}
+              onClick={() => handleActionClick(btn.label)}
+              className="flex-1 py-1.5 rounded-lg text-[8px] font-semibold transition-colors cursor-pointer"
+              style={activeAction === btn.label ? btn.activeStyle : btn.inactiveStyle}
+              aria-label={btn.label}
+              aria-pressed={activeAction === btn.label}
+            >
               {btn.label}
             </button>
           ))}
@@ -638,6 +673,19 @@ function ScreenSearch({ light = false }: { light?: boolean }) {
 }
 
 function ScreenSettings({ light = false }: { light?: boolean }) {
+  const [selectedTheme, setSelectedTheme] = useState(light ? 'Light' : 'Dark');
+  const [selectedAccent, setSelectedAccent] = useState('#4F46E5');
+  const [settingsToggles, setSettingsToggles] = useState<Record<string, boolean>>({
+    Accessibility: true,
+    'Developer Mode': false,
+  });
+
+  const handleThemeChange = useCallback((th: string) => setSelectedTheme(th), []);
+  const handleAccentChange = useCallback((c: string) => setSelectedAccent(c), []);
+  const handleToggle = useCallback((label: string) => {
+    setSettingsToggles(prev => ({ ...prev, [label]: !prev[label] }));
+  }, []);
+
   const t = light ? '#111827' : '#F8FAFC';
   const m = light ? '#64748B' : '#94A3B8';
   const card = light
@@ -652,17 +700,24 @@ function ScreenSettings({ light = false }: { light?: boolean }) {
       <div className="rounded-xl p-2.5 mb-2" style={{ background: card.bg, border: `1px solid ${card.border}`, boxShadow: card.shadow }}>
         <p className="text-[8px] font-semibold uppercase tracking-wider mb-2" style={{ color: m }}>Theme</p>
         <div className="flex gap-1.5">
-          {['Dark', 'Light', 'System'].map((th, i) => (
-            <button key={th} className="flex-1 py-1.5 rounded-lg text-[8px] font-semibold flex items-center justify-center gap-1"
-              style={{
-                background: (!light && i === 0) || (light && i === 1) ? '#4F46E5' : 'transparent',
-                color: (!light && i === 0) || (light && i === 1) ? '#fff' : m,
-                border: `1px solid ${((!light && i === 0) || (light && i === 1)) ? '#4F46E5' : card.border}`,
-              }}
-              aria-pressed={(!light && i === 0) || (light && i === 1)}>
-              {(!light && i === 0) || (light && i === 1) ? '✓ ' : ''}{th}
-            </button>
-          ))}
+          {['Dark', 'Light', 'System'].map((th) => {
+            const isSelected = selectedTheme === th;
+            return (
+              <button
+                key={th}
+                onClick={() => handleThemeChange(th)}
+                className="flex-1 py-1.5 rounded-lg text-[8px] font-semibold flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                style={{
+                  background: isSelected ? selectedAccent : 'transparent',
+                  color: isSelected ? '#fff' : m,
+                  border: `1px solid ${isSelected ? selectedAccent : card.border}`,
+                }}
+                aria-pressed={isSelected}
+              >
+                {isSelected ? '✓ ' : ''}{th}
+              </button>
+            );
+          })}
         </div>
       </div>
       {/* Accent Color */}
@@ -670,10 +725,15 @@ function ScreenSettings({ light = false }: { light?: boolean }) {
         <p className="text-[8px] font-semibold uppercase tracking-wider mb-2" style={{ color: m }}>Accent Color</p>
         <div className="flex gap-2">
           {accentColors.map(c => (
-            <div key={c} className="w-5 h-5 rounded-full flex items-center justify-center"
-              style={{ background: c, boxShadow: c === '#4F46E5' ? `0 0 0 2px ${light ? '#fff' : '#0A0F1E'}, 0 0 0 3px ${c}` : 'none' }}>
-              {c === '#4F46E5' && <span className="text-[7px] text-white">✓</span>}
-            </div>
+            <button
+              key={c}
+              onClick={() => handleAccentChange(c)}
+              className="w-5 h-5 rounded-full flex items-center justify-center transition-transform hover:scale-110 active:scale-95 cursor-pointer"
+              style={{ background: c, boxShadow: selectedAccent === c ? `0 0 0 2px ${light ? '#fff' : '#0A0F1E'}, 0 0 0 3px ${c}` : 'none' }}
+              aria-label={`Select accent color ${c}`}
+            >
+              {selectedAccent === c && <span className="text-[7px] text-white">✓</span>}
+            </button>
           ))}
         </div>
       </div>
@@ -683,25 +743,35 @@ function ScreenSettings({ light = false }: { light?: boolean }) {
         { label: 'Performance', value: 'High' },
         { label: 'Offline Storage', value: '2.4 GB' },
         { label: 'Privacy', value: '→' },
-        { label: 'Accessibility', value: '', toggle: true, on: true },
-        { label: 'Developer Mode', value: '', toggle: true, on: false },
+        { label: 'Accessibility', value: '', toggle: true },
+        { label: 'Developer Mode', value: '', toggle: true },
         { label: 'Experimental', value: 'Beta', badge: true },
         { label: 'About', value: 'v2.0.0' },
-      ].map(row => (
-        <div key={row.label} className="flex items-center justify-between px-2.5 py-2 mb-1.5 rounded-xl"
-          style={{ background: card.bg, border: `1px solid ${card.border}`, boxShadow: card.shadow }}>
-          <span className="text-[9px] font-medium" style={{ color: t }}>{row.label}</span>
-          {row.toggle ? (
-            <div className="w-7 h-4 rounded-full flex items-center px-0.5" style={{ background: row.on ? '#4F46E5' : (light ? '#E2E8F0' : '#334155') }}>
-              <div className="w-3 h-3 rounded-full bg-white shadow" style={{ marginLeft: row.on ? 'auto' : 0 }} />
-            </div>
-          ) : row.badge ? (
-            <span className="px-1.5 py-0.5 rounded-full text-[7px] font-medium text-white" style={{ background: '#F59E0B' }}>{row.value}</span>
-          ) : (
-            <span className="text-[9px]" style={{ color: m }}>{row.value}</span>
-          )}
-        </div>
-      ))}
+      ].map(row => {
+        const isToggleOn = row.toggle ? (settingsToggles[row.label] ?? false) : false;
+        return (
+          <div key={row.label} className="flex items-center justify-between px-2.5 py-2 mb-1.5 rounded-xl"
+            style={{ background: card.bg, border: `1px solid ${card.border}`, boxShadow: card.shadow }}>
+            <span className="text-[9px] font-medium" style={{ color: t }}>{row.label}</span>
+            {row.toggle ? (
+              <button
+                type="button"
+                onClick={() => handleToggle(row.label)}
+                className="w-7 h-4 rounded-full flex items-center px-0.5 cursor-pointer transition-colors"
+                style={{ background: isToggleOn ? selectedAccent : (light ? '#E2E8F0' : '#334155') }}
+                aria-pressed={isToggleOn}
+                aria-label={`Toggle ${row.label}`}
+              >
+                <div className="w-3 h-3 rounded-full bg-white shadow transition-transform" style={{ marginLeft: isToggleOn ? 'auto' : 0 }} />
+              </button>
+            ) : row.badge ? (
+              <span className="px-1.5 py-0.5 rounded-full text-[7px] font-medium text-white" style={{ background: '#F59E0B' }}>{row.value}</span>
+            ) : (
+              <span className="text-[9px]" style={{ color: m }}>{row.value}</span>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -711,6 +781,16 @@ function ScreenSettings({ light = false }: { light?: boolean }) {
 // ─────────────────────────────────────────────
 
 function DesignSystemPanel() {
+  const [clickedButton, setClickedButton] = useState<string | null>(null);
+
+  const handleButtonClick = useCallback((name: string) => {
+    setClickedButton(name);
+    const timer = setTimeout(() => {
+      setClickedButton(prev => (prev === name ? null : prev));
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="flex flex-col gap-6">
       {/* Logo */}
@@ -806,25 +886,37 @@ function DesignSystemPanel() {
       <GlassCard className="p-5">
         <SectionLabel label="Buttons" />
         <div className="flex flex-col gap-2.5">
-          <button className="w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-transform active:scale-98"
+          <button
+            onClick={() => handleButtonClick('Primary Action')}
+            className="w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-all active:scale-98 cursor-pointer"
             style={{ background: '#4F46E5', boxShadow: '0 8px 24px rgba(79,70,229,0.4)' }}
-            aria-label="Primary action button">
-            Primary Action
+            aria-label="Primary action button"
+          >
+            {clickedButton === 'Primary Action' ? '✓ Action Triggered' : 'Primary Action'}
           </button>
-          <button className="w-full py-2.5 rounded-xl text-sm font-semibold transition-transform active:scale-98"
-            style={{ background: 'transparent', border: '1.5px solid #4F46E5', color: '#A5B4FC' }}
-            aria-label="Secondary action button">
-            Secondary Action
+          <button
+            onClick={() => handleButtonClick('Secondary Action')}
+            className="w-full py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-98 cursor-pointer"
+            style={{ background: clickedButton === 'Secondary Action' ? 'rgba(79,70,229,0.15)' : 'transparent', border: '1.5px solid #4F46E5', color: '#A5B4FC' }}
+            aria-label="Secondary action button"
+          >
+            {clickedButton === 'Secondary Action' ? '✓ Action Triggered' : 'Secondary Action'}
           </button>
-          <button className="w-full py-2.5 rounded-xl text-sm font-semibold transition-transform active:scale-98"
-            style={{ background: 'transparent', color: '#94A3B8' }}
-            aria-label="Ghost action button">
-            Ghost Button
+          <button
+            onClick={() => handleButtonClick('Ghost Button')}
+            className="w-full py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-98 cursor-pointer"
+            style={{ background: clickedButton === 'Ghost Button' ? 'rgba(255,255,255,0.08)' : 'transparent', color: '#94A3B8' }}
+            aria-label="Ghost action button"
+          >
+            {clickedButton === 'Ghost Button' ? '✓ Action Triggered' : 'Ghost Button'}
           </button>
-          <button className="w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-transform active:scale-98"
+          <button
+            onClick={() => handleButtonClick('Danger Action')}
+            className="w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-all active:scale-98 cursor-pointer"
             style={{ background: '#F43F5E', boxShadow: '0 8px 24px rgba(244,63,94,0.35)' }}
-            aria-label="Danger action button">
-            Danger Action
+            aria-label="Danger action button"
+          >
+            {clickedButton === 'Danger Action' ? '✓ Action Triggered' : 'Danger Action'}
           </button>
         </div>
       </GlassCard>

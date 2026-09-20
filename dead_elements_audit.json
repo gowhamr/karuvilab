@@ -1,0 +1,128 @@
+{
+  "timestamp": "2026-09-05T15:01:47.157Z",
+  "filesScanned": 1874,
+  "totalFindings": 13,
+  "summary": {
+    "BUTTON_MISSING_ACTION": 10,
+    "CURSOR_POINTER_WITHOUT_ONCLICK": 3
+  },
+  "findings": [
+    {
+      "file": "app/(tools)/developer-tools/image-seo/ImageSeoClient.tsx",
+      "line": 265,
+      "severity": "BLOCKER",
+      "type": "BUTTON_MISSING_ACTION",
+      "element": "button",
+      "detail": "<button> has type=\"button\" (or default) but has no onClick handler, form action, Radix trigger context, or spread props",
+      "snippet": "264:         <div className=\"relative group overflow-hidden rounded-2xl\">\n265:            <button className=\"px-8 py-4 bg-blue text-white font-black text-xs uppercase tracking-widest-lg flex items-center gap-3 hover:shadow-xl transition-all\">\n266:               <Upload className=\"w-4 h-4\" />"
+    },
+    {
+      "file": "app/(tools)/image-tools/image-base64/ImageBase64Client.tsx",
+      "line": 61,
+      "severity": "MEDIUM",
+      "type": "CURSOR_POINTER_WITHOUT_ONCLICK",
+      "element": "div",
+      "detail": "<div className=\"...cursor-pointer...\"> has pointer styling but no onClick handler or interactive semantics",
+      "snippet": "60:   const encodeInput = (\n61:     <div\n62:       className=\"bg-surface border-2 border-dashed border-border rounded-2xl p-10 text-center cursor-pointer hover:border-blue transition-colors flex flex-col items-center justify-center min-h-[200px]\""
+    },
+    {
+      "file": "app/case-study/CaseStudyClient.tsx",
+      "line": 356,
+      "severity": "BLOCKER",
+      "type": "BUTTON_MISSING_ACTION",
+      "element": "button",
+      "detail": "<button> has type=\"button\" (or default) but has no onClick handler, form action, Radix trigger context, or spread props",
+      "snippet": "355:         <div className=\"flex gap-1\">\n356:           <button className=\"w-7 h-7 rounded-lg flex items-center justify-center text-[10px]\" style={{ background: '#4F46E5', color: '#fff' }} aria-label=\"Grid view\">⊞</button>\n357:           <button className=\"w-7 h-7 rounded-lg flex items-center justify-center text-[10px]\" style={{ background: card.bg, border: `1px solid ${card.border}`, color: m }} aria-label=\"List view\">≡</button>"
+    },
+    {
+      "file": "app/case-study/CaseStudyClient.tsx",
+      "line": 357,
+      "severity": "BLOCKER",
+      "type": "BUTTON_MISSING_ACTION",
+      "element": "button",
+      "detail": "<button> has type=\"button\" (or default) but has no onClick handler, form action, Radix trigger context, or spread props",
+      "snippet": "356:           <button className=\"w-7 h-7 rounded-lg flex items-center justify-center text-[10px]\" style={{ background: '#4F46E5', color: '#fff' }} aria-label=\"Grid view\">⊞</button>\n357:           <button className=\"w-7 h-7 rounded-lg flex items-center justify-center text-[10px]\" style={{ background: card.bg, border: `1px solid ${card.border}`, color: m }} aria-label=\"List view\">≡</button>\n358:         </div>"
+    },
+    {
+      "file": "app/case-study/CaseStudyClient.tsx",
+      "line": 562,
+      "severity": "BLOCKER",
+      "type": "BUTTON_MISSING_ACTION",
+      "element": "button",
+      "detail": "<button> has type=\"button\" (or default) but has no onClick handler, form action, Radix trigger context, or spread props",
+      "snippet": "561:           ].map(btn => (\n562:             <button key={btn.label} className=\"flex-1 py-1.5 rounded-lg text-[8px] font-semibold\" style={btn.style}\n563:               aria-label={btn.label}>"
+    },
+    {
+      "file": "app/case-study/CaseStudyClient.tsx",
+      "line": 656,
+      "severity": "BLOCKER",
+      "type": "BUTTON_MISSING_ACTION",
+      "element": "button",
+      "detail": "<button> has type=\"button\" (or default) but has no onClick handler, form action, Radix trigger context, or spread props",
+      "snippet": "655:           {['Dark', 'Light', 'System'].map((th, i) => (\n656:             <button key={th} className=\"flex-1 py-1.5 rounded-lg text-[8px] font-semibold flex items-center justify-center gap-1\"\n657:               style={{"
+    },
+    {
+      "file": "app/case-study/CaseStudyClient.tsx",
+      "line": 809,
+      "severity": "BLOCKER",
+      "type": "BUTTON_MISSING_ACTION",
+      "element": "button",
+      "detail": "<button> has type=\"button\" (or default) but has no onClick handler, form action, Radix trigger context, or spread props",
+      "snippet": "808:         <div className=\"flex flex-col gap-2.5\">\n809:           <button className=\"w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-transform active:scale-98\"\n810:             style={{ background: '#4F46E5', boxShadow: '0 8px 24px rgba(79,70,229,0.4)' }}"
+    },
+    {
+      "file": "app/case-study/CaseStudyClient.tsx",
+      "line": 814,
+      "severity": "BLOCKER",
+      "type": "BUTTON_MISSING_ACTION",
+      "element": "button",
+      "detail": "<button> has type=\"button\" (or default) but has no onClick handler, form action, Radix trigger context, or spread props",
+      "snippet": "813:           </button>\n814:           <button className=\"w-full py-2.5 rounded-xl text-sm font-semibold transition-transform active:scale-98\"\n815:             style={{ background: 'transparent', border: '1.5px solid #4F46E5', color: '#A5B4FC' }}"
+    },
+    {
+      "file": "app/case-study/CaseStudyClient.tsx",
+      "line": 819,
+      "severity": "BLOCKER",
+      "type": "BUTTON_MISSING_ACTION",
+      "element": "button",
+      "detail": "<button> has type=\"button\" (or default) but has no onClick handler, form action, Radix trigger context, or spread props",
+      "snippet": "818:           </button>\n819:           <button className=\"w-full py-2.5 rounded-xl text-sm font-semibold transition-transform active:scale-98\"\n820:             style={{ background: 'transparent', color: '#94A3B8' }}"
+    },
+    {
+      "file": "app/case-study/CaseStudyClient.tsx",
+      "line": 824,
+      "severity": "BLOCKER",
+      "type": "BUTTON_MISSING_ACTION",
+      "element": "button",
+      "detail": "<button> has type=\"button\" (or default) but has no onClick handler, form action, Radix trigger context, or spread props",
+      "snippet": "823:           </button>\n824:           <button className=\"w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-transform active:scale-98\"\n825:             style={{ background: '#F43F5E', boxShadow: '0 8px 24px rgba(244,63,94,0.35)' }}"
+    },
+    {
+      "file": "components/ui/FeedbackModal.tsx",
+      "line": 255,
+      "severity": "MEDIUM",
+      "type": "CURSOR_POINTER_WITHOUT_ONCLICK",
+      "element": "FileUpload",
+      "detail": "<FileUpload className=\"...cursor-pointer...\"> has pointer styling but no onClick handler or interactive semantics",
+      "snippet": "254:                     <label className=\"text-tiny font-bold uppercase tracking-widest-sm text-text-4 ml-1\">Attach Screenshot (Optional)</label>\n255:                     <FileUpload \n256:                       onFileSelect={setScreenshot}"
+    },
+    {
+      "file": "src/features/seo-tools/components/ImageSeoClient.tsx",
+      "line": 310,
+      "severity": "BLOCKER",
+      "type": "BUTTON_MISSING_ACTION",
+      "element": "button",
+      "detail": "<button> has type=\"button\" (or default) but has no onClick handler, form action, Radix trigger context, or spread props",
+      "snippet": "309:                 <div className=\"relative group overflow-hidden rounded-2xl\">\n310:                    <button className=\"px-8 py-4 bg-blue text-white font-black text-xs uppercase tracking-widest-lg flex items-center gap-3 hover:shadow-xl transition-all\">\n311:                       <Upload className=\"w-4 h-4\" />"
+    },
+    {
+      "file": "src/features/stopwatch/components/LapPaceChart.tsx",
+      "line": 138,
+      "severity": "MEDIUM",
+      "type": "CURSOR_POINTER_WITHOUT_ONCLICK",
+      "element": "g",
+      "detail": "<g className=\"...cursor-pointer...\"> has pointer styling but no onClick handler or interactive semantics",
+      "snippet": "137:             return (\n138:               <g key={p.lap.id} className=\"cursor-pointer group\">\n139:                 <circle"
+    }
+  ]
+}

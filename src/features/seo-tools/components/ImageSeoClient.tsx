@@ -66,7 +66,35 @@ export default function ImageSeoClient() {
 
   const items = useBatchStore(state => state.items[toolId] || []);
   const addItems = useBatchStore(state => state.addItems);
-  const isProcessing = false; // We process instantly for renaming
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleBatchProcess = async () => {
+    setIsProcessing(true);
+    const queue = useBatchStore.getState().items[toolId] || [];
+    for (const item of queue) {
+      if (item.status === 'pending' || item.status === 'failed') {
+        useBatchStore.getState().updateItem(toolId, item.id, { status: 'processing', progress: 50 });
+        const dotIdx = item.file.name.lastIndexOf(".");
+        const base = dotIdx !== -1 ? item.file.name.slice(0, dotIdx) : item.file.name;
+        const ext = dotIdx !== -1 ? item.file.name.slice(dotIdx) : "";
+        const seoName = toSlug(base.replace(/[-_]/g, " ")) + ext;
+        
+        const resultUrl = blobManager.create(item.file);
+        useBatchStore.getState().updateItem(toolId, item.id, {
+          status: 'completed',
+          progress: 100,
+          result: {
+            blob: item.file,
+            originalSize: item.file.size,
+            compressedSize: item.file.size,
+            name: seoName,
+            url: resultUrl,
+          }
+        });
+      }
+    }
+    setIsProcessing(false);
+  };
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -306,20 +334,38 @@ export default function ImageSeoClient() {
                   </div>
                 </div>
                 
-                <div className="relative group overflow-hidden rounded-2xl">
-                   <button className="px-8 py-4 bg-blue text-white font-black text-xs uppercase tracking-widest-lg flex items-center gap-3 hover:shadow-xl transition-all">
+                <label className="relative group overflow-hidden rounded-2xl cursor-pointer">
+                   <span className="px-8 py-4 bg-blue text-white font-black text-xs uppercase tracking-widest-lg flex items-center gap-3 hover:shadow-xl transition-all">
                       <Upload className="w-4 h-4" />
                       Select Multiple Files
-                   </button>
+                   </span>
                    <input type="file" multiple accept="image/*" onChange={handleBatchFiles} className="absolute inset-0 opacity-0 cursor-pointer" />
-                </div>
+                </label>
               </div>
 
               <BatchQueue 
                 toolId={toolId}
                 isProcessing={isProcessing}
-                onProcess={async () => {}}
-                onDownload={(item) => downloadFile(item.file, toSlug(item.file.name.split('.')[0] || "file") + "." + item.file.name.split('.').pop())}
+                onProcess={handleBatchProcess}
+                onDownload={(item) => {
+                  const dotIdx = item.file.name.lastIndexOf(".");
+                  const base = dotIdx !== -1 ? item.file.name.slice(0, dotIdx) : item.file.name;
+                  const ext = dotIdx !== -1 ? item.file.name.slice(dotIdx) : "";
+                  const fileName = item.result?.name || (toSlug(base.replace(/[-_]/g, " ")) + ext);
+                  downloadFile(item.file, fileName);
+                }}
+                onDownloadAll={() => {
+                  const queue = useBatchStore.getState().items[toolId] || [];
+                  for (const item of queue) {
+                    if (item.status === 'completed') {
+                      const dotIdx = item.file.name.lastIndexOf(".");
+                      const base = dotIdx !== -1 ? item.file.name.slice(0, dotIdx) : item.file.name;
+                      const ext = dotIdx !== -1 ? item.file.name.slice(dotIdx) : "";
+                      const fileName = item.result?.name || (toSlug(base.replace(/[-_]/g, " ")) + ext);
+                      downloadFile(item.file, fileName);
+                    }
+                  }
+                }}
                 renderThumbnail={(item) => <Thumbnail file={item.file} />}
               />
             </div>

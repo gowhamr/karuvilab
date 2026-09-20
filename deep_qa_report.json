@@ -1,0 +1,44 @@
+{
+  "emptyHandlers": [
+    {
+      "file": "app/(tools)/developer-tools/image-seo/ImageSeoClient.tsx",
+      "line": 276,
+      "code": "onProcess={async () => {}}"
+    },
+    {
+      "file": "src/features/notes/components/NoteEditor.tsx",
+      "line": 237,
+      "code": "setEncryptionPassword={() => {}}"
+    },
+    {
+      "file": "src/features/notes/components/NoteEditor.tsx",
+      "line": 241,
+      "code": "onEncryptSubmit={() => {}}"
+    },
+    {
+      "file": "src/features/notes/components/NoteEditor.tsx",
+      "line": 242,
+      "code": "onCancelEncrypt={() => {}}"
+    },
+    {
+      "file": "src/features/notes/components/NoteEditor.tsx",
+      "line": 251,
+      "code": "onUnlockSubmit={() => {}}"
+    },
+    {
+      "file": "src/features/notes/components/NoteEditor.tsx",
+      "line": 252,
+      "code": "onCancelUnlock={() => {}}"
+    },
+    {
+      "file": "src/features/seo-tools/components/ImageSeoClient.tsx",
+      "line": 321,
+      "code": "onProcess={async () => {}}"
+    }
+  ],
+  "comingSoonAlerts": [],
+  "dummyHrefs": [],
+  "unwiredButtons": [],
+  "emptyFunctionsInProps": [],
+  "unhandledTabs": []
+}

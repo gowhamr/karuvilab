@@ -279,7 +279,7 @@ export default function ToolClient() {
             <div className="space-y-6">
               {/* Error Banner */}
               {error && (
-                <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-red-500">
+                <div role="alert" className="p-4 bg-red-500/10 border border-red-500/30 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-red-500">
                   <div className="flex items-center gap-2">
                     <AlertCircle className="w-5 h-5 shrink-0" />
                     <span className="text-xs font-semibold">{error}</span>

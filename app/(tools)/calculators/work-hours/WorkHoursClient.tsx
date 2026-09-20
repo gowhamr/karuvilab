@@ -184,10 +184,11 @@ export default function WorkHoursClient() {
                           {rows.length > 1 && (
                             <button
                               onClick={() => removeRow(row.id)}
-                              className="p-2 rounded-xl text-text-muted hover:text-error hover:bg-error/10 opacity-0 group-hover:opacity-100 transition-all focus:opacity-100 outline-none"
-                              aria-label="Remove row"
+                              className="p-2 min-w-8 min-h-8 flex items-center justify-center rounded-xl text-text-muted hover:text-error hover:bg-error/10 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all focus:opacity-100 focus-visible:ring-2 focus-visible:ring-error/20 outline-none cursor-pointer"
+                              aria-label={`Remove shift row on ${row.date || 'entry'}`}
+                              title={`Remove shift row on ${row.date || 'entry'}`}
                             >
-                              <Trash2 className="w-4 h-4" />
+                              <Trash2 className="w-4 h-4" aria-hidden="true" />
                             </button>
                           )}
                         </div>

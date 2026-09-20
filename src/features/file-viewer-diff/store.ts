@@ -45,22 +45,30 @@ export const useFileViewerStore = create<FileViewerState>()(
       setFileA: (file) => set({ fileA: file }),
       updateFileAContent: (content) => 
         set((state) => ({
-          fileA: state.fileA ? { ...state.fileA, content, size: new Blob([content]).size } : null
+          fileA: state.fileA 
+            ? { ...state.fileA, content, size: new Blob([content]).size } 
+            : { content, name: 'untitled.txt', language: 'plaintext', size: new Blob([content]).size }
         })),
       setFileALanguage: (language) =>
         set((state) => ({
-          fileA: state.fileA ? { ...state.fileA, language } : null
+          fileA: state.fileA 
+            ? { ...state.fileA, language } 
+            : { content: '', name: 'untitled.txt', language, size: 0 }
         })),
 
       fileB: null,
       setFileB: (file) => set({ fileB: file }),
       updateFileBContent: (content) => 
         set((state) => ({
-          fileB: state.fileB ? { ...state.fileB, content, size: new Blob([content]).size } : null
+          fileB: state.fileB 
+            ? { ...state.fileB, content, size: new Blob([content]).size } 
+            : { content, name: 'modified.txt', language: 'plaintext', size: new Blob([content]).size }
         })),
       setFileBLanguage: (language) =>
         set((state) => ({
-          fileB: state.fileB ? { ...state.fileB, language } : null
+          fileB: state.fileB 
+            ? { ...state.fileB, language } 
+            : { content: '', name: 'modified.txt', language, size: 0 }
         })),
 
       settings: {

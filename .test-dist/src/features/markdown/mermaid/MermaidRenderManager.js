@@ -59,10 +59,17 @@ export class MermaidRenderManager {
     getActiveTheme() {
         if (typeof document === 'undefined')
             return 'dark';
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark' ||
-            document.documentElement.classList.contains('dark') ||
-            (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches);
-        return isDark ? 'dark' : 'light';
+        const dataTheme = document.documentElement.getAttribute('data-theme');
+        if (dataTheme === 'dark')
+            return 'dark';
+        if (dataTheme === 'light')
+            return 'light';
+        if (document.documentElement.classList.contains('dark'))
+            return 'dark';
+        if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
+        }
+        return 'light';
     }
     /**
      * Initialize Mermaid engine with deterministic seed and strict security config.

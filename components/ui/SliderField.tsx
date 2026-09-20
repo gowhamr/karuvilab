@@ -103,7 +103,7 @@ export function SliderField({ label, id, min, max, step = 1, value, onChange, fo
           <Slider.Range className={cn("absolute rounded-full h-full", error ? "bg-error" : "bg-brand-primary")} />
         </Slider.Track>
         <Slider.Thumb
-          id={isEditing ? `${id}-thumb` : id}
+          id={`${id}-thumb`}
           className={cn(
             "block w-6 h-6 bg-text border rounded-full shadow-md cursor-pointer hover:scale-110 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-mat-base focus:outline-none transition-all active:scale-95",
             error ? "border-error focus-visible:ring-error" : "border-brand-primary focus-visible:ring-brand-primary"
